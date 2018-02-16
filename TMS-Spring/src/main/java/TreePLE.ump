@@ -1,0 +1,60 @@
+namespace ca.mcgill.ecse321.TMS.model;
+
+class TreePLE { 
+  1 <@>- * Tree trees; 
+  1 <@>- * Status statuses;
+  1 <@>- * Municipality municipalities;
+  1 <@>- * Species species;
+  1 <@>- * User users;
+
+}
+
+class Tree {
+  unique int longitude;
+  unique int latitude;
+  key{longitude, latitude};
+  int height;
+  int diameter;
+  * -- 1 Status status;
+  * -- 1 LandUse landuse;
+  * -- 1 Municipality municipality;
+  * -- 1 Species species;
+  * -- 1 User users;
+}
+
+class Status {
+  enum TreeStatus {healthy, diseased, toBeCut, cut}
+  TreeStatus treeStatus;
+  immutable String dateOfBirth;
+  lazy immutable String dateOfDeath;
+}
+
+class LandUse {
+  unique String landUseType;
+  key{landUseType};
+}
+
+class Municipality {
+  unique String name;
+  int bioDiversityIndex;
+}
+
+class Species {
+  unique String name;
+  int carbonConsumption;
+  int oxygenProduction;
+}
+
+class User {
+  abstract;
+  unique String username;
+  
+}
+
+class Specialist {
+  isA User;
+}
+
+class Local {
+  isA User;
+}
