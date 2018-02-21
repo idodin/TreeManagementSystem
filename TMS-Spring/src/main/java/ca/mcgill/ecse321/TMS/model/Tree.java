@@ -28,39 +28,11 @@ public class Tree
   // CONSTRUCTOR
   //------------------------
 
-  public Tree(int aHeight, int aDiameter, TreeLocation aTreeLocation, Species aSpecies, User aLocal, TreePLE aTreePLE)
+  public Tree(int aHeight, int aDiameter, Species aSpecies, User aLocal, TreePLE aTreePLE)
   {
     height = aHeight;
     diameter = aDiameter;
     treeStatus = new ArrayList<TreeStatus>();
-    if (aTreeLocation == null || aTreeLocation.getTree() != null)
-    {
-      throw new RuntimeException("Unable to create Tree due to aTreeLocation");
-    }
-    treeLocation = aTreeLocation;
-    boolean didAddSpecies = setSpecies(aSpecies);
-    if (!didAddSpecies)
-    {
-      throw new RuntimeException("Unable to create tree due to species");
-    }
-    boolean didAddLocal = setLocal(aLocal);
-    if (!didAddLocal)
-    {
-      throw new RuntimeException("Unable to create tree due to local");
-    }
-    boolean didAddTreePLE = setTreePLE(aTreePLE);
-    if (!didAddTreePLE)
-    {
-      throw new RuntimeException("Unable to create tree due to treePLE");
-    }
-  }
-
-  public Tree(int aHeight, int aDiameter, int aLongitudeForTreeLocation, int aLatitudeForTreeLocation, Municipality aMunicipalityForTreeLocation, Species aSpecies, User aLocal, TreePLE aTreePLE)
-  {
-    height = aHeight;
-    diameter = aDiameter;
-    treeStatus = new ArrayList<TreeStatus>();
-    treeLocation = new TreeLocation(aLongitudeForTreeLocation, aLatitudeForTreeLocation, aMunicipalityForTreeLocation, this);
     boolean didAddSpecies = setSpecies(aSpecies);
     if (!didAddSpecies)
     {
@@ -141,6 +113,12 @@ public class Tree
   public TreeLocation getTreeLocation()
   {
     return treeLocation;
+  }
+
+  public boolean hasTreeLocation()
+  {
+    boolean has = treeLocation != null;
+    return has;
   }
 
   public Species getSpecies()
@@ -230,6 +208,33 @@ public class Tree
     return wasAdded;
   }
 
+  public boolean setTreeLocation(TreeLocation aNewTreeLocation)
+  {
+    boolean wasSet = false;
+    if (treeLocation != null && !treeLocation.equals(aNewTreeLocation) && equals(treeLocation.getTree()))
+    {
+      //Unable to setTreeLocation, as existing treeLocation would become an orphan
+      return wasSet;
+    }
+
+    treeLocation = aNewTreeLocation;
+    Tree anOldTree = aNewTreeLocation != null ? aNewTreeLocation.getTree() : null;
+
+    if (!this.equals(anOldTree))
+    {
+      if (anOldTree != null)
+      {
+        anOldTree.treeLocation = null;
+      }
+      if (treeLocation != null)
+      {
+        treeLocation.setTree(this);
+      }
+    }
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setSpecies(Species aSpecies)
   {
     boolean wasSet = false;
@@ -301,6 +306,7 @@ public class Tree
     if (existingTreeLocation != null)
     {
       existingTreeLocation.delete();
+      existingTreeLocation.setTree(null);
     }
     Species placeholderSpecies = species;
     this.species = null;
