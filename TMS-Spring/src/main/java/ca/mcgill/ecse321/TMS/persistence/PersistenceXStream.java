@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import com.thoughtworks.xstream.XStream;
 
-import ca.mcgill.ecse321.TMS.model.LandUse;
 import ca.mcgill.ecse321.TMS.model.Local;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Specialist;
 import ca.mcgill.ecse321.TMS.model.Species;
-import ca.mcgill.ecse321.TMS.model.Status;
 import ca.mcgill.ecse321.TMS.model.Tree;
+import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
+import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
 
 // The first type parameter is the domain type for wich we are creating the repository.
@@ -34,12 +34,12 @@ public class PersistenceXStream {
         TreePLE tp;
         setFilename(fileName);
         setAlias("user", User.class);
-        setAlias("landUse", LandUse.class);
+        setAlias("landUse", TreeLocation.class);
         setAlias("local", Local.class);
         setAlias("municipality", Municipality.class);
         setAlias("specialist", Specialist.class);
         setAlias("species", Species.class);
-        setAlias("status", Status.class);
+        setAlias("status", TreeStatus.class);
         setAlias("tree", Tree.class);
         setAlias("treePLE", TreePLE.class);
         
