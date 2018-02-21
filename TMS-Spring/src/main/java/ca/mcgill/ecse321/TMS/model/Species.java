@@ -167,9 +167,9 @@ public class Species
     return 0;
   }
 
-  public Tree addTree(int aHeight, int aDiameter, TreeLocation aTreeLocation, User aLocal, TreePLE aTreePLE)
+  public Tree addTree(int aHeight, int aDiameter, User aLocal, TreePLE aTreePLE)
   {
-    return new Tree(aHeight, aDiameter, aTreeLocation, this, aLocal, aTreePLE);
+    return new Tree(aHeight, aDiameter, this, aLocal, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)
