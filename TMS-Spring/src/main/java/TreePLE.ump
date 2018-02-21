@@ -11,8 +11,8 @@ class TreePLE {
 class Tree {
   int height;
   int diameter;
-  1 <@>- * TreeStatus treeStatus;
-  1 <@>- 1 TreeLocation treeLocation;
+  1 <@>- 0..1 TreeStatus treeStatus;
+  1 <@>- 0..1 TreeLocation treeLocation;
   * -- 1 Species species;
   * -- 1 User local;
 }

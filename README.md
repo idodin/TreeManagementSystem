@@ -8,6 +8,8 @@ This is a repository for the TreePLE Application created by Project Group 9 for 
 
 Each member has their own development branch. We did this with the following command (for future reference):
 
+**Please substitute imad with your development branch name**
+
 `git checkout -b imad`
 
 We then pushed it, linking it by setting the 'upstream' (remote link) to the origin remote repository. 
@@ -59,25 +61,7 @@ You can now grab these changes locally by typing
 
 `git pull`
 
-**There's a better way of doing this but it could be a bit more confusing**
 
-First commit and push the work you've already done
-
-`git checkout imad`
-
-`git add *`
-
-`git commit -m "Commit Message"`
-
-`git push`
-
-Now rebase changes from the master:
-
-`git pull`
-
-`git rebase master`
-
-`git push`
 
 
 
