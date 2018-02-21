@@ -39,23 +39,11 @@ public class TreeLocation
     {
       throw new RuntimeException("Unable to create treeLocation due to municipality");
     }
-    if (aTree == null || aTree.getTreeLocation() != null)
+    boolean didAddTree = setTree(aTree);
+    if (!didAddTree)
     {
-      throw new RuntimeException("Unable to create TreeLocation due to aTree");
+      throw new RuntimeException("Unable to create treeLocation due to tree");
     }
-    tree = aTree;
-  }
-
-  public TreeLocation(int aLongitude, int aLatitude, Municipality aMunicipality, int aHeightForTree, int aDiameterForTree, Species aSpeciesForTree, User aLocalForTree, TreePLE aTreePLEForTree)
-  {
-    longitude = aLongitude;
-    latitude = aLatitude;
-    boolean didAddMunicipality = setMunicipality(aMunicipality);
-    if (!didAddMunicipality)
-    {
-      throw new RuntimeException("Unable to create treeLocation due to municipality");
-    }
-    tree = new Tree(aHeightForTree, aDiameterForTree, this, aSpeciesForTree, aLocalForTree, aTreePLEForTree);
   }
 
   //------------------------
@@ -130,6 +118,34 @@ public class TreeLocation
     return wasSet;
   }
 
+  public boolean setTree(Tree aNewTree)
+  {
+    boolean wasSet = false;
+    if (aNewTree == null)
+    {
+      //Unable to setTree to null, as treeLocation must always be associated to a tree
+      return wasSet;
+    }
+    
+    TreeLocation existingTreeLocation = aNewTree.getTreeLocation();
+    if (existingTreeLocation != null && !equals(existingTreeLocation))
+    {
+      //Unable to setTree, the current tree already has a treeLocation, which would be orphaned if it were re-assigned
+      return wasSet;
+    }
+    
+    Tree anOldTree = tree;
+    tree = aNewTree;
+    tree.setTreeLocation(this);
+
+    if (anOldTree != null)
+    {
+      anOldTree.setTreeLocation(null);
+    }
+    wasSet = true;
+    return wasSet;
+  }
+
   public void delete()
   {
     Municipality placeholderMunicipality = municipality;
@@ -139,7 +155,7 @@ public class TreeLocation
     tree = null;
     if (existingTree != null)
     {
-      existingTree.delete();
+      existingTree.setTreeLocation(null);
     }
   }
 
