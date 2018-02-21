@@ -14,10 +14,9 @@ public class TreePLE
 
   //TreePLE Associations
   private List<Tree> trees;
-  private List<Status> statuses;
   private List<Municipality> municipalities;
   private List<Species> species;
-  private List<User> users;
+  private List<User> locals;
 
   //------------------------
   // CONSTRUCTOR
@@ -26,10 +25,9 @@ public class TreePLE
   public TreePLE()
   {
     trees = new ArrayList<Tree>();
-    statuses = new ArrayList<Status>();
     municipalities = new ArrayList<Municipality>();
     species = new ArrayList<Species>();
-    users = new ArrayList<User>();
+    locals = new ArrayList<User>();
   }
 
   //------------------------
@@ -63,36 +61,6 @@ public class TreePLE
   public int indexOfTree(Tree aTree)
   {
     int index = trees.indexOf(aTree);
-    return index;
-  }
-
-  public Status getStatus(int index)
-  {
-    Status aStatus = statuses.get(index);
-    return aStatus;
-  }
-
-  public List<Status> getStatuses()
-  {
-    List<Status> newStatuses = Collections.unmodifiableList(statuses);
-    return newStatuses;
-  }
-
-  public int numberOfStatuses()
-  {
-    int number = statuses.size();
-    return number;
-  }
-
-  public boolean hasStatuses()
-  {
-    boolean has = statuses.size() > 0;
-    return has;
-  }
-
-  public int indexOfStatus(Status aStatus)
-  {
-    int index = statuses.indexOf(aStatus);
     return index;
   }
 
@@ -156,33 +124,33 @@ public class TreePLE
     return index;
   }
 
-  public User getUser(int index)
+  public User getLocal(int index)
   {
-    User aUser = users.get(index);
-    return aUser;
+    User aLocal = locals.get(index);
+    return aLocal;
   }
 
-  public List<User> getUsers()
+  public List<User> getLocals()
   {
-    List<User> newUsers = Collections.unmodifiableList(users);
-    return newUsers;
+    List<User> newLocals = Collections.unmodifiableList(locals);
+    return newLocals;
   }
 
-  public int numberOfUsers()
+  public int numberOfLocals()
   {
-    int number = users.size();
+    int number = locals.size();
     return number;
   }
 
-  public boolean hasUsers()
+  public boolean hasLocals()
   {
-    boolean has = users.size() > 0;
+    boolean has = locals.size() > 0;
     return has;
   }
 
-  public int indexOfUser(User aUser)
+  public int indexOfLocal(User aLocal)
   {
-    int index = users.indexOf(aUser);
+    int index = locals.indexOf(aLocal);
     return index;
   }
 
@@ -191,9 +159,9 @@ public class TreePLE
     return 0;
   }
 
-  public Tree addTree(int aLongitude, int aLatitude, int aHeight, int aDiameter, Status aStatus, LandUse aLanduse, Municipality aMunicipality, Species aSpecies, User aUsers)
+  public Tree addTree(int aHeight, int aDiameter, TreeLocation aTreeLocation, Species aSpecies, User aLocal)
   {
-    return new Tree(aLongitude, aLatitude, aHeight, aDiameter, aStatus, aLanduse, aMunicipality, aSpecies, aUsers, this);
+    return new Tree(aHeight, aDiameter, aTreeLocation, aSpecies, aLocal, this);
   }
 
   public boolean addTree(Tree aTree)
@@ -254,78 +222,6 @@ public class TreePLE
     else 
     {
       wasAdded = addTreeAt(aTree, index);
-    }
-    return wasAdded;
-  }
-
-  public static int minimumNumberOfStatuses()
-  {
-    return 0;
-  }
-
-  public Status addStatus(TreeStatus aTreeStatus, String aDateOfBirth)
-  {
-    return new Status(aTreeStatus, aDateOfBirth, this);
-  }
-
-  public boolean addStatus(Status aStatus)
-  {
-    boolean wasAdded = false;
-    if (statuses.contains(aStatus)) { return false; }
-    TreePLE existingTreePLE = aStatus.getTreePLE();
-    boolean isNewTreePLE = existingTreePLE != null && !this.equals(existingTreePLE);
-    if (isNewTreePLE)
-    {
-      aStatus.setTreePLE(this);
-    }
-    else
-    {
-      statuses.add(aStatus);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeStatus(Status aStatus)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aStatus, as it must always have a treePLE
-    if (!this.equals(aStatus.getTreePLE()))
-    {
-      statuses.remove(aStatus);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-
-  public boolean addStatusAt(Status aStatus, int index)
-  {  
-    boolean wasAdded = false;
-    if(addStatus(aStatus))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfStatuses()) { index = numberOfStatuses() - 1; }
-      statuses.remove(aStatus);
-      statuses.add(index, aStatus);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveStatusAt(Status aStatus, int index)
-  {
-    boolean wasAdded = false;
-    if(statuses.contains(aStatus))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfStatuses()) { index = numberOfStatuses() - 1; }
-      statuses.remove(aStatus);
-      statuses.add(index, aStatus);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addStatusAt(aStatus, index);
     }
     return wasAdded;
   }
@@ -474,74 +370,74 @@ public class TreePLE
     return wasAdded;
   }
 
-  public static int minimumNumberOfUsers()
+  public static int minimumNumberOfLocals()
   {
     return 0;
   }
 
-  public User addUser(String aUsername)
+  public User addLocal(String aUsername)
   {
     return new User(aUsername, this);
   }
 
-  public boolean addUser(User aUser)
+  public boolean addLocal(User aLocal)
   {
     boolean wasAdded = false;
-    if (users.contains(aUser)) { return false; }
-    TreePLE existingTreePLE = aUser.getTreePLE();
+    if (locals.contains(aLocal)) { return false; }
+    TreePLE existingTreePLE = aLocal.getTreePLE();
     boolean isNewTreePLE = existingTreePLE != null && !this.equals(existingTreePLE);
     if (isNewTreePLE)
     {
-      aUser.setTreePLE(this);
+      aLocal.setTreePLE(this);
     }
     else
     {
-      users.add(aUser);
+      locals.add(aLocal);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeUser(User aUser)
+  public boolean removeLocal(User aLocal)
   {
     boolean wasRemoved = false;
-    //Unable to remove aUser, as it must always have a treePLE
-    if (!this.equals(aUser.getTreePLE()))
+    //Unable to remove aLocal, as it must always have a treePLE
+    if (!this.equals(aLocal.getTreePLE()))
     {
-      users.remove(aUser);
+      locals.remove(aLocal);
       wasRemoved = true;
     }
     return wasRemoved;
   }
 
-  public boolean addUserAt(User aUser, int index)
+  public boolean addLocalAt(User aLocal, int index)
   {  
     boolean wasAdded = false;
-    if(addUser(aUser))
+    if(addLocal(aLocal))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
-      users.remove(aUser);
-      users.add(index, aUser);
+      if(index > numberOfLocals()) { index = numberOfLocals() - 1; }
+      locals.remove(aLocal);
+      locals.add(index, aLocal);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveUserAt(User aUser, int index)
+  public boolean addOrMoveLocalAt(User aLocal, int index)
   {
     boolean wasAdded = false;
-    if(users.contains(aUser))
+    if(locals.contains(aLocal))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfUsers()) { index = numberOfUsers() - 1; }
-      users.remove(aUser);
-      users.add(index, aUser);
+      if(index > numberOfLocals()) { index = numberOfLocals() - 1; }
+      locals.remove(aLocal);
+      locals.add(index, aLocal);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addUserAt(aUser, index);
+      wasAdded = addLocalAt(aLocal, index);
     }
     return wasAdded;
   }
@@ -553,13 +449,6 @@ public class TreePLE
       Tree aTree = trees.get(trees.size() - 1);
       aTree.delete();
       trees.remove(aTree);
-    }
-    
-    while (statuses.size() > 0)
-    {
-      Status aStatus = statuses.get(statuses.size() - 1);
-      aStatus.delete();
-      statuses.remove(aStatus);
     }
     
     while (municipalities.size() > 0)
@@ -576,11 +465,11 @@ public class TreePLE
       species.remove(aSpecies);
     }
     
-    while (users.size() > 0)
+    while (locals.size() > 0)
     {
-      User aUser = users.get(users.size() - 1);
-      aUser.delete();
-      users.remove(aUser);
+      User aLocal = locals.get(locals.size() - 1);
+      aLocal.delete();
+      locals.remove(aLocal);
     }
     
   }

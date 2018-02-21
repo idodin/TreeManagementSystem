@@ -4,7 +4,7 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 
-// line 37 "../../../../../TreePLE.ump"
+// line 36 "../../../../../TreePLE.ump"
 public class Municipality
 {
 
@@ -24,7 +24,7 @@ public class Municipality
 
   //Municipality Associations
   private TreePLE treePLE;
-  private List<Tree> trees;
+  private List<TreeLocation> treeLocations;
 
   //------------------------
   // CONSTRUCTOR
@@ -42,7 +42,7 @@ public class Municipality
     {
       throw new RuntimeException("Unable to create municipality due to treePLE");
     }
-    trees = new ArrayList<Tree>();
+    treeLocations = new ArrayList<TreeLocation>();
   }
 
   //------------------------
@@ -98,33 +98,33 @@ public class Municipality
     return treePLE;
   }
 
-  public Tree getTree(int index)
+  public TreeLocation getTreeLocation(int index)
   {
-    Tree aTree = trees.get(index);
-    return aTree;
+    TreeLocation aTreeLocation = treeLocations.get(index);
+    return aTreeLocation;
   }
 
-  public List<Tree> getTrees()
+  public List<TreeLocation> getTreeLocations()
   {
-    List<Tree> newTrees = Collections.unmodifiableList(trees);
-    return newTrees;
+    List<TreeLocation> newTreeLocations = Collections.unmodifiableList(treeLocations);
+    return newTreeLocations;
   }
 
-  public int numberOfTrees()
+  public int numberOfTreeLocations()
   {
-    int number = trees.size();
+    int number = treeLocations.size();
     return number;
   }
 
-  public boolean hasTrees()
+  public boolean hasTreeLocations()
   {
-    boolean has = trees.size() > 0;
+    boolean has = treeLocations.size() > 0;
     return has;
   }
 
-  public int indexOfTree(Tree aTree)
+  public int indexOfTreeLocation(TreeLocation aTreeLocation)
   {
-    int index = trees.indexOf(aTree);
+    int index = treeLocations.indexOf(aTreeLocation);
     return index;
   }
 
@@ -147,74 +147,74 @@ public class Municipality
     return wasSet;
   }
 
-  public static int minimumNumberOfTrees()
+  public static int minimumNumberOfTreeLocations()
   {
     return 0;
   }
 
-  public Tree addTree(int aLongitude, int aLatitude, int aHeight, int aDiameter, Status aStatus, LandUse aLanduse, Species aSpecies, User aUsers, TreePLE aTreePLE)
+  public TreeLocation addTreeLocation(int aLongitude, int aLatitude, Tree aTree)
   {
-    return new Tree(aLongitude, aLatitude, aHeight, aDiameter, aStatus, aLanduse, this, aSpecies, aUsers, aTreePLE);
+    return new TreeLocation(aLongitude, aLatitude, this, aTree);
   }
 
-  public boolean addTree(Tree aTree)
+  public boolean addTreeLocation(TreeLocation aTreeLocation)
   {
     boolean wasAdded = false;
-    if (trees.contains(aTree)) { return false; }
-    Municipality existingMunicipality = aTree.getMunicipality();
+    if (treeLocations.contains(aTreeLocation)) { return false; }
+    Municipality existingMunicipality = aTreeLocation.getMunicipality();
     boolean isNewMunicipality = existingMunicipality != null && !this.equals(existingMunicipality);
     if (isNewMunicipality)
     {
-      aTree.setMunicipality(this);
+      aTreeLocation.setMunicipality(this);
     }
     else
     {
-      trees.add(aTree);
+      treeLocations.add(aTreeLocation);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeTree(Tree aTree)
+  public boolean removeTreeLocation(TreeLocation aTreeLocation)
   {
     boolean wasRemoved = false;
-    //Unable to remove aTree, as it must always have a municipality
-    if (!this.equals(aTree.getMunicipality()))
+    //Unable to remove aTreeLocation, as it must always have a municipality
+    if (!this.equals(aTreeLocation.getMunicipality()))
     {
-      trees.remove(aTree);
+      treeLocations.remove(aTreeLocation);
       wasRemoved = true;
     }
     return wasRemoved;
   }
 
-  public boolean addTreeAt(Tree aTree, int index)
+  public boolean addTreeLocationAt(TreeLocation aTreeLocation, int index)
   {  
     boolean wasAdded = false;
-    if(addTree(aTree))
+    if(addTreeLocation(aTreeLocation))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfTrees()) { index = numberOfTrees() - 1; }
-      trees.remove(aTree);
-      trees.add(index, aTree);
+      if(index > numberOfTreeLocations()) { index = numberOfTreeLocations() - 1; }
+      treeLocations.remove(aTreeLocation);
+      treeLocations.add(index, aTreeLocation);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveTreeAt(Tree aTree, int index)
+  public boolean addOrMoveTreeLocationAt(TreeLocation aTreeLocation, int index)
   {
     boolean wasAdded = false;
-    if(trees.contains(aTree))
+    if(treeLocations.contains(aTreeLocation))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfTrees()) { index = numberOfTrees() - 1; }
-      trees.remove(aTree);
-      trees.add(index, aTree);
+      if(index > numberOfTreeLocations()) { index = numberOfTreeLocations() - 1; }
+      treeLocations.remove(aTreeLocation);
+      treeLocations.add(index, aTreeLocation);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addTreeAt(aTree, index);
+      wasAdded = addTreeLocationAt(aTreeLocation, index);
     }
     return wasAdded;
   }
@@ -225,10 +225,10 @@ public class Municipality
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
     placeholderTreePLE.removeMunicipality(this);
-    for(int i=trees.size(); i > 0; i--)
+    for(int i=treeLocations.size(); i > 0; i--)
     {
-      Tree aTree = trees.get(i - 1);
-      aTree.delete();
+      TreeLocation aTreeLocation = treeLocations.get(i - 1);
+      aTreeLocation.delete();
     }
   }
 

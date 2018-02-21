@@ -2,10 +2,9 @@
 /*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
-import java.util.*;
 
-// line 54 "../../../../../TreePLE.ump"
-public class Specialist extends User
+// line 51 "../../../../../TreePLE.ump"
+public class Specialist extends UserRole
 {
 
   //------------------------
@@ -16,9 +15,9 @@ public class Specialist extends User
   // CONSTRUCTOR
   //------------------------
 
-  public Specialist(String aUsername, TreePLE aTreePLE)
+  public Specialist(User aUser)
   {
-    super(aUsername, aTreePLE);
+    super(aUser);
   }
 
   //------------------------
