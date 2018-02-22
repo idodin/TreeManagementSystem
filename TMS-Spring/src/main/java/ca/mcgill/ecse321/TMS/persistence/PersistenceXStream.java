@@ -19,6 +19,7 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+import ca.mcgill.ecse321.TMS.model.UserRole;
 
 // The first type parameter is the domain type for wich we are creating the repository.
 // The second is the key type that is used to look it up. This example will not use it.
@@ -42,6 +43,10 @@ public class PersistenceXStream {
         setAlias("treeStatus", TreeStatus.class);
         setAlias("tree", Tree.class);
         setAlias("treePLE", TreePLE.class);
+        setAlias("treeStatus", TreeStatus.class);
+        setAlias("treeLocation", TreeLocation.class);
+        setAlias("userRole", UserRole.class);
+        
         
 
         // load model if exists, create otherwise
