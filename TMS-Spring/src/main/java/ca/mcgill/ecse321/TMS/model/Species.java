@@ -4,7 +4,7 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 
-// line 42 "../../../../../TreePLE.ump"
+// line 41 "../../../../../TreePLE.ump"
 public class Species
 {
 
@@ -167,9 +167,9 @@ public class Species
     return 0;
   }
 
-  public Tree addTree(int aLongitude, int aLatitude, int aHeight, int aDiameter, Status aStatus, LandUse aLanduse, Municipality aMunicipality, User aUsers, TreePLE aTreePLE)
+  public Tree addTree(int aHeight, int aDiameter, User aLocal, TreePLE aTreePLE)
   {
-    return new Tree(aLongitude, aLatitude, aHeight, aDiameter, aStatus, aLanduse, aMunicipality, this, aUsers, aTreePLE);
+    return new Tree(aHeight, aDiameter, this, aLocal, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)

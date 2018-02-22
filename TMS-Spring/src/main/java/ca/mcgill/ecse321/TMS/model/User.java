@@ -4,8 +4,8 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 
-// line 48 "../../../../../TreePLE.ump"
-public abstract class User
+// line 47 "../../../../../TreePLE.ump"
+public class User
 {
 
   //------------------------
@@ -24,6 +24,7 @@ public abstract class User
   //User Associations
   private TreePLE treePLE;
   private List<Tree> trees;
+  private List<UserRole> userRoles;
 
   //------------------------
   // CONSTRUCTOR
@@ -38,9 +39,10 @@ public abstract class User
     boolean didAddTreePLE = setTreePLE(aTreePLE);
     if (!didAddTreePLE)
     {
-      throw new RuntimeException("Unable to create user due to treePLE");
+      throw new RuntimeException("Unable to create local due to treePLE");
     }
     trees = new ArrayList<Tree>();
+    userRoles = new ArrayList<UserRole>();
   }
 
   //------------------------
@@ -113,6 +115,36 @@ public abstract class User
     return index;
   }
 
+  public UserRole getUserRole(int index)
+  {
+    UserRole aUserRole = userRoles.get(index);
+    return aUserRole;
+  }
+
+  public List<UserRole> getUserRoles()
+  {
+    List<UserRole> newUserRoles = Collections.unmodifiableList(userRoles);
+    return newUserRoles;
+  }
+
+  public int numberOfUserRoles()
+  {
+    int number = userRoles.size();
+    return number;
+  }
+
+  public boolean hasUserRoles()
+  {
+    boolean has = userRoles.size() > 0;
+    return has;
+  }
+
+  public int indexOfUserRole(UserRole aUserRole)
+  {
+    int index = userRoles.indexOf(aUserRole);
+    return index;
+  }
+
   public boolean setTreePLE(TreePLE aTreePLE)
   {
     boolean wasSet = false;
@@ -125,9 +157,9 @@ public abstract class User
     treePLE = aTreePLE;
     if (existingTreePLE != null && !existingTreePLE.equals(aTreePLE))
     {
-      existingTreePLE.removeUser(this);
+      existingTreePLE.removeLocal(this);
     }
-    treePLE.addUser(this);
+    treePLE.addLocal(this);
     wasSet = true;
     return wasSet;
   }
@@ -137,20 +169,20 @@ public abstract class User
     return 0;
   }
 
-  public Tree addTree(int aLongitude, int aLatitude, int aHeight, int aDiameter, Status aStatus, LandUse aLanduse, Municipality aMunicipality, Species aSpecies, TreePLE aTreePLE)
+  public Tree addTree(int aHeight, int aDiameter, Species aSpecies, TreePLE aTreePLE)
   {
-    return new Tree(aLongitude, aLatitude, aHeight, aDiameter, aStatus, aLanduse, aMunicipality, aSpecies, this, aTreePLE);
+    return new Tree(aHeight, aDiameter, aSpecies, this, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)
   {
     boolean wasAdded = false;
     if (trees.contains(aTree)) { return false; }
-    User existingUsers = aTree.getUsers();
-    boolean isNewUsers = existingUsers != null && !this.equals(existingUsers);
-    if (isNewUsers)
+    User existingLocal = aTree.getLocal();
+    boolean isNewLocal = existingLocal != null && !this.equals(existingLocal);
+    if (isNewLocal)
     {
-      aTree.setUsers(this);
+      aTree.setLocal(this);
     }
     else
     {
@@ -163,8 +195,8 @@ public abstract class User
   public boolean removeTree(Tree aTree)
   {
     boolean wasRemoved = false;
-    //Unable to remove aTree, as it must always have a users
-    if (!this.equals(aTree.getUsers()))
+    //Unable to remove aTree, as it must always have a local
+    if (!this.equals(aTree.getLocal()))
     {
       trees.remove(aTree);
       wasRemoved = true;
@@ -204,16 +236,110 @@ public abstract class User
     return wasAdded;
   }
 
+  public static int minimumNumberOfUserRoles()
+  {
+    return 0;
+  }
+
+  public static int maximumNumberOfUserRoles()
+  {
+    return 2;
+  }
+
+  public UserRole addUserRole()
+  {
+    if (numberOfUserRoles() >= maximumNumberOfUserRoles())
+    {
+      return null;
+    }
+    else
+    {
+      return new UserRole(this);
+    }
+  }
+
+  public boolean addUserRole(UserRole aUserRole)
+  {
+    boolean wasAdded = false;
+    if (userRoles.contains(aUserRole)) { return false; }
+    if (numberOfUserRoles() >= maximumNumberOfUserRoles())
+    {
+      return wasAdded;
+    }
+
+    User existingUser = aUserRole.getUser();
+    boolean isNewUser = existingUser != null && !this.equals(existingUser);
+    if (isNewUser)
+    {
+      aUserRole.setUser(this);
+    }
+    else
+    {
+      userRoles.add(aUserRole);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeUserRole(UserRole aUserRole)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aUserRole, as it must always have a user
+    if (!this.equals(aUserRole.getUser()))
+    {
+      userRoles.remove(aUserRole);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+
+  public boolean addUserRoleAt(UserRole aUserRole, int index)
+  {  
+    boolean wasAdded = false;
+    if(addUserRole(aUserRole))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
+      userRoles.remove(aUserRole);
+      userRoles.add(index, aUserRole);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveUserRoleAt(UserRole aUserRole, int index)
+  {
+    boolean wasAdded = false;
+    if(userRoles.contains(aUserRole))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfUserRoles()) { index = numberOfUserRoles() - 1; }
+      userRoles.remove(aUserRole);
+      userRoles.add(index, aUserRole);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addUserRoleAt(aUserRole, index);
+    }
+    return wasAdded;
+  }
+
   public void delete()
   {
     usersByUsername.remove(getUsername());
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
-    placeholderTreePLE.removeUser(this);
+    placeholderTreePLE.removeLocal(this);
     for(int i=trees.size(); i > 0; i--)
     {
       Tree aTree = trees.get(i - 1);
       aTree.delete();
+    }
+    for(int i=userRoles.size(); i > 0; i--)
+    {
+      UserRole aUserRole = userRoles.get(i - 1);
+      aUserRole.delete();
     }
   }
 
