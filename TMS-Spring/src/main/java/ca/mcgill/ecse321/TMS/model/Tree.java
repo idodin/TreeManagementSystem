@@ -298,7 +298,7 @@ public class Tree
     
     TreeLocation existingTreeLocation = treeLocation;
     treeLocation = null;
-    if (existingTreeLocation != null)
+    if (existingTreeLocation != null )
     {
       existingTreeLocation.delete();
     }
