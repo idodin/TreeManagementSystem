@@ -4,7 +4,7 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 
-// line 47 "../../../../../TreePLE.ump"
+// line 48 "../../../../../TreePLE.ump"
 public class User
 {
 
