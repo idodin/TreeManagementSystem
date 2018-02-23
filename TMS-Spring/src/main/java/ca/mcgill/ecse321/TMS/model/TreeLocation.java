@@ -43,20 +43,24 @@ public class TreeLocation
       throw new RuntimeException("Unable to create TreeLocation due to aTree");
     }
     tree = aTree;
-    if (aLocationType == null || aLocationType.getTreeLocation() != null)
+    boolean didAddLocationType = setLocationType(aLocationType);
+    if (!didAddLocationType)
     {
-      throw new RuntimeException("Unable to create TreeLocation due to aLocationType");
+      throw new RuntimeException("Unable to create treeLocation due to locationType");
     }
-    locationType = aLocationType;
   }
 
-  public TreeLocation(int aX, int aY, String aDescription, int aIdForTree, int aHeightForTree, int aDiameterForTree, Date aDatePlantedForTree, Date aDateAddedForTree, TreeStatus aTreeStatusForTree, Species aSpeciesForTree, User aLocalForTree, Municipality aMunicipalityForTree, TreePLE aTreePLEForTree)
+  public TreeLocation(int aX, int aY, String aDescription, int aIdForTree, int aHeightForTree, int aDiameterForTree, Date aDatePlantedForTree, Date aDateAddedForTree, TreeStatus aTreeStatusForTree, Species aSpeciesForTree, User aLocalForTree, Municipality aMunicipalityForTree, TreePLE aTreePLEForTree, LocationType aLocationType)
   {
     x = aX;
     y = aY;
     description = aDescription;
     tree = new Tree(aIdForTree, aHeightForTree, aDiameterForTree, aDatePlantedForTree, aDateAddedForTree, aTreeStatusForTree, aSpeciesForTree, aLocalForTree, aMunicipalityForTree, aTreePLEForTree, this);
-    locationType = new LocationType(this);
+    boolean didAddLocationType = setLocationType(aLocationType);
+    if (!didAddLocationType)
+    {
+      throw new RuntimeException("Unable to create treeLocation due to locationType");
+    }
   }
 
   //------------------------
@@ -110,6 +114,33 @@ public class TreeLocation
   public LocationType getLocationType()
   {
     return locationType;
+  }
+
+  public boolean setLocationType(LocationType aLocationType)
+  {
+    boolean wasSet = false;
+    if (!canSetLocationType) { return false; }
+    if (aLocationType == null)
+    {
+      return wasSet;
+    }
+
+    LocationType existingLocationType = locationType;
+    locationType = aLocationType;
+    if (existingLocationType != null && !existingLocationType.equals(aLocationType))
+    {
+      existingLocationType.removeTreeLocation(this);
+    }
+    if (!locationType.addTreeLocation(this))
+    {
+      locationType = existingLocationType;
+      wasSet = false;
+    }
+    else
+    {
+      wasSet = true;
+    }
+    return wasSet;
   }
 
   public boolean equals(Object obj)
@@ -177,12 +208,9 @@ public class TreeLocation
     {
       existingTree.delete();
     }
-    LocationType existingLocationType = locationType;
-    locationType = null;
-    if (existingLocationType != null)
-    {
-      existingLocationType.delete();
-    }
+    LocationType placeholderLocationType = locationType;
+    this.locationType = null;
+    placeholderLocationType.removeTreeLocation(this);
   }
 
 

@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
+import java.util.*;
 
 // line 40 "../../../../../TreePLE.ump"
 public class LocationType
@@ -21,24 +22,15 @@ public class LocationType
   private LandUseType landUseType;
 
   //LocationType Associations
-  private TreeLocation treeLocation;
+  private List<TreeLocation> treeLocations;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public LocationType(TreeLocation aTreeLocation)
+  public LocationType()
   {
-    if (aTreeLocation == null || aTreeLocation.getLocationType() != null)
-    {
-      throw new RuntimeException("Unable to create LocationType due to aTreeLocation");
-    }
-    treeLocation = aTreeLocation;
-  }
-
-  public LocationType(int aXForTreeLocation, int aYForTreeLocation, String aDescriptionForTreeLocation, Tree aTreeForTreeLocation)
-  {
-    treeLocation = new TreeLocation(aXForTreeLocation, aYForTreeLocation, aDescriptionForTreeLocation, aTreeForTreeLocation, this);
+    treeLocations = new ArrayList<TreeLocation>();
   }
 
   //------------------------
@@ -58,18 +50,114 @@ public class LocationType
     return landUseType;
   }
 
-  public TreeLocation getTreeLocation()
+  public TreeLocation getTreeLocation(int index)
   {
-    return treeLocation;
+    TreeLocation aTreeLocation = treeLocations.get(index);
+    return aTreeLocation;
+  }
+
+  public List<TreeLocation> getTreeLocations()
+  {
+    List<TreeLocation> newTreeLocations = Collections.unmodifiableList(treeLocations);
+    return newTreeLocations;
+  }
+
+  public int numberOfTreeLocations()
+  {
+    int number = treeLocations.size();
+    return number;
+  }
+
+  public boolean hasTreeLocations()
+  {
+    boolean has = treeLocations.size() > 0;
+    return has;
+  }
+
+  public int indexOfTreeLocation(TreeLocation aTreeLocation)
+  {
+    int index = treeLocations.indexOf(aTreeLocation);
+    return index;
+  }
+
+  public static int minimumNumberOfTreeLocations()
+  {
+    return 0;
+  }
+
+  public TreeLocation addTreeLocation(int aX, int aY, String aDescription, Tree aTree)
+  {
+    return new TreeLocation(aX, aY, aDescription, aTree, this);
+  }
+
+  public boolean addTreeLocation(TreeLocation aTreeLocation)
+  {
+    boolean wasAdded = false;
+    if (treeLocations.contains(aTreeLocation)) { return false; }
+    LocationType existingLocationType = aTreeLocation.getLocationType();
+    boolean isNewLocationType = existingLocationType != null && !this.equals(existingLocationType);
+    if (isNewLocationType)
+    {
+      aTreeLocation.setLocationType(this);
+    }
+    else
+    {
+      treeLocations.add(aTreeLocation);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeTreeLocation(TreeLocation aTreeLocation)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aTreeLocation, as it must always have a locationType
+    if (!this.equals(aTreeLocation.getLocationType()))
+    {
+      treeLocations.remove(aTreeLocation);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+
+  public boolean addTreeLocationAt(TreeLocation aTreeLocation, int index)
+  {  
+    boolean wasAdded = false;
+    if(addTreeLocation(aTreeLocation))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTreeLocations()) { index = numberOfTreeLocations() - 1; }
+      treeLocations.remove(aTreeLocation);
+      treeLocations.add(index, aTreeLocation);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveTreeLocationAt(TreeLocation aTreeLocation, int index)
+  {
+    boolean wasAdded = false;
+    if(treeLocations.contains(aTreeLocation))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTreeLocations()) { index = numberOfTreeLocations() - 1; }
+      treeLocations.remove(aTreeLocation);
+      treeLocations.add(index, aTreeLocation);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addTreeLocationAt(aTreeLocation, index);
+    }
+    return wasAdded;
   }
 
   public void delete()
   {
-    TreeLocation existingTreeLocation = treeLocation;
-    treeLocation = null;
-    if (existingTreeLocation != null)
+    for(int i=treeLocations.size(); i > 0; i--)
     {
-      existingTreeLocation.delete();
+      TreeLocation aTreeLocation = treeLocations.get(i - 1);
+      aTreeLocation.delete();
     }
   }
 
@@ -77,7 +165,6 @@ public class LocationType
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "landUseType" + "=" + (getLandUseType() != null ? !getLandUseType().equals(this)  ? getLandUseType().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "treeLocation = "+(getTreeLocation()!=null?Integer.toHexString(System.identityHashCode(getTreeLocation())):"null");
+            "  " + "landUseType" + "=" + (getLandUseType() != null ? !getLandUseType().equals(this)  ? getLandUseType().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

@@ -544,9 +544,9 @@ public class TreePLE
     return 0;
   }
 
-  public Park addPark(TreeLocation aTreeLocation, int aParkCode, String aParkName)
+  public Park addPark(int aParkCode, String aParkName)
   {
-    return new Park(aTreeLocation, aParkCode, aParkName, this);
+    return new Park(aParkCode, aParkName, this);
   }
 
   public boolean addPark(Park aPark)
@@ -616,9 +616,9 @@ public class TreePLE
     return 0;
   }
 
-  public Street addStreet(TreeLocation aTreeLocation, String aStreetName)
+  public Street addStreet(String aStreetName)
   {
-    return new Street(aTreeLocation, aStreetName, this);
+    return new Street(aStreetName, this);
   }
 
   public boolean addStreet(Street aStreet)

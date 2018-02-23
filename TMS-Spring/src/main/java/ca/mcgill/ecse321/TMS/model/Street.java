@@ -28,9 +28,9 @@ public class Street extends LocationType
   // CONSTRUCTOR
   //------------------------
 
-  public Street(TreeLocation aTreeLocation, String aStreetName, TreePLE aTreePLE)
+  public Street(String aStreetName, TreePLE aTreePLE)
   {
-    super(aTreeLocation);
+    super();
     if (!setStreetName(aStreetName))
     {
       throw new RuntimeException("Cannot create due to duplicate streetName");

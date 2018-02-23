@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
+import java.util.*;
 
 // line 45 "../../../../../TreePLE.ump"
 public class Park extends LocationType
@@ -22,9 +23,9 @@ public class Park extends LocationType
   // CONSTRUCTOR
   //------------------------
 
-  public Park(TreeLocation aTreeLocation, int aParkCode, String aParkName, TreePLE aTreePLE)
+  public Park(int aParkCode, String aParkName, TreePLE aTreePLE)
   {
-    super(aTreeLocation);
+    super();
     parkCode = aParkCode;
     parkName = aParkName;
     boolean didAddTreePLE = setTreePLE(aTreePLE);
