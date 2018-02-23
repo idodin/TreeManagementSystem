@@ -3,8 +3,9 @@
 
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
+import java.sql.Date;
 
-// line 37 "../../../../../TreePLE.ump"
+// line 57 "../../../../../TreePLE.ump"
 public class Municipality
 {
 
@@ -12,6 +13,7 @@ public class Municipality
   // STATIC VARIABLES
   //------------------------
 
+  private static Map<String, Municipality> municipalitysByIdNumber = new HashMap<String, Municipality>();
   private static Map<String, Municipality> municipalitysByName = new HashMap<String, Municipality>();
 
   //------------------------
@@ -19,20 +21,23 @@ public class Municipality
   //------------------------
 
   //Municipality Attributes
+  private String idNumber;
   private String name;
-  private int bioDiversityIndex;
 
   //Municipality Associations
   private TreePLE treePLE;
-  private List<TreeLocation> treeLocations;
+  private List<Tree> trees;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Municipality(String aName, int aBioDiversityIndex, TreePLE aTreePLE)
+  public Municipality(String aIdNumber, String aName, TreePLE aTreePLE)
   {
-    bioDiversityIndex = aBioDiversityIndex;
+    if (!setIdNumber(aIdNumber))
+    {
+      throw new RuntimeException("Cannot create due to duplicate idNumber");
+    }
     if (!setName(aName))
     {
       throw new RuntimeException("Cannot create due to duplicate name");
@@ -42,12 +47,28 @@ public class Municipality
     {
       throw new RuntimeException("Unable to create municipality due to treePLE");
     }
-    treeLocations = new ArrayList<TreeLocation>();
+    trees = new ArrayList<Tree>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setIdNumber(String aIdNumber)
+  {
+    boolean wasSet = false;
+    String anOldIdNumber = getIdNumber();
+    if (hasWithIdNumber(aIdNumber)) {
+      return wasSet;
+    }
+    idNumber = aIdNumber;
+    wasSet = true;
+    if (anOldIdNumber != null) {
+      municipalitysByIdNumber.remove(anOldIdNumber);
+    }
+    municipalitysByIdNumber.put(aIdNumber, this);
+    return wasSet;
+  }
 
   public boolean setName(String aName)
   {
@@ -65,12 +86,19 @@ public class Municipality
     return wasSet;
   }
 
-  public boolean setBioDiversityIndex(int aBioDiversityIndex)
+  public String getIdNumber()
   {
-    boolean wasSet = false;
-    bioDiversityIndex = aBioDiversityIndex;
-    wasSet = true;
-    return wasSet;
+    return idNumber;
+  }
+
+  public static Municipality getWithIdNumber(String aIdNumber)
+  {
+    return municipalitysByIdNumber.get(aIdNumber);
+  }
+
+  public static boolean hasWithIdNumber(String aIdNumber)
+  {
+    return getWithIdNumber(aIdNumber) != null;
   }
 
   public String getName()
@@ -88,43 +116,38 @@ public class Municipality
     return getWithName(aName) != null;
   }
 
-  public int getBioDiversityIndex()
-  {
-    return bioDiversityIndex;
-  }
-
   public TreePLE getTreePLE()
   {
     return treePLE;
   }
 
-  public TreeLocation getTreeLocation(int index)
+  public Tree getTree(int index)
   {
-    TreeLocation aTreeLocation = treeLocations.get(index);
-    return aTreeLocation;
+    Tree aTree = trees.get(index);
+    return aTree;
   }
 
-  public List<TreeLocation> getTreeLocations()
+  public List<Tree> getTrees()
   {
-    List<TreeLocation> newTreeLocations = Collections.unmodifiableList(treeLocations);
-    return newTreeLocations;
+    List<Tree> newTrees = Collections.unmodifiableList(trees);
+    return newTrees;
   }
 
-  public int numberOfTreeLocations()
+  public int numberOfTrees()
   {
-    int number = treeLocations.size();
+    int number = trees.size();
     return number;
   }
 
-  public boolean hasTreeLocations()
+  public boolean hasTrees()
   {
-    boolean has = treeLocations.size() > 0;
+    boolean has = trees.size() > 0;
     return has;
   }
 
-  public int indexOfTreeLocation(TreeLocation aTreeLocation)
+  public int indexOfTree(Tree aTree)
   {
-    int index = treeLocations.indexOf(aTreeLocation);
+    int index = trees.indexOf(aTree);
     return index;
   }
 
@@ -147,88 +170,89 @@ public class Municipality
     return wasSet;
   }
 
-  public static int minimumNumberOfTreeLocations()
+  public static int minimumNumberOfTrees()
   {
     return 0;
   }
 
-  public TreeLocation addTreeLocation(int aLongitude, int aLatitude, Tree aTree)
+  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, TreePLE aTreePLE, TreeLocation aTreeLocation)
   {
-    return new TreeLocation(aLongitude, aLatitude, this, aTree);
+    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, this, aTreePLE, aTreeLocation);
   }
 
-  public boolean addTreeLocation(TreeLocation aTreeLocation)
+  public boolean addTree(Tree aTree)
   {
     boolean wasAdded = false;
-    if (treeLocations.contains(aTreeLocation)) { return false; }
-    Municipality existingMunicipality = aTreeLocation.getMunicipality();
+    if (trees.contains(aTree)) { return false; }
+    Municipality existingMunicipality = aTree.getMunicipality();
     boolean isNewMunicipality = existingMunicipality != null && !this.equals(existingMunicipality);
     if (isNewMunicipality)
     {
-      aTreeLocation.setMunicipality(this);
+      aTree.setMunicipality(this);
     }
     else
     {
-      treeLocations.add(aTreeLocation);
+      trees.add(aTree);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeTreeLocation(TreeLocation aTreeLocation)
+  public boolean removeTree(Tree aTree)
   {
     boolean wasRemoved = false;
-    //Unable to remove aTreeLocation, as it must always have a municipality
-    if (!this.equals(aTreeLocation.getMunicipality()))
+    //Unable to remove aTree, as it must always have a municipality
+    if (!this.equals(aTree.getMunicipality()))
     {
-      treeLocations.remove(aTreeLocation);
+      trees.remove(aTree);
       wasRemoved = true;
     }
     return wasRemoved;
   }
 
-  public boolean addTreeLocationAt(TreeLocation aTreeLocation, int index)
+  public boolean addTreeAt(Tree aTree, int index)
   {  
     boolean wasAdded = false;
-    if(addTreeLocation(aTreeLocation))
+    if(addTree(aTree))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfTreeLocations()) { index = numberOfTreeLocations() - 1; }
-      treeLocations.remove(aTreeLocation);
-      treeLocations.add(index, aTreeLocation);
+      if(index > numberOfTrees()) { index = numberOfTrees() - 1; }
+      trees.remove(aTree);
+      trees.add(index, aTree);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveTreeLocationAt(TreeLocation aTreeLocation, int index)
+  public boolean addOrMoveTreeAt(Tree aTree, int index)
   {
     boolean wasAdded = false;
-    if(treeLocations.contains(aTreeLocation))
+    if(trees.contains(aTree))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfTreeLocations()) { index = numberOfTreeLocations() - 1; }
-      treeLocations.remove(aTreeLocation);
-      treeLocations.add(index, aTreeLocation);
+      if(index > numberOfTrees()) { index = numberOfTrees() - 1; }
+      trees.remove(aTree);
+      trees.add(index, aTree);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addTreeLocationAt(aTreeLocation, index);
+      wasAdded = addTreeAt(aTree, index);
     }
     return wasAdded;
   }
 
   public void delete()
   {
+    municipalitysByIdNumber.remove(getIdNumber());
     municipalitysByName.remove(getName());
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
     placeholderTreePLE.removeMunicipality(this);
-    for(int i=treeLocations.size(); i > 0; i--)
+    for(int i=trees.size(); i > 0; i--)
     {
-      TreeLocation aTreeLocation = treeLocations.get(i - 1);
-      aTreeLocation.delete();
+      Tree aTree = trees.get(i - 1);
+      aTree.delete();
     }
   }
 
@@ -236,8 +260,8 @@ public class Municipality
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "," +
-            "bioDiversityIndex" + ":" + getBioDiversityIndex()+ "]" + System.getProperties().getProperty("line.separator") +
+            "idNumber" + ":" + getIdNumber()+ "," +
+            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "treePLE = "+(getTreePLE()!=null?Integer.toHexString(System.identityHashCode(getTreePLE())):"null");
   }
 }
