@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse321.TMS.model;
 
-// line 60 "../../../../../TreePLE.ump"
+// line 82 "../../../../../TreePLE.ump"
 public class UserRole
 {
 
