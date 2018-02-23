@@ -4,7 +4,7 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.sql.Date;
 
-// line 20 "../../../../../TreePLE.ump"
+// line 21 "../../../../../TreePLE.ump"
 public class TreeStatus
 {
 
@@ -86,30 +86,42 @@ public class TreeStatus
     return tree;
   }
 
-  public boolean setTree(Tree aTree)
+  public boolean setTree(Tree aNewTree)
   {
     boolean wasSet = false;
-    if (aTree == null)
+    if (aNewTree == null)
     {
+      //Unable to setTree to null, as treeStatus must always be associated to a tree
       return wasSet;
     }
-
-    Tree existingTree = tree;
-    tree = aTree;
-    if (existingTree != null && !existingTree.equals(aTree))
+    
+    TreeStatus existingTreeStatus = aNewTree.getTreeStatus();
+    if (existingTreeStatus != null && !equals(existingTreeStatus))
     {
-      existingTree.removeTreeStatus(this);
+      //Unable to setTree, the current tree already has a treeStatus, which would be orphaned if it were re-assigned
+      return wasSet;
     }
-    tree.addTreeStatus(this);
+    
+    Tree anOldTree = tree;
+    tree = aNewTree;
+    tree.setTreeStatus(this);
+
+    if (anOldTree != null)
+    {
+      anOldTree.setTreeStatus(null);
+    }
     wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    Tree placeholderTree = tree;
-    this.tree = null;
-    placeholderTree.removeTreeStatus(this);
+    Tree existingTree = tree;
+    tree = null;
+    if (existingTree != null)
+    {
+      existingTree.setTreeStatus(null);
+    }
   }
 
 
