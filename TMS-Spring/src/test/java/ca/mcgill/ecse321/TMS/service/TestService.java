@@ -108,7 +108,31 @@ public class TestService {
 	
 	@Test
 	public void testFindalltrees() {
-		
+		//create tree properties
+		String name = "aehwany";
+		 int height=5;
+		 int diameter=10;  
+		 User user=new User(name, ple);
+		 Species species= new Species("dandelion", 5, 4, ple);
+		 
+		 //Create trees
+		 Tree tree1 = new Tree(height, diameter, species , user, ple);
+		 Tree tree2 = new Tree(height, diameter, species , user, ple);
+		 Tree tree3 = new Tree(height, diameter, species , user, ple);
+		 
+		 
+		 List<Tree> treeList;
+		 try {
+				TMSService erc = new TMSService(ple);
+				treeList=erc.findAllTrees();
+			} catch (InvalidInputException e) {
+				// TODO Auto-generated catch block
+				fail();
+			}
+		 assertEquals(3,treeList.size());
+		 assertEquals(treeList.get(0),tree1);
+		 assertEquals(treeList.get(1),tree2);
+		 assertEquals(treeList.get(2),tree3);
 		
 	}
 	
