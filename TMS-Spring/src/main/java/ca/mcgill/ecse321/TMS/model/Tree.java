@@ -2,12 +2,17 @@
 /*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
-import java.util.*;
 import java.sql.Date;
 
 // line 11 "../../../../../TreePLE.ump"
 public class Tree
 {
+
+  //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  private static int nextId = 1;
 
   //------------------------
   // MEMBER VARIABLES
@@ -17,8 +22,11 @@ public class Tree
   private int height;
   private int diameter;
 
+  //Autounique Attributes
+  private int id;
+
   //Tree Associations
-  private List<TreeStatus> treeStatus;
+  private TreeStatus treeStatus;
   private TreeLocation treeLocation;
   private Species species;
   private User local;
@@ -32,7 +40,7 @@ public class Tree
   {
     height = aHeight;
     diameter = aDiameter;
-    treeStatus = new ArrayList<TreeStatus>();
+    id = nextId++;
     boolean didAddSpecies = setSpecies(aSpecies);
     if (!didAddSpecies)
     {
@@ -80,34 +88,20 @@ public class Tree
     return diameter;
   }
 
-  public TreeStatus getTreeStatus(int index)
+  public int getId()
   {
-    TreeStatus aTreeStatus = treeStatus.get(index);
-    return aTreeStatus;
+    return id;
   }
 
-  public List<TreeStatus> getTreeStatus()
+  public TreeStatus getTreeStatus()
   {
-    List<TreeStatus> newTreeStatus = Collections.unmodifiableList(treeStatus);
-    return newTreeStatus;
-  }
-
-  public int numberOfTreeStatus()
-  {
-    int number = treeStatus.size();
-    return number;
+    return treeStatus;
   }
 
   public boolean hasTreeStatus()
   {
-    boolean has = treeStatus.size() > 0;
+    boolean has = treeStatus != null;
     return has;
-  }
-
-  public int indexOfTreeStatus(TreeStatus aTreeStatus)
-  {
-    int index = treeStatus.indexOf(aTreeStatus);
-    return index;
   }
 
   public TreeLocation getTreeLocation()
@@ -136,76 +130,31 @@ public class Tree
     return treePLE;
   }
 
-  public static int minimumNumberOfTreeStatus()
+  public boolean setTreeStatus(TreeStatus aNewTreeStatus)
   {
-    return 0;
-  }
-
-  public TreeStatus addTreeStatus(Date aDateOfBirth)
-  {
-    return new TreeStatus(aDateOfBirth, this);
-  }
-
-  public boolean addTreeStatus(TreeStatus aTreeStatus)
-  {
-    boolean wasAdded = false;
-    if (treeStatus.contains(aTreeStatus)) { return false; }
-    Tree existingTree = aTreeStatus.getTree();
-    boolean isNewTree = existingTree != null && !this.equals(existingTree);
-    if (isNewTree)
+    boolean wasSet = false;
+    if (treeStatus != null && !treeStatus.equals(aNewTreeStatus) && equals(treeStatus.getTree()))
     {
-      aTreeStatus.setTree(this);
+      //Unable to setTreeStatus, as existing treeStatus would become an orphan
+      return wasSet;
     }
-    else
-    {
-      treeStatus.add(aTreeStatus);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
 
-  public boolean removeTreeStatus(TreeStatus aTreeStatus)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aTreeStatus, as it must always have a tree
-    if (!this.equals(aTreeStatus.getTree()))
-    {
-      treeStatus.remove(aTreeStatus);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
+    treeStatus = aNewTreeStatus;
+    Tree anOldTree = aNewTreeStatus != null ? aNewTreeStatus.getTree() : null;
 
-  public boolean addTreeStatusAt(TreeStatus aTreeStatus, int index)
-  {  
-    boolean wasAdded = false;
-    if(addTreeStatus(aTreeStatus))
+    if (!this.equals(anOldTree))
     {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfTreeStatus()) { index = numberOfTreeStatus() - 1; }
-      treeStatus.remove(aTreeStatus);
-      treeStatus.add(index, aTreeStatus);
-      wasAdded = true;
+      if (anOldTree != null)
+      {
+        anOldTree.treeStatus = null;
+      }
+      if (treeStatus != null)
+      {
+        treeStatus.setTree(this);
+      }
     }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveTreeStatusAt(TreeStatus aTreeStatus, int index)
-  {
-    boolean wasAdded = false;
-    if(treeStatus.contains(aTreeStatus))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfTreeStatus()) { index = numberOfTreeStatus() - 1; }
-      treeStatus.remove(aTreeStatus);
-      treeStatus.add(index, aTreeStatus);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addTreeStatusAt(aTreeStatus, index);
-    }
-    return wasAdded;
+    wasSet = true;
+    return wasSet;
   }
 
   public boolean setTreeLocation(TreeLocation aNewTreeLocation)
@@ -294,13 +243,13 @@ public class Tree
 
   public void delete()
   {
-    while (treeStatus.size() > 0)
+    TreeStatus existingTreeStatus = treeStatus;
+    treeStatus = null;
+    if (existingTreeStatus != null)
     {
-      TreeStatus aTreeStatus = treeStatus.get(treeStatus.size() - 1);
-      aTreeStatus.delete();
-      treeStatus.remove(aTreeStatus);
+      existingTreeStatus.delete();
+      existingTreeStatus.setTree(null);
     }
-    
     TreeLocation existingTreeLocation = treeLocation;
     treeLocation = null;
     if (existingTreeLocation != null )
@@ -323,8 +272,10 @@ public class Tree
   public String toString()
   {
     return super.toString() + "["+
+            "id" + ":" + getId()+ "," +
             "height" + ":" + getHeight()+ "," +
             "diameter" + ":" + getDiameter()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "treeStatus = "+(getTreeStatus()!=null?Integer.toHexString(System.identityHashCode(getTreeStatus())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "treeLocation = "+(getTreeLocation()!=null?Integer.toHexString(System.identityHashCode(getTreeLocation())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "species = "+(getSpecies()!=null?Integer.toHexString(System.identityHashCode(getSpecies())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "local = "+(getLocal()!=null?Integer.toHexString(System.identityHashCode(getLocal())):"null") + System.getProperties().getProperty("line.separator") +
