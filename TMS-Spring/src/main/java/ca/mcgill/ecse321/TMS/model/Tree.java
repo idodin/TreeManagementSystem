@@ -31,7 +31,7 @@ public class Tree
   // CONSTRUCTOR
   //------------------------
 
-  public Tree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE, TreeLocation aTreeLocation)
+  public Tree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
     id = aId;
     height = aHeight;
@@ -63,46 +63,6 @@ public class Tree
     {
       throw new RuntimeException("Unable to create tree due to treePLE");
     }
-    if (aTreeLocation == null || aTreeLocation.getTree() != null)
-    {
-      throw new RuntimeException("Unable to create Tree due to aTreeLocation");
-    }
-    treeLocation = aTreeLocation;
-  }
-
-  public Tree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE, int aXForTreeLocation, int aYForTreeLocation, String aDescriptionForTreeLocation, LocationType aLocationTypeForTreeLocation)
-  {
-    id = aId;
-    height = aHeight;
-    diameter = aDiameter;
-    datePlanted = aDatePlanted;
-    dateAdded = aDateAdded;
-    boolean didAddTreeStatus = setTreeStatus(aTreeStatus);
-    if (!didAddTreeStatus)
-    {
-      throw new RuntimeException("Unable to create tree due to treeStatus");
-    }
-    boolean didAddSpecies = setSpecies(aSpecies);
-    if (!didAddSpecies)
-    {
-      throw new RuntimeException("Unable to create tree due to species");
-    }
-    boolean didAddLocal = setLocal(aLocal);
-    if (!didAddLocal)
-    {
-      throw new RuntimeException("Unable to create tree due to local");
-    }
-    boolean didAddMunicipality = setMunicipality(aMunicipality);
-    if (!didAddMunicipality)
-    {
-      throw new RuntimeException("Unable to create tree due to municipality");
-    }
-    boolean didAddTreePLE = setTreePLE(aTreePLE);
-    if (!didAddTreePLE)
-    {
-      throw new RuntimeException("Unable to create tree due to treePLE");
-    }
-    treeLocation = new TreeLocation(aXForTreeLocation, aYForTreeLocation, aDescriptionForTreeLocation, this, aLocationTypeForTreeLocation);
   }
 
   //------------------------
@@ -204,6 +164,12 @@ public class Tree
     return treeLocation;
   }
 
+  public boolean hasTreeLocation()
+  {
+    boolean has = treeLocation != null;
+    return has;
+  }
+
   public boolean setTreeStatus(TreeStatus aTreeStatus)
   {
     boolean wasSet = false;
@@ -295,6 +261,33 @@ public class Tree
       existingTreePLE.removeTree(this);
     }
     treePLE.addTree(this);
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setTreeLocation(TreeLocation aNewTreeLocation)
+  {
+    boolean wasSet = false;
+    if (treeLocation != null && !treeLocation.equals(aNewTreeLocation) && equals(treeLocation.getTree()))
+    {
+      //Unable to setTreeLocation, as existing treeLocation would become an orphan
+      return wasSet;
+    }
+
+    treeLocation = aNewTreeLocation;
+    Tree anOldTree = aNewTreeLocation != null ? aNewTreeLocation.getTree() : null;
+
+    if (!this.equals(anOldTree))
+    {
+      if (anOldTree != null)
+      {
+        anOldTree.treeLocation = null;
+      }
+      if (treeLocation != null)
+      {
+        treeLocation.setTree(this);
+      }
+    }
     wasSet = true;
     return wasSet;
   }
