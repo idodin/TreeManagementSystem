@@ -67,7 +67,7 @@ public void test() {
     if (ple == null)
         fail("Could not load file.");
 
-    // check participants
+    // check tree
     assertEquals(2, ple.numberOfTrees());
     assertEquals(2, ple.getLocals().size());
     assertEquals(2, ple.getSpecies().size());
@@ -82,7 +82,7 @@ public void test() {
     assertEquals("poppy" , ple.getTree(1).getSpecies().getName());
     assertEquals(9 , ple.getTree(1).getHeight());
     assertEquals("Saintlaurent" , ple.getTree(1).getTreeLocation().getMunicipality().getName());
-    // check event
+
     
    
     
