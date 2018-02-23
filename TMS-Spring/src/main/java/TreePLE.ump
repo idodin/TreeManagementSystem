@@ -9,6 +9,7 @@ class TreePLE {
 }
 
 class Tree {
+  autounique id;
   int height;
   int diameter;
   1 <@>- 0..1 TreeStatus treeStatus;
