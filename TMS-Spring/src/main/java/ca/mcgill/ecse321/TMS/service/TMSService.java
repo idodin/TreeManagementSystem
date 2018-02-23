@@ -40,6 +40,21 @@ public class TMSService {
 		return tree;
 		
 	}
+	
+	public List<Tree> findAllTrees(){
+		return tp.getTrees();
+	}
+	
+	public Tree removeTree(Tree aTree) {
+		aTree.getLocal().removeTree(aTree);
+		aTree.getMunicipality().removeTree(aTree);
+		aTree.getSpecies().removeTree(aTree);
+		aTree.getTreeLocation().getLocationType().removeTreeLocation(aTree.getTreeLocation());
+		aTree.getTreeLocation().delete();
+		aTree.getTreeStatus().removeTree(aTree);
+		tp.removeTree(aTree);
+		return aTree;
+	}
 
 	private String checkTreeInputException(int aId, int aHeight, int aDiameter, Date aDatePlanted,
 			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, int x, int y,
