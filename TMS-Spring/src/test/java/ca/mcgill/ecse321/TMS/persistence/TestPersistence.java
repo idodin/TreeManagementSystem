@@ -30,14 +30,15 @@ public void setUp() throws Exception {
 	User user=new User("aehwany", ple);
 	Species species= new Species("dandelion", 5, 4, ple);
 	Municipality municipality=new Municipality("Rosement", 10, ple);
-    TreeLocation location=new TreeLocation(5,7, municipality , null);
-    Tree tree = new Tree(5, 2, location , species , user, ple);
+    Tree tree = new Tree(5, 2, species , user, ple);
+    TreeLocation location=new TreeLocation(5,7, municipality , tree);
     
     User user2=new User("karim", ple);
 	Species species2= new Species("poppy", 5, 4, ple);
 	Municipality municipality2=new Municipality("Saintlaurent", 10, ple);
-	TreeLocation location2= new TreeLocation(10, 5,municipality2, 5, 7, species2, user2 , ple);
-    Tree tree2 = new Tree(9, 4, location2 , species2 , user2, ple);
+	Tree tree2 = new Tree(9, 4, species2 , user2, ple);
+	TreeLocation location2= new TreeLocation(10, 5,municipality2, tree2);
+    
    
    
 }
@@ -73,14 +74,14 @@ public void test() {
     assertEquals(2, ple.getMunicipalities().size());
     
     assertEquals("aehwany", ple.getTree(0).getLocal().getUsername());
-    assertEquals("dandelion" , ple.getTree(0).getSpecies());
+    assertEquals("dandelion" , ple.getTree(0).getSpecies().getName());
     assertEquals(5 , ple.getTree(0).getHeight());
-    assertEquals("Rosement" , ple.getTree(0).getTreeLocation().getMunicipality());
+    assertEquals("Rosement" , ple.getTree(0).getTreeLocation().getMunicipality().getName());
     
     assertEquals("karim", ple.getTree(1).getLocal().getUsername());
-    assertEquals("poppy" , ple.getTree(0).getSpecies());
+    assertEquals("poppy" , ple.getTree(1).getSpecies().getName());
     assertEquals(9 , ple.getTree(1).getHeight());
-    assertEquals("Saintlaurent" , ple.getTree(1).getTreeLocation().getMunicipality());
+    assertEquals("Saintlaurent" , ple.getTree(1).getTreeLocation().getMunicipality().getName());
     // check event
     
    
