@@ -32,7 +32,7 @@ associationClass TreeLocation{
   int x;
   int y;
   String description;
-  0..1 Tree;
+  1 Tree;
   * LocationType;
 }
   

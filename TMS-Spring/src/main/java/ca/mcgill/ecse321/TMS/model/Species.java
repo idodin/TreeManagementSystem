@@ -168,9 +168,9 @@ public class Species
     return 0;
   }
 
-  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
+  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, User aLocal, Municipality aMunicipality, TreePLE aTreePLE, TreeLocation aTreeLocation)
   {
-    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, this, aLocal, aMunicipality, aTreePLE);
+    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, this, aLocal, aMunicipality, aTreePLE, aTreeLocation);
   }
 
   public boolean addTree(Tree aTree)

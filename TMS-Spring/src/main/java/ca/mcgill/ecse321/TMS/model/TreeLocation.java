@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
+import java.sql.Date;
 
 // line 31 "../../../../../TreePLE.ump"
 public class TreeLocation
@@ -37,11 +38,24 @@ public class TreeLocation
     x = aX;
     y = aY;
     description = aDescription;
-    boolean didAddTree = setTree(aTree);
-    if (!didAddTree)
+    if (aTree == null || aTree.getTreeLocation() != null)
     {
-      throw new RuntimeException("Unable to create treeLocation due to tree");
+      throw new RuntimeException("Unable to create TreeLocation due to aTree");
     }
+    tree = aTree;
+    boolean didAddLocationType = setLocationType(aLocationType);
+    if (!didAddLocationType)
+    {
+      throw new RuntimeException("Unable to create treeLocation due to locationType");
+    }
+  }
+
+  public TreeLocation(int aX, int aY, String aDescription, int aIdForTree, int aHeightForTree, int aDiameterForTree, Date aDatePlantedForTree, Date aDateAddedForTree, TreeStatus aTreeStatusForTree, Species aSpeciesForTree, User aLocalForTree, Municipality aMunicipalityForTree, TreePLE aTreePLEForTree, LocationType aLocationType)
+  {
+    x = aX;
+    y = aY;
+    description = aDescription;
+    tree = new Tree(aIdForTree, aHeightForTree, aDiameterForTree, aDatePlantedForTree, aDateAddedForTree, aTreeStatusForTree, aSpeciesForTree, aLocalForTree, aMunicipalityForTree, aTreePLEForTree, this);
     boolean didAddLocationType = setLocationType(aLocationType);
     if (!didAddLocationType)
     {
@@ -100,35 +114,6 @@ public class TreeLocation
   public LocationType getLocationType()
   {
     return locationType;
-  }
-
-  public boolean setTree(Tree aNewTree)
-  {
-    boolean wasSet = false;
-    if (!canSetTree) { return false; }
-    if (aNewTree == null)
-    {
-      //Unable to setTree to null, as treeLocation must always be associated to a tree
-      return wasSet;
-    }
-    
-    TreeLocation existingTreeLocation = aNewTree.getTreeLocation();
-    if (existingTreeLocation != null && !equals(existingTreeLocation))
-    {
-      //Unable to setTree, the current tree already has a treeLocation, which would be orphaned if it were re-assigned
-      return wasSet;
-    }
-    
-    Tree anOldTree = tree;
-    tree = aNewTree;
-    tree.setTreeLocation(this);
-
-    if (anOldTree != null)
-    {
-      anOldTree.setTreeLocation(null);
-    }
-    wasSet = true;
-    return wasSet;
   }
 
   public boolean setLocationType(LocationType aLocationType)
@@ -221,7 +206,7 @@ public class TreeLocation
     tree = null;
     if (existingTree != null)
     {
-      existingTree.setTreeLocation(null);
+      existingTree.delete();
     }
     LocationType placeholderLocationType = locationType;
     this.locationType = null;
