@@ -11,9 +11,12 @@ import org.springframework.stereotype.Repository;
 import com.thoughtworks.xstream.XStream;
 
 import ca.mcgill.ecse321.TMS.model.Local;
+import ca.mcgill.ecse321.TMS.model.LocationType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
+import ca.mcgill.ecse321.TMS.model.Park;
 import ca.mcgill.ecse321.TMS.model.Specialist;
 import ca.mcgill.ecse321.TMS.model.Species;
+import ca.mcgill.ecse321.TMS.model.Street;
 import ca.mcgill.ecse321.TMS.model.Tree;
 import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
@@ -35,17 +38,20 @@ public class PersistenceXStream {
         TreePLE tp;
         setFilename(fileName);
         setAlias("user", User.class);
-        setAlias("landUse", TreeLocation.class);
+        setAlias("treeLocation", TreeLocation.class);
         setAlias("local", Local.class);
         setAlias("municipality", Municipality.class);
         setAlias("specialist", Specialist.class);
         setAlias("species", Species.class);
-        setAlias("status", TreeStatus.class);
+        setAlias("treeStatus", TreeStatus.class);
         setAlias("tree", Tree.class);
         setAlias("treePLE", TreePLE.class);
         setAlias("treeStatus", TreeStatus.class);
         setAlias("treeLocation", TreeLocation.class);
         setAlias("userRole", UserRole.class);
+        setAlias("locationType", LocationType.class);
+        setAlias("park", Park.class);
+        setAlias("street", Street.class);
         
         
 

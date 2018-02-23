@@ -4,39 +4,59 @@ class TreePLE {
   1 <@>- * Tree trees; 
   1 <@>- * Municipality municipalities;
   1 <@>- * Species species;
-  1 <@>- * User locals;
-
+  1 <@>- * User users;
+  1 <@>- * Park parks;
+  1 <@>- * Street streets;
+  1 <@>- * TreeStatus statuses;
 }
 
 class Tree {
-  autounique id;
+  int id;
   int height;
-  int diameter;
-  1 <@>- 0..1 TreeStatus treeStatus;
-  1 <@>- 0..1 TreeLocation treeLocation;
+  int diameter; 
+  Date datePlanted;
+  Date dateAdded;
+  * -- 1 TreeStatus treeStatus;
   * -- 1 Species species;
   * -- 1 User local;
+  * -- 1 Municipality municipality;
 }
 
 class TreeStatus{
   enum Status {healthy, diseased, toBeCut, cut}
   lazy Status status;
-  immutable Date dateOfBirth;
-  lazy immutable Date dateOfDeath;
 }
 
 
-class TreeLocation {
-  enum LandUseType {residential, institutional, park, municipal}
+associationClass TreeLocation{
+  int x;
+  int y;
+  String description;
+  1 Tree;
+  * LocationType;
+}
+  
+
+class LocationType{
+  enum LandUseType {residential, institutional, municipal}
   lazy LandUseType landUseType;
-  int longitude;
-  int latitude;
-  * -- 1 Municipality municipality;
 }
+
+class Park{
+  isA LocationType;
+  int parkCode;
+  String parkName;
+}
+
+class Street{
+  isA LocationType;
+  unique String streetName;
+}
+
 
 class Municipality {
+  unique idNumber;
   unique String name;
-  int bioDiversityIndex;
 }
 
 class Species {
@@ -47,6 +67,8 @@ class Species {
 
 class User {
   unique String username;
+  enum UserType {scientist, local, ubranDecisionMaker}
+  lazy UserType userType;
 }
 
 class Specialist {
