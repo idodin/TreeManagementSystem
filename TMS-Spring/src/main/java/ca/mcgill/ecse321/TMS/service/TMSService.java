@@ -16,6 +16,8 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+import ca.mcgill.ecse321.TMS.dto.TreeDto;
+
 
 @Service
 public class TMSService {
@@ -55,6 +57,7 @@ public class TMSService {
 		tp.removeTree(aTree);
 		return aTree;
 	}
+
 
 	private String checkTreeInputException(int aId, int aHeight, int aDiameter, Date aDatePlanted,
 			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, int x, int y,
@@ -155,5 +158,18 @@ public class TMSService {
 		}
 		return null;
 	}
+
+	private TreePLE treePle;
+	
+
+	public List<Tree> getTreesForMunicipality(Municipality m) {
+		return m.getTrees();
+	}
+
+
+	public List<Tree> getTreesForSpecies(Species s) {
+		return s.getTrees();
+	}
+
 }
 
