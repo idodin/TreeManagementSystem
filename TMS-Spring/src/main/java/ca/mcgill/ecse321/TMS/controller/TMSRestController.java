@@ -6,7 +6,9 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
@@ -18,6 +20,7 @@ import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Species;
 import ca.mcgill.ecse321.TMS.model.Tree;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
+import ca.mcgill.ecse321.TMS.service.InvalidInputException;
 import ca.mcgill.ecse321.TMS.service.TMSService;
 
 @RestController
@@ -49,6 +52,16 @@ public class TMSRestController {
 		}
 		return trees;
 	}
+	
+	@PostMapping(value = {"/removeTree", "/removeTree/"})
+	public TreeDto removeTree(
+			@RequestParam (name="tree") TreeDto treeDto
+			) throws InvalidInputException {
+			//get tree by ID
+		Tree t = service.getTreeById(treeDto.getId());
+		return convertToDto(service.removeTree(t));
+	}
+
 	
 	//TODO Conversion methods	
 	
@@ -90,19 +103,6 @@ public class TMSRestController {
 		}
 		return trees;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
