@@ -11,11 +11,11 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello
-    }, 
+    },
     {
-        path: '/app',
-        name: 'TMS',
-        component: Eventregistration
-      }
+      path: '/app',
+      name: 'TMS',
+      component: TMS
+    }
   ]
 })

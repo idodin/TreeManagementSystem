@@ -1,58 +1,56 @@
 package ca.mcgill.ecse321.TMS.dto;
 
+import ca.mcgill.ecse321.TMS.model.LocationType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Tree;
 
 public class TreeLocationDto {
-	public enum LandUseType { Residential, Institutional, Park, Municipal }
-	private LandUseType landUseType;
-	private int longitude;
-	private int latitude;
-	private Municipality municipality;
+	
+	
+	private int x;
+	private int y;
+	private String description;
+	
 	private Tree tree;
+	private LocationType locationType;
+	
+	
 	
 	public TreeLocationDto() {
 		
 	}
 	
-	public TreeLocationDto(LandUseType landUseType, int longitude, int latitude, Municipality municipality, Tree tree) {
-		this.landUseType = landUseType; 
-		this.longitude = longitude; 
-		this.latitude = latitude; 
-		this.municipality = municipality;
+	public TreeLocationDto(int x, int y, String description, Tree tree, LocationType locationType) {
+		this.x = x; 
+		this.y = y; 
+		this.description = description;
 		this.tree = tree;
+		this.locationType = locationType;
 	}
 
-	public LandUseType getLandUseType() {
-		return landUseType;
+	
+	public int getX() {
+		return x;
 	}
 
-	public void setLandUseType(LandUseType landUseType) {
-		this.landUseType = landUseType;
+	public void setX(int x) {
+		this.x = x;
 	}
 
-	public int getLongitude() {
-		return longitude;
+	public int getY() {
+		return y;
 	}
 
-	public void setLongitude(int longitude) {
-		this.longitude = longitude;
+	public void setY(int y) {
+		this.y = y;
 	}
-
-	public int getLatitude() {
-		return latitude;
+	
+	public String getDescription() {
+		return description;
 	}
-
-	public void setLatitude(int latitude) {
-		this.latitude = latitude;
-	}
-
-	public Municipality getMunicipality() {
-		return municipality;
-	}
-
-	public void setMunicipality(Municipality municipality) {
-		this.municipality = municipality;
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Tree getTree() {
@@ -63,5 +61,13 @@ public class TreeLocationDto {
 		this.tree = tree;
 	}
 	
+	public LocationType getLandLocationType() {
+		return locationType;
+	}
+
+	public void setLocationType(LocationType locationType) {
+		this.locationType = locationType;
+	}
+
 	
 }
