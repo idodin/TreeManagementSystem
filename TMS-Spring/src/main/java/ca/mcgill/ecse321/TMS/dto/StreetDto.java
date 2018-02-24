@@ -15,7 +15,6 @@ public class StreetDto extends LocationTypeDto{
 	public StreetDto(String streetName, LandUseType landUseType, List<TreeLocationDto> treeLocations) {
 		this.streetName = streetName;
 		this.landUseType = landUseType;
-		this.treeLocations = treeLocations;
 	}
 	
 	public String getStreetName() {
