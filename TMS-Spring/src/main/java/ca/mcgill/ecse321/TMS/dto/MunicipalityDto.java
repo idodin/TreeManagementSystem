@@ -3,18 +3,16 @@ package ca.mcgill.ecse321.TMS.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.mcgill.ecse321.TMS.model.TreeLocation;
-
 public class MunicipalityDto {
 	String name;
 	int bioDiv;
-	private List<TreeLocation> treeLocations;
+	private List<TreeLocationDto> treeLocations;
 	
 	public MunicipalityDto() {
 		
 	}
 	
-	public MunicipalityDto(String name, int bioDiv, ArrayList<TreeLocation> treeLocations) {
+	public MunicipalityDto(String name, int bioDiv, ArrayList<TreeLocationDto> treeLocations) {
 		this.name = name;
 		this.bioDiv = bioDiv;
 		this.treeLocations = treeLocations;
@@ -36,11 +34,11 @@ public class MunicipalityDto {
 		this.bioDiv = bioDiv;
 	}
 
-	public List<TreeLocation> getTreeLocations() {
+	public List<TreeLocationDto> getTreeLocations() {
 		return treeLocations;
 	}
 
-	public void setTreeLocations(List<TreeLocation> treeLocations) {
+	public void setTreeLocations(List<TreeLocationDto> treeLocations) {
 		this.treeLocations = treeLocations;
 	}
 	
