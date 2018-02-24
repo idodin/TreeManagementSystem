@@ -47,15 +47,8 @@ public class TMSService {
 		return tp.getTrees();
 	}
 	
-	public Tree removeTree(Tree aTree) {
-		aTree.getLocal().removeTree(aTree);
-		aTree.getMunicipality().removeTree(aTree);
-		aTree.getSpecies().removeTree(aTree);
-		aTree.getTreeLocation().getLocationType().removeTreeLocation(aTree.getTreeLocation());
-		aTree.getTreeLocation().delete();
-		aTree.getTreeStatus().removeTree(aTree);
-		tp.removeTree(aTree);
-		return aTree;
+	public void removeTree(Tree aTree) {
+		aTree.delete();
 	}
 
 
@@ -79,7 +72,7 @@ public class TMSService {
 			errorthrown = true;
 		}
 		
-		if (aDatePlanted.before(aDateAdded)) {
+		if (aDatePlanted.after(aDateAdded)) {
 			errormsg = errormsg + "Cannot plant tree in the future!";
 			errorthrown = true;
 		}
