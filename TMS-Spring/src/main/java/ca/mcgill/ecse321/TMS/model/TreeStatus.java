@@ -116,9 +116,9 @@ public class TreeStatus
     return 0;
   }
 
-  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
+  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
-    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, this, aSpecies, aLocal, aMunicipality, aTreePLE);
+    return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, this, aSpecies, aLocal, aMunicipality, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)

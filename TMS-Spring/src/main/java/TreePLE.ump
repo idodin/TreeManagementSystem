@@ -11,7 +11,7 @@ class TreePLE {
 }
 
 class Tree {
-  int id;
+  autounique id;
   int height;
   int diameter; 
   Date datePlanted;
