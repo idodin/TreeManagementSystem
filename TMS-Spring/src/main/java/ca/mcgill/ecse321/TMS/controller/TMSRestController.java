@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.collect.Lists;
 
 import ca.mcgill.ecse321.TMS.dto.MunicipalityDto;
 import ca.mcgill.ecse321.TMS.dto.SpeciesDto;
@@ -37,6 +40,15 @@ public class TMSRestController {
 	/*
 	 * Here will have get and post requests
 	 */
+	
+	@GetMapping(value = { "/participants", "/participants/" })
+	public List<TreeDto> findAllTrees() {
+		List<TreeDto> trees = Lists.newArrayList();
+		for (Tree tree : service.findAllTrees()) {
+			trees.add(convertToDto(tree));
+		}
+		return trees;
+	}
 	
 	//TODO Conversion methods	
 	

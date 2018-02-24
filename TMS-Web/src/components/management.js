@@ -15,14 +15,24 @@ export default {
   data () {
     return {
       trees: [],
-      newTree: ''
+      newTree: '',
+      listTreesError: ''
     }
   },
   created: function () {
 	  
 	},
 	methods: {
-		
+		findAllTrees: function(){
+			AXIOS.get(`/findAllTrees`)
+			.then(response => {
+				// JSON responses are automatically parsed.
+				this.trees = response.data
+			})
+			.catch(e => {
+				this.listTreesError = e;
+			});
+		}
 	}
   //...
 }
