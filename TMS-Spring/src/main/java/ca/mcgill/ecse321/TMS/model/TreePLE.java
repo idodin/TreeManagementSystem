@@ -328,7 +328,7 @@ public class TreePLE
     return 0;
   }
 
-  public Municipality addMunicipality(String aIdNumber, String aName)
+  public Municipality addMunicipality(int aIdNumber, String aName)
   {
     return new Municipality(aIdNumber, aName, this);
   }

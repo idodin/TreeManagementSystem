@@ -8,20 +8,15 @@ import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 
 public class TreeStatusDto {
 	
-	//im removing the definition of the enumeration from the Dto classes
-	//and instead importing the class so that we can identify only one place to change
-	//in the future if we need to
-	private Status status;
-	private List<TreeDto> trees;
 	
+	private Status status;
 	
 	public TreeStatusDto() {
 		
 	}
 	
-	public TreeStatusDto(Status status, List<TreeDto> trees) {
+	public TreeStatusDto(Status status) {
 		this.status = status;
-		this.trees = trees; 
 	}
 
 	public Status getStatus() {
@@ -30,14 +25,6 @@ public class TreeStatusDto {
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public List<TreeDto> getTree() {
-		return trees;
-	}
-
-	public void setTree(List<TreeDto> trees) {
-		this.trees = trees;
 	}
 	
 	

@@ -3,6 +3,8 @@ package ca.mcgill.ecse321.TMS.service;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.sql.Date;
+import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,11 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+
+
+
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
+
 
 
 @Service
@@ -47,15 +53,8 @@ public class TMSService {
 		return tp.getTrees();
 	}
 	
-	public Tree removeTree(Tree aTree) {
-		aTree.getLocal().removeTree(aTree);
-		aTree.getMunicipality().removeTree(aTree);
-		aTree.getSpecies().removeTree(aTree);
-		aTree.getTreeLocation().getLocationType().removeTreeLocation(aTree.getTreeLocation());
-		aTree.getTreeLocation().delete();
-		aTree.getTreeStatus().removeTree(aTree);
-		tp.removeTree(aTree);
-		return aTree;
+	public void removeTree(Tree aTree) {
+		aTree.delete();
 	}
 
 
@@ -79,7 +78,7 @@ public class TMSService {
 			errorthrown = true;
 		}
 		
-		if (aDatePlanted.before(aDateAdded)) {
+		if (aDatePlanted.after(aDateAdded)) {
 			errormsg = errormsg + "Cannot plant tree in the future!";
 			errorthrown = true;
 		}
@@ -159,7 +158,7 @@ public class TMSService {
 		return null;
 	}
 
-	private TreePLE treePle;
+	
 	
 
 	public List<Tree> getTreesForMunicipality(Municipality m) {
