@@ -3,6 +3,8 @@ package ca.mcgill.ecse321.TMS.service;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.sql.Date;
+import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,11 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+
+
+
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
+
 
 
 @Service
@@ -152,7 +158,7 @@ public class TMSService {
 		return null;
 	}
 
-	private TreePLE treePle;
+	
 	
 
 	public List<Tree> getTreesForMunicipality(Municipality m) {
