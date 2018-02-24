@@ -56,10 +56,8 @@ public class TMSRestController {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	private TreePLE treePLE; 
-
 	@Autowired
-	private ModelMapper modelMapper; 
+	private TMSService service;
 	
 	@RequestMapping("/")
 	public String index() {
@@ -67,8 +65,6 @@ public class TMSRestController {
 		return "TreePLE application root. Use the REST API to manage trees.\n";
 	}
 
-	@Autowired
-	private TMSService service;
 
 
 	/*
@@ -77,17 +73,49 @@ public class TMSRestController {
 
 	
 	//For now we'll force the Tree to be registered to already created status, species, user, municipality and locationtype
-	@PostMapping(value = {"/trees/{id}"})
-	public TreeDto createTree(@PathVariable("id") int id, @RequestParam int height,
+	@PostMapping(value = {"/trees/"})
+	public TreeDto createTree(@RequestParam int height,
 			@RequestParam int diameter, @RequestParam Date datePlanted, @RequestParam int x,
 			@RequestParam int y, @RequestParam String description) throws InvalidInputException {	
 		
-		TreeStatus testStatus = treePLE.addStatus();
-		Species testSpecies = treePLE.addSpecies("Test", 11, 12);
-		User testUser = treePLE.addUser("Imad");
-		Municipality testMunicipality = treePLE.addMunicipality(1, "McGill");
-		LocationType testType = treePLE.addPark(1, "Mont Royal");
-		Tree tree = service.createTree(id, height, diameter, datePlanted, testStatus, testSpecies, testUser, testMunicipality, x, y, description, testType);
+		TreeStatus testStatus;
+		Species testSpecies;
+		User testUser;
+		Municipality testMunicipality;
+		LocationType testType;
+		
+		if(treePLE.getStatuses().size()==0) {
+			testStatus = treePLE.addStatus();
+		}
+		else {
+			testStatus = treePLE.getStatus(0);
+		}
+		if(treePLE.getSpecies().size()==0) {
+			testSpecies = treePLE.addSpecies("Test", 11, 12);
+		}
+		else {
+			testSpecies = treePLE.getSpecies(0);
+		}
+		if(treePLE.getUsers().size()==0) {
+			testUser = treePLE.addUser("Imad");
+		}
+		else {
+			testUser = treePLE.getUser(0);
+		}
+		if(treePLE.getMunicipalities().size()==0) {
+			testMunicipality = treePLE.addMunicipality(1, "McGill");
+		}
+		else {
+			testMunicipality = treePLE.getMunicipality(0);
+		}
+		if(treePLE.getParks().size()==0) {
+			testType = treePLE.addPark(1, "Mont Royal");
+		}
+		else {
+			testType = treePLE.getPark(0);
+		}
+		
+		Tree tree = service.createTree(height, diameter, datePlanted, testStatus, testSpecies, testUser, testMunicipality, x, y, description, testType);
 		System.out.println(tree.getId());
 		
 		return convertToDto(tree);
@@ -107,7 +135,10 @@ public class TMSRestController {
 	public TreeDto removeTree(@RequestParam(name = "tree") TreeDto treeDto) throws InvalidInputException {
 		// get tree by ID
 		Tree t = service.getTreeById(treeDto.getId());
-		return convertToDto(service.removeTree(t));
+		TreeDto tDto = convertToDto(t);
+		service.removeTree(t);
+		return tDto;
+		
 	}
 
 	// TODO Conversion methods
@@ -144,17 +175,12 @@ public class TMSRestController {
 			if (role instanceof Specialist) {
 				roles.add("specialist");
 			}
-	
-	
-	private List<TreeDto> createTreeDtosForSpecies(Species s) {
-		List<Tree> treesForSpecies = service.getTreesForSpecies(s);
-		List<TreeDto> trees = new ArrayList<TreeDto>();
-		for (Tree tree: treesForSpecies) {
-			trees.add(convertToDto(tree));
 		}
 		usD.setRoles(roles);
 		return usD;
 	}
+	
+
 
 	private TreeDto convertToDto(Tree t) {
 		TreeDto treeDto = modelMapper.map(t, TreeDto.class);

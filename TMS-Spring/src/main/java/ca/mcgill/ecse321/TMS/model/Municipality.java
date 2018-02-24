@@ -153,9 +153,9 @@ public class Municipality
     return 0;
   }
 
-  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, TreePLE aTreePLE)
+  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, TreePLE aTreePLE)
   {
-    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, this, aTreePLE);
+    return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, this, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)
