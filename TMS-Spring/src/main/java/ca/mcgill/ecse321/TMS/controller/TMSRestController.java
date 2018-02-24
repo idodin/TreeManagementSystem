@@ -5,8 +5,13 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.collect.Lists;
 
 import ca.mcgill.ecse321.TMS.dto.MunicipalityDto;
 import ca.mcgill.ecse321.TMS.dto.SpeciesDto;
@@ -15,6 +20,7 @@ import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Species;
 import ca.mcgill.ecse321.TMS.model.Tree;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
+import ca.mcgill.ecse321.TMS.service.InvalidInputException;
 import ca.mcgill.ecse321.TMS.service.TMSService;
 
 @RestController
@@ -38,8 +44,26 @@ public class TMSRestController {
 	 * Here will have get and post requests
 	 */
 	
-	//TODO Conversion methods
+	@GetMapping(value = { "/trees", "/trees/" })
+	public List<TreeDto> findAllTrees() {
+		List<TreeDto> trees = Lists.newArrayList();
+		for (Tree tree : service.findAllTrees()) {
+			trees.add(convertToDto(tree));
+		}
+		return trees;
+	}
 	
+	@PostMapping(value = {"/removeTree", "/removeTree/"})
+	public TreeDto removeTree(
+			@RequestParam (name="tree") TreeDto treeDto
+			) throws InvalidInputException {
+			//get tree by ID
+		Tree t = service.getTreeById(treeDto.getId());
+		return convertToDto(service.removeTree(t));
+	}
+
+	
+	//TODO Conversion methods	
 	
 	//do we have to send systemManager attribute?
 	private MunicipalityDto convertToDto(Municipality m) {
@@ -79,19 +103,6 @@ public class TMSRestController {
 		}
 		return trees;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
