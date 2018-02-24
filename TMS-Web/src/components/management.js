@@ -24,7 +24,7 @@ export default {
 	},
 	methods: {
 		findAllTrees: function(){
-			AXIOS.get(`/findAllTrees`)
+			AXIOS.get(`/trees`)
 			.then(response => {
 				// JSON responses are automatically parsed.
 				this.trees = response.data

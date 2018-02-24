@@ -41,7 +41,7 @@ public class TMSRestController {
 	 * Here will have get and post requests
 	 */
 	
-	@GetMapping(value = { "/participants", "/participants/" })
+	@GetMapping(value = { "/trees", "/trees/" })
 	public List<TreeDto> findAllTrees() {
 		List<TreeDto> trees = Lists.newArrayList();
 		for (Tree tree : service.findAllTrees()) {
