@@ -3,46 +3,49 @@
 
 package ca.mcgill.ecse321.TMS.model;
 
-// line 29 "../../../../../TreePLE.ump"
+// line 31 "../../../../../TreePLE.ump"
 public class TreeLocation
 {
-
-  //------------------------
-  // ENUMERATIONS
-  //------------------------
-
-  public enum LandUseType { Residential, Institutional, Park, Municipal }
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //TreeLocation Attributes
-  private LandUseType landUseType;
-  private int longitude;
-  private int latitude;
+  private int x;
+  private int y;
+  private String description;
 
   //TreeLocation Associations
-  private Municipality municipality;
   private Tree tree;
+  private LocationType locationType;
+
+  //Helper Variables
+  private int cachedHashCode;
+  private boolean canSetTree;
+  private boolean canSetLocationType;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public TreeLocation(int aLongitude, int aLatitude, Municipality aMunicipality, Tree aTree)
+  public TreeLocation(int aX, int aY, String aDescription, Tree aTree, LocationType aLocationType)
   {
-    longitude = aLongitude;
-    latitude = aLatitude;
-    boolean didAddMunicipality = setMunicipality(aMunicipality);
-    if (!didAddMunicipality)
-    {
-      throw new RuntimeException("Unable to create treeLocation due to municipality");
-    }
+    cachedHashCode = -1;
+    canSetTree = true;
+    canSetLocationType = true;
+    x = aX;
+    y = aY;
+    description = aDescription;
     boolean didAddTree = setTree(aTree);
     if (!didAddTree)
     {
       throw new RuntimeException("Unable to create treeLocation due to tree");
+    }
+    boolean didAddLocationType = setLocationType(aLocationType);
+    if (!didAddLocationType)
+    {
+      throw new RuntimeException("Unable to create treeLocation due to locationType");
     }
   }
 
@@ -50,48 +53,43 @@ public class TreeLocation
   // INTERFACE
   //------------------------
 
-  public boolean setLandUseType(LandUseType aLandUseType)
+  public boolean setX(int aX)
   {
     boolean wasSet = false;
-    landUseType = aLandUseType;
+    x = aX;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setLongitude(int aLongitude)
+  public boolean setY(int aY)
   {
     boolean wasSet = false;
-    longitude = aLongitude;
+    y = aY;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setLatitude(int aLatitude)
+  public boolean setDescription(String aDescription)
   {
     boolean wasSet = false;
-    latitude = aLatitude;
+    description = aDescription;
     wasSet = true;
     return wasSet;
   }
 
-  public LandUseType getLandUseType()
+  public int getX()
   {
-    return landUseType;
+    return x;
   }
 
-  public int getLongitude()
+  public int getY()
   {
-    return longitude;
+    return y;
   }
 
-  public int getLatitude()
+  public String getDescription()
   {
-    return latitude;
-  }
-
-  public Municipality getMunicipality()
-  {
-    return municipality;
+    return description;
   }
 
   public Tree getTree()
@@ -99,28 +97,15 @@ public class TreeLocation
     return tree;
   }
 
-  public boolean setMunicipality(Municipality aMunicipality)
+  public LocationType getLocationType()
   {
-    boolean wasSet = false;
-    if (aMunicipality == null)
-    {
-      return wasSet;
-    }
-
-    Municipality existingMunicipality = municipality;
-    municipality = aMunicipality;
-    if (existingMunicipality != null && !existingMunicipality.equals(aMunicipality))
-    {
-      existingMunicipality.removeTreeLocation(this);
-    }
-    municipality.addTreeLocation(this);
-    wasSet = true;
-    return wasSet;
+    return locationType;
   }
 
   public boolean setTree(Tree aNewTree)
   {
     boolean wasSet = false;
+    if (!canSetTree) { return false; }
     if (aNewTree == null)
     {
       //Unable to setTree to null, as treeLocation must always be associated to a tree
@@ -146,27 +131,111 @@ public class TreeLocation
     return wasSet;
   }
 
+  public boolean setLocationType(LocationType aLocationType)
+  {
+    boolean wasSet = false;
+    if (!canSetLocationType) { return false; }
+    if (aLocationType == null)
+    {
+      return wasSet;
+    }
+
+    LocationType existingLocationType = locationType;
+    locationType = aLocationType;
+    if (existingLocationType != null && !existingLocationType.equals(aLocationType))
+    {
+      existingLocationType.removeTreeLocation(this);
+    }
+    if (!locationType.addTreeLocation(this))
+    {
+      locationType = existingLocationType;
+      wasSet = false;
+    }
+    else
+    {
+      wasSet = true;
+    }
+    return wasSet;
+  }
+
+  public boolean equals(Object obj)
+  {
+    if (obj == null) { return false; }
+    if (!getClass().equals(obj.getClass())) { return false; }
+
+    TreeLocation compareTo = (TreeLocation)obj;
+  
+    if (getTree() == null && compareTo.getTree() != null)
+    {
+      return false;
+    }
+    else if (getTree() != null && !getTree().equals(compareTo.getTree()))
+    {
+      return false;
+    }
+
+    if (getLocationType() == null && compareTo.getLocationType() != null)
+    {
+      return false;
+    }
+    else if (getLocationType() != null && !getLocationType().equals(compareTo.getLocationType()))
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  public int hashCode()
+  {
+    if (cachedHashCode != -1)
+    {
+      return cachedHashCode;
+    }
+    cachedHashCode = 17;
+    if (getTree() != null)
+    {
+      cachedHashCode = cachedHashCode * 23 + getTree().hashCode();
+    }
+    else
+    {
+      cachedHashCode = cachedHashCode * 23;
+    }
+    if (getLocationType() != null)
+    {
+      cachedHashCode = cachedHashCode * 23 + getLocationType().hashCode();
+    }
+    else
+    {
+      cachedHashCode = cachedHashCode * 23;
+    }
+
+    canSetTree = false;
+    canSetLocationType = false;
+    return cachedHashCode;
+  }
+
   public void delete()
   {
-    Municipality placeholderMunicipality = municipality;
-    this.municipality = null;
-    placeholderMunicipality.removeTreeLocation(this);
     Tree existingTree = tree;
     tree = null;
     if (existingTree != null)
     {
       existingTree.setTreeLocation(null);
     }
+    LocationType placeholderLocationType = locationType;
+    this.locationType = null;
+    placeholderLocationType.removeTreeLocation(this);
   }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "longitude" + ":" + getLongitude()+ "," +
-            "latitude" + ":" + getLatitude()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "landUseType" + "=" + (getLandUseType() != null ? !getLandUseType().equals(this)  ? getLandUseType().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "municipality = "+(getMunicipality()!=null?Integer.toHexString(System.identityHashCode(getMunicipality())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "tree = "+(getTree()!=null?Integer.toHexString(System.identityHashCode(getTree())):"null");
+            "x" + ":" + getX()+ "," +
+            "y" + ":" + getY()+ "," +
+            "description" + ":" + getDescription()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "tree = "+(getTree()!=null?Integer.toHexString(System.identityHashCode(getTree())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "locationType = "+(getLocationType()!=null?Integer.toHexString(System.identityHashCode(getLocationType())):"null");
   }
 }

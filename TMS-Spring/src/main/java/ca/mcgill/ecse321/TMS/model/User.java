@@ -3,10 +3,17 @@
 
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
+import java.sql.Date;
 
-// line 48 "../../../../../TreePLE.ump"
+// line 68 "../../../../../TreePLE.ump"
 public class User
 {
+
+  //------------------------
+  // ENUMERATIONS
+  //------------------------
+
+  public enum UserType { Scientist, Local, UbranDecisionMaker }
 
   //------------------------
   // STATIC VARIABLES
@@ -20,6 +27,7 @@ public class User
 
   //User Attributes
   private String username;
+  private UserType userType;
 
   //User Associations
   private TreePLE treePLE;
@@ -39,7 +47,7 @@ public class User
     boolean didAddTreePLE = setTreePLE(aTreePLE);
     if (!didAddTreePLE)
     {
-      throw new RuntimeException("Unable to create local due to treePLE");
+      throw new RuntimeException("Unable to create user due to treePLE");
     }
     trees = new ArrayList<Tree>();
     userRoles = new ArrayList<UserRole>();
@@ -65,6 +73,14 @@ public class User
     return wasSet;
   }
 
+  public boolean setUserType(UserType aUserType)
+  {
+    boolean wasSet = false;
+    userType = aUserType;
+    wasSet = true;
+    return wasSet;
+  }
+
   public String getUsername()
   {
     return username;
@@ -78,6 +94,11 @@ public class User
   public static boolean hasWithUsername(String aUsername)
   {
     return getWithUsername(aUsername) != null;
+  }
+
+  public UserType getUserType()
+  {
+    return userType;
   }
 
   public TreePLE getTreePLE()
@@ -157,9 +178,9 @@ public class User
     treePLE = aTreePLE;
     if (existingTreePLE != null && !existingTreePLE.equals(aTreePLE))
     {
-      existingTreePLE.removeLocal(this);
+      existingTreePLE.removeUser(this);
     }
-    treePLE.addLocal(this);
+    treePLE.addUser(this);
     wasSet = true;
     return wasSet;
   }
@@ -169,9 +190,9 @@ public class User
     return 0;
   }
 
-  public Tree addTree(int aHeight, int aDiameter, Species aSpecies, TreePLE aTreePLE)
+  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, Municipality aMunicipality, TreePLE aTreePLE)
   {
-    return new Tree(aHeight, aDiameter, aSpecies, this, aTreePLE);
+    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, this, aMunicipality, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)
@@ -330,7 +351,7 @@ public class User
     usersByUsername.remove(getUsername());
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
-    placeholderTreePLE.removeLocal(this);
+    placeholderTreePLE.removeUser(this);
     for(int i=trees.size(); i > 0; i--)
     {
       Tree aTree = trees.get(i - 1);
@@ -348,6 +369,7 @@ public class User
   {
     return super.toString() + "["+
             "username" + ":" + getUsername()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "userType" + "=" + (getUserType() != null ? !getUserType().equals(this)  ? getUserType().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "treePLE = "+(getTreePLE()!=null?Integer.toHexString(System.identityHashCode(getTreePLE())):"null");
   }
 }

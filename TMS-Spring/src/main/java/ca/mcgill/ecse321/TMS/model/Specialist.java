@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse321.TMS.model;
 
-// line 52 "../../../../../TreePLE.ump"
+// line 74 "../../../../../TreePLE.ump"
 public class Specialist extends UserRole
 {
 

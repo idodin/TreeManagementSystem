@@ -4,43 +4,45 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.sql.Date;
 
-// line 11 "../../../../../TreePLE.ump"
+// line 13 "../../../../../TreePLE.ump"
 public class Tree
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static int nextId = 1;
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Tree Attributes
+  private int id;
   private int height;
   private int diameter;
-
-  //Autounique Attributes
-  private int id;
+  private Date datePlanted;
+  private Date dateAdded;
 
   //Tree Associations
   private TreeStatus treeStatus;
-  private TreeLocation treeLocation;
   private Species species;
   private User local;
+  private Municipality municipality;
   private TreePLE treePLE;
+  private TreeLocation treeLocation;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Tree(int aHeight, int aDiameter, Species aSpecies, User aLocal, TreePLE aTreePLE)
+  public Tree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
+    id = aId;
     height = aHeight;
     diameter = aDiameter;
-    id = nextId++;
+    datePlanted = aDatePlanted;
+    dateAdded = aDateAdded;
+    boolean didAddTreeStatus = setTreeStatus(aTreeStatus);
+    if (!didAddTreeStatus)
+    {
+      throw new RuntimeException("Unable to create tree due to treeStatus");
+    }
     boolean didAddSpecies = setSpecies(aSpecies);
     if (!didAddSpecies)
     {
@@ -50,6 +52,11 @@ public class Tree
     if (!didAddLocal)
     {
       throw new RuntimeException("Unable to create tree due to local");
+    }
+    boolean didAddMunicipality = setMunicipality(aMunicipality);
+    if (!didAddMunicipality)
+    {
+      throw new RuntimeException("Unable to create tree due to municipality");
     }
     boolean didAddTreePLE = setTreePLE(aTreePLE);
     if (!didAddTreePLE)
@@ -61,6 +68,14 @@ public class Tree
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setId(int aId)
+  {
+    boolean wasSet = false;
+    id = aId;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setHeight(int aHeight)
   {
@@ -78,6 +93,27 @@ public class Tree
     return wasSet;
   }
 
+  public boolean setDatePlanted(Date aDatePlanted)
+  {
+    boolean wasSet = false;
+    datePlanted = aDatePlanted;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setDateAdded(Date aDateAdded)
+  {
+    boolean wasSet = false;
+    dateAdded = aDateAdded;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public int getId()
+  {
+    return id;
+  }
+
   public int getHeight()
   {
     return height;
@@ -88,9 +124,14 @@ public class Tree
     return diameter;
   }
 
-  public int getId()
+  public Date getDatePlanted()
   {
-    return id;
+    return datePlanted;
+  }
+
+  public Date getDateAdded()
+  {
+    return dateAdded;
   }
 
   public TreeStatus getTreeStatus()
@@ -98,10 +139,24 @@ public class Tree
     return treeStatus;
   }
 
-  public boolean hasTreeStatus()
+  public Species getSpecies()
   {
-    boolean has = treeStatus != null;
-    return has;
+    return species;
+  }
+
+  public User getLocal()
+  {
+    return local;
+  }
+
+  public Municipality getMunicipality()
+  {
+    return municipality;
+  }
+
+  public TreePLE getTreePLE()
+  {
+    return treePLE;
   }
 
   public TreeLocation getTreeLocation()
@@ -115,71 +170,21 @@ public class Tree
     return has;
   }
 
-  public Species getSpecies()
-  {
-    return species;
-  }
-
-  public User getLocal()
-  {
-    return local;
-  }
-
-  public TreePLE getTreePLE()
-  {
-    return treePLE;
-  }
-
-  public boolean setTreeStatus(TreeStatus aNewTreeStatus)
+  public boolean setTreeStatus(TreeStatus aTreeStatus)
   {
     boolean wasSet = false;
-    if (treeStatus != null && !treeStatus.equals(aNewTreeStatus) && equals(treeStatus.getTree()))
+    if (aTreeStatus == null)
     {
-      //Unable to setTreeStatus, as existing treeStatus would become an orphan
       return wasSet;
     }
 
-    treeStatus = aNewTreeStatus;
-    Tree anOldTree = aNewTreeStatus != null ? aNewTreeStatus.getTree() : null;
-
-    if (!this.equals(anOldTree))
+    TreeStatus existingTreeStatus = treeStatus;
+    treeStatus = aTreeStatus;
+    if (existingTreeStatus != null && !existingTreeStatus.equals(aTreeStatus))
     {
-      if (anOldTree != null)
-      {
-        anOldTree.treeStatus = null;
-      }
-      if (treeStatus != null)
-      {
-        treeStatus.setTree(this);
-      }
+      existingTreeStatus.removeTree(this);
     }
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setTreeLocation(TreeLocation aNewTreeLocation)
-  {
-    boolean wasSet = false;
-    if (treeLocation != null && !treeLocation.equals(aNewTreeLocation) && equals(treeLocation.getTree()))
-    {
-      //Unable to setTreeLocation, as existing treeLocation would become an orphan
-      return wasSet;
-    }
-
-    treeLocation = aNewTreeLocation;
-    Tree anOldTree = aNewTreeLocation != null ? aNewTreeLocation.getTree() : null;
-
-    if (!this.equals(anOldTree))
-    {
-      if (anOldTree != null)
-      {
-        anOldTree.treeLocation = null;
-      }
-      if (treeLocation != null)
-      {
-        treeLocation.setTree(this);
-      }
-    }
+    treeStatus.addTree(this);
     wasSet = true;
     return wasSet;
   }
@@ -222,6 +227,25 @@ public class Tree
     return wasSet;
   }
 
+  public boolean setMunicipality(Municipality aMunicipality)
+  {
+    boolean wasSet = false;
+    if (aMunicipality == null)
+    {
+      return wasSet;
+    }
+
+    Municipality existingMunicipality = municipality;
+    municipality = aMunicipality;
+    if (existingMunicipality != null && !existingMunicipality.equals(aMunicipality))
+    {
+      existingMunicipality.removeTree(this);
+    }
+    municipality.addTree(this);
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setTreePLE(TreePLE aTreePLE)
   {
     boolean wasSet = false;
@@ -241,31 +265,56 @@ public class Tree
     return wasSet;
   }
 
+  public boolean setTreeLocation(TreeLocation aNewTreeLocation)
+  {
+    boolean wasSet = false;
+    if (treeLocation != null && !treeLocation.equals(aNewTreeLocation) && equals(treeLocation.getTree()))
+    {
+      //Unable to setTreeLocation, as existing treeLocation would become an orphan
+      return wasSet;
+    }
+
+    treeLocation = aNewTreeLocation;
+    Tree anOldTree = aNewTreeLocation != null ? aNewTreeLocation.getTree() : null;
+
+    if (!this.equals(anOldTree))
+    {
+      if (anOldTree != null)
+      {
+        anOldTree.treeLocation = null;
+      }
+      if (treeLocation != null)
+      {
+        treeLocation.setTree(this);
+      }
+    }
+    wasSet = true;
+    return wasSet;
+  }
+
   public void delete()
   {
-    TreeStatus existingTreeStatus = treeStatus;
-    treeStatus = null;
-    if (existingTreeStatus != null)
-    {
-      existingTreeStatus.delete();
-      existingTreeStatus.setTree(null);
-    }
-    TreeLocation existingTreeLocation = treeLocation;
-    treeLocation = null;
-    if (existingTreeLocation != null)
-    {
-      existingTreeLocation.delete();
-      existingTreeLocation.setTree(null);
-    }
+    TreeStatus placeholderTreeStatus = treeStatus;
+    this.treeStatus = null;
+    placeholderTreeStatus.removeTree(this);
     Species placeholderSpecies = species;
     this.species = null;
     placeholderSpecies.removeTree(this);
     User placeholderLocal = local;
     this.local = null;
     placeholderLocal.removeTree(this);
+    Municipality placeholderMunicipality = municipality;
+    this.municipality = null;
+    placeholderMunicipality.removeTree(this);
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
     placeholderTreePLE.removeTree(this);
+    TreeLocation existingTreeLocation = treeLocation;
+    treeLocation = null;
+    if (existingTreeLocation != null)
+    {
+      existingTreeLocation.delete();
+    }
   }
 
 
@@ -275,10 +324,13 @@ public class Tree
             "id" + ":" + getId()+ "," +
             "height" + ":" + getHeight()+ "," +
             "diameter" + ":" + getDiameter()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "datePlanted" + "=" + (getDatePlanted() != null ? !getDatePlanted().equals(this)  ? getDatePlanted().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "dateAdded" + "=" + (getDateAdded() != null ? !getDateAdded().equals(this)  ? getDateAdded().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "treeStatus = "+(getTreeStatus()!=null?Integer.toHexString(System.identityHashCode(getTreeStatus())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "treeLocation = "+(getTreeLocation()!=null?Integer.toHexString(System.identityHashCode(getTreeLocation())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "species = "+(getSpecies()!=null?Integer.toHexString(System.identityHashCode(getSpecies())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "local = "+(getLocal()!=null?Integer.toHexString(System.identityHashCode(getLocal())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "treePLE = "+(getTreePLE()!=null?Integer.toHexString(System.identityHashCode(getTreePLE())):"null");
+            "  " + "municipality = "+(getMunicipality()!=null?Integer.toHexString(System.identityHashCode(getMunicipality())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "treePLE = "+(getTreePLE()!=null?Integer.toHexString(System.identityHashCode(getTreePLE())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "treeLocation = "+(getTreeLocation()!=null?Integer.toHexString(System.identityHashCode(getTreeLocation())):"null");
   }
 }
