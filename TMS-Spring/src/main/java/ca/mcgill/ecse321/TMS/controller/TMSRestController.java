@@ -1,10 +1,13 @@
 package ca.mcgill.ecse321.TMS.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +21,12 @@ import com.google.common.collect.Lists;
 import ca.mcgill.ecse321.TMS.dto.MunicipalityDto;
 import ca.mcgill.ecse321.TMS.dto.SpeciesDto;
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
+
 import ca.mcgill.ecse321.TMS.dto.TreeLocationDto;
 import ca.mcgill.ecse321.TMS.dto.TreeStatusDto;
 import ca.mcgill.ecse321.TMS.dto.UserDto;
 import ca.mcgill.ecse321.TMS.model.Local;
+
 import ca.mcgill.ecse321.TMS.model.LocationType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Specialist;
@@ -30,9 +35,13 @@ import ca.mcgill.ecse321.TMS.model.Tree;
 import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 
+
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.model.UserRole;
+import ca.mcgill.ecse321.TMS.model.TreeStatus;
+import ca.mcgill.ecse321.TMS.model.User;
+
 
 import ca.mcgill.ecse321.TMS.service.InvalidInputException;
 
@@ -47,18 +56,44 @@ public class TMSRestController {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	private TreePLE treePLE; 
+
+	@Autowired
+	private ModelMapper modelMapper; 
+	
 	@RequestMapping("/")
 	public String index() {
+		
 		return "TreePLE application root. Use the REST API to manage trees.\n";
 	}
 
 	@Autowired
 	private TMSService service;
 
+
 	/*
 	 * Here will have get and post requests
 	 */
 
+	
+	//For now we'll force the Tree to be registered to already created status, species, user, municipality and locationtype
+	@PostMapping(value = {"/trees/{id}"})
+	public TreeDto createTree(@PathVariable("id") int id, @RequestParam int height,
+			@RequestParam int diameter, @RequestParam Date datePlanted, @RequestParam int x,
+			@RequestParam int y, @RequestParam String description) throws InvalidInputException {	
+		
+		TreeStatus testStatus = treePLE.addStatus();
+		Species testSpecies = treePLE.addSpecies("Test", 11, 12);
+		User testUser = treePLE.addUser("Imad");
+		Municipality testMunicipality = treePLE.addMunicipality(1, "McGill");
+		LocationType testType = treePLE.addPark(1, "Mont Royal");
+		Tree tree = service.createTree(id, height, diameter, datePlanted, testStatus, testSpecies, testUser, testMunicipality, x, y, description, testType);
+		System.out.println(tree.getId());
+		
+		return convertToDto(tree);
+	}
+
+	
 	@GetMapping(value = { "/trees", "/trees/" })
 	public List<TreeDto> findAllTrees() {
 		List<TreeDto> trees = Lists.newArrayList();
@@ -109,6 +144,13 @@ public class TMSRestController {
 			if (role instanceof Specialist) {
 				roles.add("specialist");
 			}
+	
+	
+	private List<TreeDto> createTreeDtosForSpecies(Species s) {
+		List<Tree> treesForSpecies = service.getTreesForSpecies(s);
+		List<TreeDto> trees = new ArrayList<TreeDto>();
+		for (Tree tree: treesForSpecies) {
+			trees.add(convertToDto(tree));
 		}
 		usD.setRoles(roles);
 		return usD;
