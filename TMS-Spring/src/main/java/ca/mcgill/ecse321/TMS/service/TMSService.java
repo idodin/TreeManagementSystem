@@ -64,7 +64,7 @@ public class TMSService {
 		String errormsg = "";
 		Boolean errorthrown = false;
 		
-		if (aId <= 0 || aHeight <= 0 || aDiameter <= 0 || x <= 0 || y <= 0) {
+		if (aId <= 0 || aHeight < 0 || aDiameter <= 0 || x <= 0 || y <= 0) {
 			errormsg = "Cannot pass negative integer! ";
 			errorthrown = true;
 		}

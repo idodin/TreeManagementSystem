@@ -42,6 +42,9 @@ public class TMSRestController {
 	@Autowired
 	private ModelMapper modelMapper; 
 	
+	@Autowired
+	private TreePLE treePLE;
+	
 	@RequestMapping("/")
 	public String index() {
 		
@@ -79,11 +82,13 @@ public class TMSRestController {
 		return trees;
 	}
 
-	@PostMapping(value = { "/removeTree", "/removeTree/" })
-	public TreeDto removeTree(@RequestParam(name = "tree") TreeDto treeDto) throws InvalidInputException {
+	@PostMapping(value = { "/removeTree/{Id}", "/removeTree/{Id}/" })
+	public TreeDto removeTree(@PathVariable("Id") int id) throws InvalidInputException {
 		// get tree by ID
-		Tree t = service.getTreeById(treeDto.getId());
-		return null;
+		Tree t = service.getTreeById(id);
+		TreeDto treeDto = convertToDto(t);
+		service.removeTree(t);
+		return treeDto;
 	}
 
 	private MunicipalityDto convertToDto(Municipality m) {
