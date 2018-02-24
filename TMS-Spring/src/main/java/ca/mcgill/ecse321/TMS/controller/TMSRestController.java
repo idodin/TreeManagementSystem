@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.TMS.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,18 +17,21 @@ import com.google.common.collect.Lists;
 import ca.mcgill.ecse321.TMS.dto.MunicipalityDto;
 import ca.mcgill.ecse321.TMS.dto.SpeciesDto;
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
+import ca.mcgill.ecse321.TMS.model.LocationType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Species;
 import ca.mcgill.ecse321.TMS.model.Tree;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
+import ca.mcgill.ecse321.TMS.model.TreeStatus;
+import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.service.InvalidInputException;
 import ca.mcgill.ecse321.TMS.service.TMSService;
 
 @RestController
 public class TMSRestController {
 	
-	@Autowired
-	private TreePLE treePLE; 
+//	@Autowired
+//	private TreePLE treePLE; 
 	
 	@Autowired
 	private ModelMapper modelMapper; 
@@ -62,7 +66,6 @@ public class TMSRestController {
 		return convertToDto(service.removeTree(t));
 	}
 
-	
 	//TODO Conversion methods	
 	
 	//do we have to send systemManager attribute?
