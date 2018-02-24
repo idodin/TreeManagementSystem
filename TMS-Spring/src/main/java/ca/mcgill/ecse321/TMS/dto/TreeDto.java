@@ -19,12 +19,16 @@ public class TreeDto {
 	private UserDto local;
 	private MunicipalityDto municipality;
 	
+	
+	
 	public TreeDto() {
 		
 	}
-	
+
+
 	public TreeDto(int height, int diameter, int id, Date datePlanted, Date dateAdded,
-			TreeLocationDto location, TreeStatusDto status, SpeciesDto species,UserDto local, MunicipalityDto municipality) {
+			TreeLocationDto location, TreeStatusDto status, SpeciesDto species,
+			UserDto local, MunicipalityDto municipality) {
 		this.id = id; 
 		this.height = height;
 		this.diameter = diameter;
@@ -36,6 +40,7 @@ public class TreeDto {
 		this.local = local;
 		this.municipality = municipality;
 	}
+	
 
 	public int getHeight() {
 		return height;
