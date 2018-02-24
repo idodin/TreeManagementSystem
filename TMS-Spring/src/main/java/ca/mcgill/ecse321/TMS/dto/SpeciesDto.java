@@ -6,16 +6,17 @@ import java.util.List;
 import ca.mcgill.ecse321.TMS.model.Tree;
 
 public class SpeciesDto {
+	
 	String name; 
 	int carbonConsumption; 
 	int oxygenProduction;
-	private List<Tree> trees;
+	private List<TreeDto> trees;
 	
 	public SpeciesDto() {
 		
 	}
 	
-	public SpeciesDto(String name, int carbonConsumption, int oxygenProduction, ArrayList<Tree> trees) {
+	public SpeciesDto(String name, int carbonConsumption, int oxygenProduction, ArrayList<TreeDto> trees) {
 		this.name = name;
 		this.carbonConsumption = carbonConsumption;
 		this.oxygenProduction = oxygenProduction;
@@ -46,11 +47,11 @@ public class SpeciesDto {
 		this.oxygenProduction = oxygenProduction;
 	}
 
-	public List<Tree> getTrees() {
+	public List<TreeDto> getTrees() {
 		return trees;
 	}
 
-	public void setTrees(List<Tree> trees) {
+	public void setTrees(List<TreeDto> trees) {
 		this.trees = trees;
 	}
 	

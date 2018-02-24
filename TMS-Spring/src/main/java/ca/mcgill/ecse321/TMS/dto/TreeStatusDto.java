@@ -1,26 +1,27 @@
 package ca.mcgill.ecse321.TMS.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import ca.mcgill.ecse321.TMS.model.Tree;
+import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 
 public class TreeStatusDto {
 	
-	public enum Status { Healthy, Diseased, ToBeCut, Cut }
+	//im removing the definition of the enumeration from the Dto classes
+	//and instead importing the class so that we can identify only one place to change
+	//in the future if we need to
 	private Status status;
-	private Date dateOfBirth;
-	private Date dateOfDeath;
-	private Tree tree;
+	private List<TreeDto> trees;
+	
 	
 	public TreeStatusDto() {
 		
 	}
 	
-	public TreeStatusDto(Status status, Date dateOfBirth, Date dateOfDeath, Tree tree) {
+	public TreeStatusDto(Status status, List<TreeDto> trees) {
 		this.status = status;
-		this.dateOfBirth = dateOfBirth;
-		this.dateOfDeath = dateOfDeath;
-		this.tree = tree; 
+		this.trees = trees; 
 	}
 
 	public Status getStatus() {
@@ -31,28 +32,12 @@ public class TreeStatusDto {
 		this.status = status;
 	}
 
-	public Date getDateOfBirth() {
-		return dateOfBirth;
+	public List<TreeDto> getTree() {
+		return trees;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
-	public Date getDateOfDeath() {
-		return dateOfDeath;
-	}
-
-	public void setDateOfDeath(Date dateOfDeath) {
-		this.dateOfDeath = dateOfDeath;
-	}
-
-	public Tree getTree() {
-		return tree;
-	}
-
-	public void setTree(Tree tree) {
-		this.tree = tree;
+	public void setTree(List<TreeDto> trees) {
+		this.trees = trees;
 	}
 	
 	
