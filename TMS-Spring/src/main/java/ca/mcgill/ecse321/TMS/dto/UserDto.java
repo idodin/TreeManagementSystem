@@ -11,10 +11,9 @@ public class UserDto {
 	
 	private String username;
 	private UserType userType;
-	
 	//will have service method to convert class names to string list
 	private List<String> roles;
-	private List<TreeDto> trees;
+	
 	
 	
 	public UserDto() {
@@ -51,14 +50,6 @@ public class UserDto {
 
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
-	}
-	
-	public List<TreeDto> getTrees() {
-		return trees;
-	}
-	
-	public void setTrees(List<TreeDto> trees) {
-		this.trees = trees;
 	}
 	
 	
