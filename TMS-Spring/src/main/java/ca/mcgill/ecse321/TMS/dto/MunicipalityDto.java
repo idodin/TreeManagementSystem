@@ -6,18 +6,22 @@ import java.util.List;
 import ca.mcgill.ecse321.TMS.model.TreeLocation;
 
 public class MunicipalityDto {
-	String name;
-	int bioDiv;
-	private List<TreeLocation> treeLocations;
+	
+	//not sure about the private part for now
+	private String idNumber;
+	private String name;
+	private List<TreeDto> trees;
+	
+	
 	
 	public MunicipalityDto() {
 		
 	}
 	
-	public MunicipalityDto(String name, int bioDiv, ArrayList<TreeLocation> treeLocations) {
+	public MunicipalityDto(String idNumber, String name, ArrayList<TreeDto> trees) {
+		this.idNumber = idNumber;
 		this.name = name;
-		this.bioDiv = bioDiv;
-		this.treeLocations = treeLocations;
+		this.trees = trees;
 	}
 
 	public String getName() {
@@ -28,20 +32,20 @@ public class MunicipalityDto {
 		this.name = name;
 	}
 
-	public int getBioDiv() {
-		return bioDiv;
+	public String getIdNumber() {
+		return idNumber;
 	}
 
-	public void setBioDiv(int bioDiv) {
-		this.bioDiv = bioDiv;
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
 	}
 
-	public List<TreeLocation> getTreeLocations() {
-		return treeLocations;
+	public List<TreeDto> getTrees() {
+		return trees;
 	}
 
-	public void setTreeLocations(List<TreeLocation> treeLocations) {
-		this.treeLocations = treeLocations;
+	public void setTrees(List<TreeDto> trees) {
+		this.trees = trees;
 	}
 	
 	
