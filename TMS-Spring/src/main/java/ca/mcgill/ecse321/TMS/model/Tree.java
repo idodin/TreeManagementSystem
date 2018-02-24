@@ -9,15 +9,23 @@ public class Tree
 {
 
   //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  private static int nextId = 1;
+
+  //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Tree Attributes
-  private int id;
   private int height;
   private int diameter;
   private Date datePlanted;
   private Date dateAdded;
+
+  //Autounique Attributes
+  private int id;
 
   //Tree Associations
   private TreeStatus treeStatus;
@@ -31,13 +39,13 @@ public class Tree
   // CONSTRUCTOR
   //------------------------
 
-  public Tree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
+  public Tree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
-    id = aId;
     height = aHeight;
     diameter = aDiameter;
     datePlanted = aDatePlanted;
     dateAdded = aDateAdded;
+    id = nextId++;
     boolean didAddTreeStatus = setTreeStatus(aTreeStatus);
     if (!didAddTreeStatus)
     {
@@ -68,14 +76,6 @@ public class Tree
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setId(int aId)
-  {
-    boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
-  }
 
   public boolean setHeight(int aHeight)
   {
@@ -109,11 +109,6 @@ public class Tree
     return wasSet;
   }
 
-  public int getId()
-  {
-    return id;
-  }
-
   public int getHeight()
   {
     return height;
@@ -132,6 +127,11 @@ public class Tree
   public Date getDateAdded()
   {
     return dateAdded;
+  }
+
+  public int getId()
+  {
+    return id;
   }
 
   public TreeStatus getTreeStatus()
