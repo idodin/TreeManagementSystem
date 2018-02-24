@@ -190,9 +190,9 @@ public class User
     return 0;
   }
 
-  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, Municipality aMunicipality, TreePLE aTreePLE, TreeLocation aTreeLocation)
+  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, Municipality aMunicipality, TreePLE aTreePLE)
   {
-    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, this, aMunicipality, aTreePLE, aTreeLocation);
+    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, this, aMunicipality, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)

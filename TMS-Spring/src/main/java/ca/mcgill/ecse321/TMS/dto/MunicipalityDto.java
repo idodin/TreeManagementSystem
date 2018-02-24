@@ -10,7 +10,6 @@ public class MunicipalityDto {
 	//not sure about the private part for now
 	private String idNumber;
 	private String name;
-	private List<TreeDto> trees;
 	
 	
 	
@@ -18,10 +17,9 @@ public class MunicipalityDto {
 		
 	}
 	
-	public MunicipalityDto(String idNumber, String name, ArrayList<TreeDto> trees) {
+	public MunicipalityDto(String idNumber, String name) {
 		this.idNumber = idNumber;
 		this.name = name;
-		this.trees = trees;
 	}
 
 	public String getName() {
@@ -38,14 +36,6 @@ public class MunicipalityDto {
 
 	public void setIdNumber(String idNumber) {
 		this.idNumber = idNumber;
-	}
-
-	public List<TreeDto> getTrees() {
-		return trees;
-	}
-
-	public void setTrees(List<TreeDto> trees) {
-		this.trees = trees;
 	}
 	
 	

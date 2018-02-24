@@ -10,17 +10,15 @@ public class SpeciesDto {
 	String name; 
 	int carbonConsumption; 
 	int oxygenProduction;
-	private List<TreeDto> trees;
 	
 	public SpeciesDto() {
 		
 	}
 	
-	public SpeciesDto(String name, int carbonConsumption, int oxygenProduction, ArrayList<TreeDto> trees) {
+	public SpeciesDto(String name, int carbonConsumption, int oxygenProduction) {
 		this.name = name;
 		this.carbonConsumption = carbonConsumption;
 		this.oxygenProduction = oxygenProduction;
-		this.trees = trees;
 	}
 
 	public String getName() {
@@ -46,14 +44,5 @@ public class SpeciesDto {
 	public void setOxygenProduction(int oxygenProduction) {
 		this.oxygenProduction = oxygenProduction;
 	}
-
-	public List<TreeDto> getTrees() {
-		return trees;
-	}
-
-	public void setTrees(List<TreeDto> trees) {
-		this.trees = trees;
-	}
-	
 	
 }

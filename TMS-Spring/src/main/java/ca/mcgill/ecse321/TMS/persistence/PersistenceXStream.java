@@ -38,12 +38,12 @@ public class PersistenceXStream {
         TreePLE tp;
         setFilename(fileName);
         setAlias("user", User.class);
-        setAlias("treeLocation", TreeLocation.class);
+        setAlias("landUse", TreeLocation.class);
         setAlias("local", Local.class);
         setAlias("municipality", Municipality.class);
         setAlias("specialist", Specialist.class);
         setAlias("species", Species.class);
-        setAlias("treeStatus", TreeStatus.class);
+        setAlias("status", TreeStatus.class);
         setAlias("tree", Tree.class);
         setAlias("treePLE", TreePLE.class);
         setAlias("treeStatus", TreeStatus.class);
