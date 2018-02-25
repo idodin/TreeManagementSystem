@@ -256,9 +256,9 @@ public class TreePLE
     return 0;
   }
 
-  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality)
+  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality)
   {
-    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality, this);
+    return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality, this);
   }
 
   public boolean addTree(Tree aTree)
@@ -328,7 +328,7 @@ public class TreePLE
     return 0;
   }
 
-  public Municipality addMunicipality(String aIdNumber, String aName)
+  public Municipality addMunicipality(int aIdNumber, String aName)
   {
     return new Municipality(aIdNumber, aName, this);
   }

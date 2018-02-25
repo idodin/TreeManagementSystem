@@ -13,7 +13,6 @@ public class Municipality
   // STATIC VARIABLES
   //------------------------
 
-  private static Map<String, Municipality> municipalitysByIdNumber = new HashMap<String, Municipality>();
   private static Map<String, Municipality> municipalitysByName = new HashMap<String, Municipality>();
 
   //------------------------
@@ -21,7 +20,7 @@ public class Municipality
   //------------------------
 
   //Municipality Attributes
-  private String idNumber;
+  private int idNumber;
   private String name;
 
   //Municipality Associations
@@ -32,12 +31,9 @@ public class Municipality
   // CONSTRUCTOR
   //------------------------
 
-  public Municipality(String aIdNumber, String aName, TreePLE aTreePLE)
+  public Municipality(int aIdNumber, String aName, TreePLE aTreePLE)
   {
-    if (!setIdNumber(aIdNumber))
-    {
-      throw new RuntimeException("Cannot create due to duplicate idNumber");
-    }
+    idNumber = aIdNumber;
     if (!setName(aName))
     {
       throw new RuntimeException("Cannot create due to duplicate name");
@@ -54,19 +50,11 @@ public class Municipality
   // INTERFACE
   //------------------------
 
-  public boolean setIdNumber(String aIdNumber)
+  public boolean setIdNumber(int aIdNumber)
   {
     boolean wasSet = false;
-    String anOldIdNumber = getIdNumber();
-    if (hasWithIdNumber(aIdNumber)) {
-      return wasSet;
-    }
     idNumber = aIdNumber;
     wasSet = true;
-    if (anOldIdNumber != null) {
-      municipalitysByIdNumber.remove(anOldIdNumber);
-    }
-    municipalitysByIdNumber.put(aIdNumber, this);
     return wasSet;
   }
 
@@ -86,19 +74,9 @@ public class Municipality
     return wasSet;
   }
 
-  public String getIdNumber()
+  public int getIdNumber()
   {
     return idNumber;
-  }
-
-  public static Municipality getWithIdNumber(String aIdNumber)
-  {
-    return municipalitysByIdNumber.get(aIdNumber);
-  }
-
-  public static boolean hasWithIdNumber(String aIdNumber)
-  {
-    return getWithIdNumber(aIdNumber) != null;
   }
 
   public String getName()
@@ -175,9 +153,9 @@ public class Municipality
     return 0;
   }
 
-  public Tree addTree(int aId, int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, TreePLE aTreePLE)
+  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, TreePLE aTreePLE)
   {
-    return new Tree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, this, aTreePLE);
+    return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, this, aTreePLE);
   }
 
   public boolean addTree(Tree aTree)
@@ -244,7 +222,6 @@ public class Municipality
 
   public void delete()
   {
-    municipalitysByIdNumber.remove(getIdNumber());
     municipalitysByName.remove(getName());
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;

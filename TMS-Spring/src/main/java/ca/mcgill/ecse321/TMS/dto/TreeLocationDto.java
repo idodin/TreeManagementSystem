@@ -11,8 +11,9 @@ public class TreeLocationDto {
 	private int y;
 	private String description;
 	
-	private Tree tree;
-	private LocationType locationType;
+	
+	//private Tree tree;
+	private LocationTypeDto locationType;
 	
 	
 	
@@ -20,11 +21,10 @@ public class TreeLocationDto {
 		
 	}
 	
-	public TreeLocationDto(int x, int y, String description, Tree tree, LocationType locationType) {
+	public TreeLocationDto(int x, int y, String description, Tree tree, LocationTypeDto locationType) {
 		this.x = x; 
 		this.y = y; 
 		this.description = description;
-		this.tree = tree;
 		this.locationType = locationType;
 	}
 
@@ -52,20 +52,12 @@ public class TreeLocationDto {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Tree getTree() {
-		return tree;
-	}
-
-	public void setTree(Tree tree) {
-		this.tree = tree;
-	}
 	
-	public LocationType getLandLocationType() {
+	public LocationTypeDto getLandLocationType() {
 		return locationType;
 	}
 
-	public void setLocationType(LocationType locationType) {
+	public void setLocationType(LocationTypeDto locationType) {
 		this.locationType = locationType;
 	}
 

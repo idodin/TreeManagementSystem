@@ -3,6 +3,8 @@ package ca.mcgill.ecse321.TMS.service;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.sql.Date;
+import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,12 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+
+
+
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
+
 
 
 
@@ -29,16 +35,17 @@ public class TMSService {
 		this.tp=tp;
 	}
 	
-	public Tree createTree(int aId, int aHeight, int aDiameter,
+	public Tree createTree(int aHeight, int aDiameter,
 			Date aDatePlanted, TreeStatus aTreeStatus,
 			Species aSpecies, User aLocal, Municipality aMunicipality,
 			int x, int y, String description, LocationType locationType) throws InvalidInputException{
 		
 		Date aDateAdded = new Date(Calendar.getInstance().getTime().getTime());
 		
-		description = checkTreeInputException(aId, aHeight, aDiameter, aDatePlanted, aTreeStatus, aSpecies, aLocal,
+		description = checkTreeInputException(aHeight, aDiameter, aDatePlanted, aTreeStatus, aSpecies, aLocal,
 				aMunicipality, x, y, description, locationType, aDateAdded);
 		
+
 		Tree tree = tp.addTree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality);
 		PersistenceXStream.saveToXMLwithXStream(tp);
 		TreeLocation location = new TreeLocation(x, y, description, tree, locationType);
@@ -50,6 +57,7 @@ public class TMSService {
 		return tp.getTrees();
 	}
 	
+
 	public Tree removeTree(Tree aTree) {
 		
 		aTree.delete();
@@ -64,8 +72,9 @@ public class TMSService {
 		String errormsg = "";
 		Boolean errorthrown = false;
 		
-		if (aId <= 0 || aHeight <= 0 || aDiameter <= 0 || x <= 0 || y <= 0) {
-			errormsg = "Cannot pass negative integer!";
+
+		if (aHeight < 0 || aDiameter < 0 || x < 0 || y < 0) {
+			errormsg = "Cannot pass negative integer! ";
 			errorthrown = true;
 		}
 		
@@ -73,12 +82,8 @@ public class TMSService {
 			description = "";
 		}
 		
-		if(this.getTreeById(aId) != null) {
-			errormsg = errormsg + "Tree with that ID already exists!";
-			errorthrown = true;
-		}
-		
-		if (aDateAdded.before(aDatePlanted)) {
+
+		if (aDatePlanted.after(aDateAdded)) {
 			errormsg = errormsg + "Cannot plant tree in the future!";
 			errorthrown = true;
 		}
@@ -158,7 +163,7 @@ public class TMSService {
 		return null;
 	}
 
-	private TreePLE treePle;
+	
 	
 
 	public List<Tree> getTreesForMunicipality(Municipality m) {
@@ -171,4 +176,3 @@ public class TMSService {
 	}
 
 }
-

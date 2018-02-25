@@ -11,13 +11,13 @@ public class ParkDto extends LocationTypeDto{
 	private String parkName;
 	
 	public ParkDto() {
+		
 	}
 	
-	public ParkDto(int parkCode, String parkName, LandUseType landUseType, List<TreeLocationDto> treeLocations) {
+	public ParkDto(int parkCode, String parkName, LandUseType landUseType) {
 		this.parkCode = parkCode;
 		this.parkName = parkName;
 		this.landUseType = landUseType;
-		this.treeLocations = treeLocations;
 	}
 	
 	public int getParkCode() {
@@ -35,5 +35,6 @@ public class ParkDto extends LocationTypeDto{
 	public void setParkName(String parkName) {
 		this.parkName = parkName;
 	}
+	
 
 }
