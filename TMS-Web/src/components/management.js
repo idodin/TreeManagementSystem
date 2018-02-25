@@ -20,8 +20,15 @@ export default {
     }
   },
   created: function () {
-	  
-	},
+	  AXIOS.get(`/trees`)
+	 .then(response => {
+		// JSON responses are automatically parsed.
+		this.trees = response.data
+	 })
+		.catch(e => {
+			this.listTreesError = e;
+		});
+	 },
 	methods: {
 		findAllTrees: function(){
 			AXIOS.get(`/trees`)
