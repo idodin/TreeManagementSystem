@@ -43,9 +43,6 @@ public void setUp() throws Exception {
 	Date dateAdded2=new Date(c4.getTimeInMillis());
 	TreeStatus status2=new TreeStatus(ple);
 	Tree tree2 = new Tree(17, 10, datePlanted2, dateAdded2, status2, species2, user2, municipality2, ple);
-    
-    
-   
    
 }
 
