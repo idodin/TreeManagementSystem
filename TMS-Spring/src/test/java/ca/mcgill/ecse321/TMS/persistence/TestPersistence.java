@@ -26,23 +26,23 @@ public void setUp() throws Exception {
     // create trees
 	User user=new User("aehwany", ple);
 	Species species= new Species("dandelion", 5, 4, ple);
-	Municipality municipality=new Municipality( "T10","Rosement", ple);
+	Municipality municipality=new Municipality(10,"Rosement", ple);
 	Calendar c1 = Calendar.getInstance();
 	Date datePlanted=new Date(c1.getTimeInMillis());
 	Calendar c2 = Calendar.getInstance();
 	Date dateAdded=new Date(c2.getTimeInMillis());
 	TreeStatus status=new TreeStatus(ple);
-    Tree tree = new Tree(4, 5, 7, datePlanted, dateAdded, status, species, user, municipality, ple);
+    Tree tree = new Tree(5, 7, datePlanted, dateAdded, status, species, user, municipality, ple);
     
     User user2=new User("karim", ple);
 	Species species2= new Species("poppy", 9, 7, ple);
-	Municipality municipality2=new Municipality("T43","Saintlaurent",  ple);
+	Municipality municipality2=new Municipality(43,"Saintlaurent",  ple);
 	Calendar c3 = Calendar.getInstance();
 	Date datePlanted2=new Date(c3.getTimeInMillis());
 	Calendar c4 = Calendar.getInstance();
 	Date dateAdded2=new Date(c4.getTimeInMillis());
 	TreeStatus status2=new TreeStatus(ple);
-	Tree tree2 = new Tree(8, 17, 10, datePlanted2, dateAdded2, status2, species2, user2, municipality2, ple);
+	Tree tree2 = new Tree(17, 10, datePlanted2, dateAdded2, status2, species2, user2, municipality2, ple);
     
     
    
