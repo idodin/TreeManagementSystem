@@ -14,12 +14,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ca.mcgill.ecse321.TMS.model.LocationType;
+import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Species;
+import ca.mcgill.ecse321.TMS.model.Street;
 import ca.mcgill.ecse321.TMS.model.Tree;
+import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
+import ca.mcgill.ecse321.TMS.model.TreeStatus;
+import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
-import ca.mcgill.ecse321.eventregistration.model.RegistrationManager;
 
 public class TestService {
 
@@ -51,15 +56,21 @@ public class TestService {
 	public void testCreatetree() {
 		assertEquals(0, ple.getTrees().size());	 
 		//create tree properties
-		String name = "aehwany";
-		  int height=5;
-		  int diameter=10;  
-		  User user=new User(name, ple);
-		  Species species= new Species("dandelion", 5, 4, ple);
-		
+		int height=5;
+		int diameter=10;
+		User user=new User("aehwany", ple);
+		Species species= new Species("dandelion", 5, 4, ple);
+		Municipality municipality=new Municipality("Rosement", "T10", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted=new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded=new Date(c2.getTimeInMillis());
+		TreeStatus status=new TreeStatus(ple);
+		LocationType location=new LocationType();
 		  try {
 			TMSService erc = new TMSService(ple);
-			erc.createTree(height, diameter, species, user, ple);
+			erc.createTree(20, height, diameter, datePlanted, status,species, user, municipality,
+					3, 8, "description", location);
 		} catch (InvalidInputException e) {
 			// TODO Auto-generated catch block
 			fail();
@@ -70,31 +81,30 @@ public class TestService {
 		 TreePLE ple2 = (TreePLE) PersistenceXStream.loadFromXMLwithXStream();
 
 		  // check file contents
-		  checkResultTree(height, diameter,species, user, ple2);
+		  //checkResultTree(height, diameter,species, user, ple2);
 		  ple2.delete();
 	}
 	@Test
 	public void testRemovetree() {
 		
 		//create tree properties
-		String name = "aehwany";
-		 int height=5;
-		 int diameter=10;  
-		 User user=new User(name, ple);
-		 Species species= new Species("dandelion", 5, 4, ple);
-		 Tree tree = new Tree(height, diameter, species , user, ple);
-		 
-		 ple.addTree(tree);
+		int height=5;
+		int diameter=10;
+		User user=new User("aehwany", ple);
+		Species species= new Species("dandelion", 5, 4, ple);
+		Municipality municipality=new Municipality("Rosement", "T10", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted=new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded=new Date(c2.getTimeInMillis());
+		TreeStatus status=new TreeStatus(ple);
+		Tree tree = new Tree(20, height, diameter, datePlanted,dateAdded, status,species, user, municipality, ple);
+		
 		 assertEquals(1, ple.getTrees().size()); 
-			
-		 try {
+ 
 				TMSService erc = new TMSService(ple);
-				erc.removeTree(tree, ple);
-			} catch (InvalidInputException e) {
-				// TODO Auto-generated catch block
-				fail();
-			}
-		 
+				erc.removeTree(tree);
+
 		 TreePLE ple1 = ple;
 		 assertEquals(0, ple.getTrees().size());
 		 TreePLE ple2 = (TreePLE) PersistenceXStream.loadFromXMLwithXStream();
@@ -109,26 +119,26 @@ public class TestService {
 	@Test
 	public void testFindalltrees() {
 		//create tree properties
-		String name = "aehwany";
-		 int height=5;
-		 int diameter=10;  
-		 User user=new User(name, ple);
-		 Species species= new Species("dandelion", 5, 4, ple);
-		 
+		int height=5;
+		int diameter=10;
+		User user=new User("aehwany", ple);
+		Species species= new Species("dandelion", 5, 4, ple);
+		Municipality municipality=new Municipality("Rosement", "T10", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted=new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded=new Date(c2.getTimeInMillis());
+		TreeStatus status=new TreeStatus(ple);
 		 //Create trees
-		 Tree tree1 = new Tree(height, diameter, species , user, ple);
-		 Tree tree2 = new Tree(height, diameter, species , user, ple);
-		 Tree tree3 = new Tree(height, diameter, species , user, ple);
+		 Tree tree1 = new Tree(20, height, diameter, datePlanted,dateAdded, status,species, user, municipality, ple);
+		 Tree tree2 = new Tree(20, height, diameter, datePlanted,dateAdded, status,species, user, municipality, ple);	
+		 Tree tree3 = new Tree(20, height, diameter, datePlanted,dateAdded, status,species, user, municipality, ple);
+			
 		 
 		 
 		 List<Tree> treeList;
-		 try {
 				TMSService erc = new TMSService(ple);
 				treeList=erc.findAllTrees();
-			} catch (InvalidInputException e) {
-				// TODO Auto-generated catch block
-				fail();
-			}
 		 assertEquals(3,treeList.size());
 		 assertEquals(treeList.get(0),tree1);
 		 assertEquals(treeList.get(1),tree2);
@@ -145,6 +155,43 @@ public class TestService {
 		  assertEquals(diameter, ple.getTree(0).getDiameter());
 	  
 	}
-	
+	@Test
+	public void TestcheckTreeInputException() {
+		int id=-20;
+		int height=-5;
+		int diameter=-10;
+		int x=-2;
+		int y=-5;
+		User user=new User("aehwany", ple);
+		Species species= new Species("dandelion", 5, 4, ple);
+		Municipality municipality=new Municipality("Rosement", "T10", ple);
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2017, Calendar.MARCH, 16, 10, 30, 0);
+		Date datePlanted=new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		c2.set(2017, Calendar.MARCH, 14, 9, 0, 0);
+		Date dateAdded=new Date(c2.getTimeInMillis());
+		TreeStatus status=new TreeStatus(ple);
+		Street street=null;
+		LocationType locationType1=street;
+		
+		Tree tree1 = new Tree(id, height, diameter, datePlanted,dateAdded, status,species, user, municipality, ple);
+		//Tree tree2 = new Tree(id, height, diameter, datePlanted,dateAdded, status,species, user, municipality, ple);
+		
+		//TreeLocation location = new TreeLocation(x, y, "    ", tree1, locationType1);
+		
+		//check1
+		String error = null;
+		TMSService erc = new TMSService(ple);
+		try {
+			erc.createTree();
+		} catch (InvalidInputException e) {
+		      error = e.getMessage();
+		  }
+		assertEquals(
+				"Cannot pass negative integer!Tree with that ID already exists!Cannot plant tree in the future!Status needs to be selected for registration!Species needs to be selected for registration!User needs to be logged in for registration!Municipality needs to be selected for registration!",
+		          error);
+	}
+
 	
 }

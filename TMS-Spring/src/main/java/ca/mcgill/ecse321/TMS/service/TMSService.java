@@ -22,6 +22,8 @@ import ca.mcgill.ecse321.TMS.model.User;
 
 
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
+import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
+
 
 
 
@@ -43,7 +45,9 @@ public class TMSService {
 		description = checkTreeInputException(aHeight, aDiameter, aDatePlanted, aTreeStatus, aSpecies, aLocal,
 				aMunicipality, x, y, description, locationType, aDateAdded);
 		
-		Tree tree = tp.addTree( aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality);
+
+		Tree tree = tp.addTree(aId, aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality);
+		PersistenceXStream.saveToXMLwithXStream(tp);
 		TreeLocation location = new TreeLocation(x, y, description, tree, locationType);
 		return tree;
 		
@@ -53,17 +57,22 @@ public class TMSService {
 		return tp.getTrees();
 	}
 	
-	public void removeTree(Tree aTree) {
+
+	public Tree removeTree(Tree aTree) {
+		
 		aTree.delete();
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return aTree;
 	}
 
 
-	private String checkTreeInputException(int aHeight, int aDiameter, Date aDatePlanted,
+	public String checkTreeInputException(int aId, int aHeight, int aDiameter, Date aDatePlanted,
 			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, int x, int y,
 			String description, LocationType locationType, Date aDateAdded) throws InvalidInputException {
 		String errormsg = "";
 		Boolean errorthrown = false;
 		
+
 		if (aHeight < 0 || aDiameter < 0 || x < 0 || y < 0) {
 			errormsg = "Cannot pass negative integer! ";
 			errorthrown = true;
@@ -73,23 +82,24 @@ public class TMSService {
 			description = "";
 		}
 		
+
 		if (aDatePlanted.after(aDateAdded)) {
 			errormsg = errormsg + "Cannot plant tree in the future!";
 			errorthrown = true;
 		}
 		
 		if (aTreeStatus == null) {
-			errormsg = errormsg + "Status needs to be selected for registration! ";
+			errormsg = errormsg + "Status needs to be selected for registration!";
 			errorthrown = true;
 		}
 		
 		if (aSpecies == null) {
-			errormsg = errormsg + "Species needs to be selected for registration! ";
+			errormsg = errormsg + "Species needs to be selected for registration!";
 			errorthrown = true;
 		}
 		
 		if (aLocal == null) {
-			errormsg = errormsg + "User needs to be logged in for registration! ";
+			errormsg = errormsg + "User needs to be logged in for registration!";
 			errorthrown = true;
 		}
 		
@@ -103,36 +113,36 @@ public class TMSService {
 			throw new InvalidInputException(errormsg);
 		}
 		
-		if (tp.indexOfStatus(aTreeStatus) == -1){
-			errormsg = "Status must exist! ";
+		if (tp.indexOfStatus(aTreeStatus) == -1 ){
+			errormsg = errormsg + "Status must exist!";
 			errorthrown = true;
 		}
 		
 		if (tp.indexOfSpecies(aSpecies) == -1) {
-			errormsg = errormsg + "Species must exist! ";
+			errormsg = errormsg + "Species must exist!";
 			errorthrown = true;
 		}
 		
 		if (tp.indexOfUser(aLocal) == -1) {
-			errormsg = errormsg + "User must be registered! ";
+			errormsg = errormsg + "User must be registered!";
 			errorthrown = true;
 		}
 		
 		if (tp.indexOfMunicipality(aMunicipality) == -1) {
-			errormsg = errormsg + "Municipality must exist! ";
+			errormsg = errormsg + "Municipality must exist!";
 			errorthrown = true;
 		}
 		
 		if(locationType instanceof Park) {
 			if(tp.indexOfPark((Park)locationType)==-1){
-				errormsg = errormsg + "Park must exist! ";
+				errormsg = errormsg + "Park must exist!";
 				errorthrown = true;
 			}
 		}
 		
 		if(locationType instanceof Street) {
 			if(tp.indexOfStreet((Street)locationType) == -1) {
-				errormsg = errormsg + "Street must exist! ";
+				errormsg = errormsg + "Street must exist!";
 				errorthrown = true;
 			}
 		}
