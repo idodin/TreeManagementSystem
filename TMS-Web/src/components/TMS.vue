@@ -1,13 +1,13 @@
 <template>
 <div id="treemanagement">
     <h2>Tree</h2>
-        <button id="updateButton">Update Trees</button>
+        <button id="updateButton" @click="findAllTrees()">List Trees</button>
         </br></br></br>
       <div id="tableDiv">
       <table border="1" align="center">
       <tr v-for="tree in trees">
           <td>{{ tree.id }}</td>
-          <td>{{ tree.species.name }}</td>
+          <td>{{ tree.diameter }}</td>
       </tr>
     </table>
     </div></br>
