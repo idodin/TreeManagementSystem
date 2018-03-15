@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
+import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,6 +23,7 @@ import ca.mcgill.ecse321.TMS.model.Street;
 import ca.mcgill.ecse321.TMS.model.Tree;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
+import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
 
@@ -201,6 +203,118 @@ public class TestService {
 		assertEquals("Status must exist! Species must exist! User must be registered! Municipality must exist! Park must exist!", error);
 		
 	}
+	
+	//Calculate current oxygen production of a list of trees.
+	@Test
+	public void TestCalculateOxygenProduction() {
+		int height=5;
+		int diameter=10;
+		User user=new User("aehwany", ple);
+		Species species1= new Species("dandelion", 18, 10, ple);
+		Species species2= new Species("Coconut", 8, 2, ple);
+		Species species3= new Species("Pine", 10, 6, ple);
+		Municipality municipality=new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted=new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded=new Date(c2.getTimeInMillis());
+		TreeStatus status1=new TreeStatus(ple);
+		TreeStatus status2=new TreeStatus(ple);
+		TreeStatus status3=new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		 //Create trees
+		 Tree tree1 = new Tree(height, diameter, datePlanted,dateAdded, status1,species1, user, municipality, ple);
+		 Tree tree2 = new Tree(height, diameter, datePlanted,dateAdded, status2,species2, user, municipality, ple);	
+		 Tree tree3 = new Tree(height, diameter, datePlanted,dateAdded, status3,species3, user, municipality, ple);
+			
+		 List<Tree> treeList=new java.util.ArrayList<>();
+		 treeList.add(tree1);
+		 treeList.add(tree2);
+		 treeList.add(tree3);
+		 int production=0;
+		TMSService erc = new TMSService(ple);
+		try {
+		production=erc.calculateOxygenProduction(treeList);
+		}catch(InvalidInputException e) {
+			fail();
+		}
+		assertEquals(13, production);
+		 
+	}
+	//testing if calculateOxygenProduction is called with empty list of trees.
+	@Test
+	public void TestEmptyListOxygenProduction() {		
+		String error="";
+		 List<Tree> treeList=new java.util.ArrayList<>();
+		 TMSService erc = new TMSService(ple);
+		 try {
+			 int production=erc.calculateOxygenProduction(treeList);
+		 }catch(InvalidInputException e){
+			 error=e.getMessage();
+			assertEquals("Please enter a list of trees", error);
+		 }
+		
+	}
+	
+	//Calculate current carbon consumption of a list of trees.
+	@Test
+	public void TestCalculateCarbonConsumption() {
+		int height=5;
+		int diameter=10;
+		User user=new User("aehwany", ple);
+		Species species1= new Species("dandelion", 18, 10, ple);
+		Species species2= new Species("Coconut", 8, 2, ple);
+		Species species3= new Species("Pine", 10, 6, ple);
+		Municipality municipality=new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted=new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded=new Date(c2.getTimeInMillis());
+		TreeStatus status1=new TreeStatus(ple);
+		TreeStatus status2=new TreeStatus(ple);
+		TreeStatus status3=new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		 //Create trees
+		 Tree tree1 = new Tree(height, diameter, datePlanted,dateAdded, status1,species1, user, municipality, ple);
+		 Tree tree2 = new Tree(height, diameter, datePlanted,dateAdded, status2,species2, user, municipality, ple);	
+		 Tree tree3 = new Tree(height, diameter, datePlanted,dateAdded, status3,species3, user, municipality, ple);
+			
+		 List<Tree> treeList=new java.util.ArrayList<>();
+		 treeList.add(tree1);
+		 treeList.add(tree2);
+		 treeList.add(tree3);
+		int consumption=0;
+		TMSService erc = new TMSService(ple);
+		try{
+			consumption=erc.calculateCarbonConsumption(treeList);
+		}
+		catch(InvalidInputException e){
+		fail();
+		}
+		assertEquals(23, consumption);
+		 
+	}
+	
+	//testing if calculateCarbonConsumption is called with empty list of trees.
+	@Test
+	public void TestEmptyListCarbonConsumption() {		
+		String error="";
+		 List<Tree> treeList=new java.util.ArrayList<>();
+		 TMSService erc = new TMSService(ple);
+		 try {
+			 int consumption=erc.calculateCarbonConsumption(treeList);
+		 }catch(InvalidInputException e){
+			 error=e.getMessage();
+			assertEquals("Please enter a list of trees", error);
+		 }
+		
+	}
+	
+	
 	
 	
 
