@@ -202,7 +202,7 @@ public class TestService {
 	}
 	
 	@Test
-	public void TestLoadFileInput() {
+	public void TestLoadFileInputSuccess() {
 		// input.csv must be a correctly formatted csv file  containing a single tree with
 		// the tree data that is checked afterwards.
 		File input = new File("input.csv");
@@ -298,6 +298,106 @@ public class TestService {
 		assertEquals("Please ensure file is of type .csv", errorMessage);
 	}
 	
-
+	@Test
+	public void TestUpdateTreeSuccess() {
+		TMSService ts = new TMSService(ple);
+		
+		Date datePlanted = Date.valueOf("2002-02-02");
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Healthy);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+		LocationType locationType = new Park(3, "Mt. Royal Park", ple);
+		
+		Tree tree;
+		try {
+			tree = ts.createTree(10, 10, datePlanted, status, species, user, municipality, 0, 0, "north", locationType);
+		} catch(InvalidInputException e) {
+			fail("Error in creating tree. See testlog output.");
+		}
+		
+		Date newDatePlanted = Date.valueOf("2010-02-02");
+		Species newSpecies = new Species("clover", 2, 2, ple);
+		TreeStatus newStatus = new TreeStatus(ple);
+		newStatus.setStatus(TreeStatus.Status.Diseased);
+		User newUser = new User("aelehwany", ple);
+		Municipality newMunicipality = new Municipality(2, "Concordia", ple);
+		LocationType newLocationType = new Street("Sherbrooke", ple);
+		
+		ts.updateTree(tree, 11, 12, newDatePlanted, newStatus, newSpecies, newUser, newMunicipality, 1, 2, "south", newLocationType);
+		
+		assertEquals(11, tree.getHeight());
+		assertEquals(12, tree.getDiameter());
+		assertEquals("2010-02-02", tree.getDatePlanted().toString());
+		assertEquals("clover", tree.getSpecies().getName());
+		assertEquals("aelehwany", tree.getLocal().getUsername());
+		assertEquals("Concordia", tree.getMunicipality().getName());
+		assertEquals(1, tree.getTreeLocation().getX());
+		assertEquals(2, tree.getTreeLocation().getY());
+		assertEquals("south", tree.getTreeLocation().getDescription());
+		
+		Street street;
+		if(tree.getTreeLocation().getLocationType() instanceof Street) {
+			street = (Street)tree.getTreeLocation().getLocationType();
+		}
+		else {
+			fail("Location type was not a Street");
+		}
+		
+		assertEquals("Sherbrooke", street.getStreetName());
+	}
+	
+	@Test
+	public void TestUnavailableUpdateTree() {
+		TMSService ts = new TMSService(ple);
+		String errorMessage = "";
+		
+		Date datePlanted = Date.valueOf("2002-02-02");
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Healthy);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+		LocationType locationType = new Park(3, "Mt. Royal Park", ple);
+		
+		Tree tree;
+		try {
+			tree = ts.createTree(10, 10, datePlanted, status, species, user, municipality, 0, 0, "north", locationType);
+		} catch(InvalidInputException e) {
+			fail("Error in creating tree. See testlog output.");
+		}
+		
+		Date newDatePlanted = Date.valueOf("2010-02-02");
+		Species newSpecies = new Species("clover", 2, 2, ple2);
+		TreeStatus newStatus = new TreeStatus(ple2);
+		newStatus.setStatus(TreeStatus.Status.Diseased);
+		User newUser = new User("aelehwany", ple2);
+		Municipality newMunicipality = new Municipality(2, "Concordia", ple2);
+		LocationType newLocationType = new Street("Sherbrooke", ple2);
+		
+		try {
+			ts.updateTree(tree, 11, 12, newDatePlanted, newStatus, newSpecies, newUser, newMunicipality, 1, 2, "south", newLocationType);
+		} catch (InvalidInputException e) {
+			errorMessage = e.getMessage();
+		}
+		
+		assertEquals("Status must exist! Species must exist! User must be registered! Municipality must exist! Street must exist!", error);
+	}
+	
+	@Test
+	public void TestNullInputUpdateTree() {
+		TMSService ts = new TMSService(ple);
+		String errorMessage = "";
+		Date datePlanted = Date.valueOf("2100-02-02");
+		
+		try {
+			ts.updateTree(null,-5, -10, datePlanted, null, null, null, null, null, null, null, null, null, null);
+		} catch (InvalidInputException e) {
+			errorMessage = e.getMessage();
+		}
+		
+		assertEquals("Tree needs to be selected to be updated! Cannot pass negative integer! Cannot plant tree in the future! Status needs to be selected for registration! Species needs to be selected for registration! User needs to be logged in for registration! Municipality needs to be selected for registration!", errorMessage);
+	}
 	
 }
