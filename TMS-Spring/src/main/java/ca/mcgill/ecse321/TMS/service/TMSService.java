@@ -18,9 +18,7 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
-
-
-
+import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
 
@@ -149,6 +147,81 @@ public class TMSService {
 			throw new InvalidInputException(errormsg);
 		}
 		return description;
+	}
+	
+	public int calculateOxygenProduction(List<Tree> treeList) throws InvalidInputException {
+		int total=0;
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		for(Tree tree: treeList) {
+			if(tree.getTreeStatus().getStatus()!=Status.Cut) {
+				if(tree.getTreeStatus().getStatus()==Status.Diseased) {
+					int index=tree.getSpecies().getOxygenProduction();
+					total+=index/2;
+				}
+				else {
+					int index=tree.getSpecies().getOxygenProduction();
+					total+=index;
+				}
+			}
+		}
+		return total;
+	}
+	
+	public int calculateCarbonConsumption(List<Tree> treeList) throws InvalidInputException {
+		int total=0;
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		
+		for(Tree tree: treeList) {
+			if(tree.getTreeStatus().getStatus()!=Status.Cut) {
+				if(tree.getTreeStatus().getStatus()==Status.Diseased) {
+					int index=tree.getSpecies().getCarbonConsumption();
+					total+=index/2;
+				}
+				else {
+					int index=tree.getSpecies().getCarbonConsumption();
+					total+=index;
+				}
+			}
+		}
+		return total;
+	}
+	
+	public int bioIndexCalculator(List<Tree> treeList) throws InvalidInputException{
+		int index = 0;
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("List cannot be empty");
+		}
+		for(Tree tree: treeList) {
+			if(tree == null) {
+				throw new InvalidInputException("The list contains a null entry");
+			}
+		}
+		
+		return 4*2;
+	}
+	
+	public int bioForecast(List<Tree> treeList) throws InvalidInputException{
+		int forecast = 0;
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("List cannot be empty");
+		}
+		for(Tree tree: treeList) {
+			if(tree == null) {
+				throw new InvalidInputException("The list contains a null entry");
+			}
+		}
+		
+		return 3*2;
 	}
 	
 	public Tree getTreeById(int aId) {
