@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.27.0.3728.d139ed893 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
@@ -13,7 +13,7 @@ public class TreeStatus
   // ENUMERATIONS
   //------------------------
 
-  public enum Status { Healthy, Diseased, ToBeCut, Cut }
+  public enum Status { Healthy, Diseased, Cut }
 
   //------------------------
   // MEMBER VARIABLES
@@ -21,6 +21,7 @@ public class TreeStatus
 
   //TreeStatus Attributes
   private Status status;
+  private boolean toBeCut;
 
   //TreeStatus Associations
   private TreePLE treePLE;
@@ -52,9 +53,22 @@ public class TreeStatus
     return wasSet;
   }
 
+  public boolean setToBeCut(boolean aToBeCut)
+  {
+    boolean wasSet = false;
+    toBeCut = aToBeCut;
+    wasSet = true;
+    return wasSet;
+  }
+
   public Status getStatus()
   {
     return status;
+  }
+
+  public boolean getToBeCut()
+  {
+    return toBeCut;
   }
 
   public TreePLE getTreePLE()
@@ -115,7 +129,7 @@ public class TreeStatus
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
     return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, this, aSpecies, aLocal, aMunicipality, aTreePLE);
@@ -187,7 +201,10 @@ public class TreeStatus
   {
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
-    placeholderTreePLE.removeStatus(this);
+    if(placeholderTreePLE != null)
+    {
+      placeholderTreePLE.removeStatus(this);
+    }
     for(int i=trees.size(); i > 0; i--)
     {
       Tree aTree = trees.get(i - 1);
@@ -198,7 +215,8 @@ public class TreeStatus
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+    return super.toString() + "["+
+            "toBeCut" + ":" + getToBeCut()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "status" + "=" + (getStatus() != null ? !getStatus().equals(this)  ? getStatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "treePLE = "+(getTreePLE()!=null?Integer.toHexString(System.identityHashCode(getTreePLE())):"null");
   }

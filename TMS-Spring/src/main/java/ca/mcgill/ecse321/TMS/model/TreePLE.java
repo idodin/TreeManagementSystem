@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.27.0.3728.d139ed893 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
@@ -255,7 +255,7 @@ public class TreePLE
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality)
   {
     return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality, this);
@@ -327,7 +327,7 @@ public class TreePLE
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Municipality addMunicipality(int aIdNumber, String aName)
   {
     return new Municipality(aIdNumber, aName, this);
@@ -399,7 +399,7 @@ public class TreePLE
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Species addSpecies(String aName, int aCarbonConsumption, int aOxygenProduction)
   {
     return new Species(aName, aCarbonConsumption, aOxygenProduction, this);
@@ -471,7 +471,7 @@ public class TreePLE
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public User addUser(String aUsername)
   {
     return new User(aUsername, this);
@@ -543,7 +543,7 @@ public class TreePLE
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Park addPark(int aParkCode, String aParkName)
   {
     return new Park(aParkCode, aParkName, this);
@@ -615,7 +615,7 @@ public class TreePLE
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Street addStreet(String aStreetName)
   {
     return new Street(aStreetName, this);
@@ -687,7 +687,7 @@ public class TreePLE
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public TreeStatus addStatus()
   {
     return new TreeStatus(this);

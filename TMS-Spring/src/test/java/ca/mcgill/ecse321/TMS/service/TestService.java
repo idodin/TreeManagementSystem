@@ -202,7 +202,130 @@ public class TestService {
 		
 	}
 	
+	@Test
+	public void testMarkDiseasedSuccess() {
+		TMSService ts = new TMSService(ple);
+		
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Healthy);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+		
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+		
+		try {
+			ts.markDiseased(tree);
+		} catch (InvalidInputException e) {
+			fail("Tree couldn't be marked as diseased due to invalid input");
+		}
+		
+		assertEquals(TreeStatus.Status.Diseased, tree.getTreeStatus().getStatus());	
+	}
 	
-
+	@Test
+	public void testMarkDiseasedNull() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+		
+		Tree tree = null;
+		
+		try {
+			ts.markDiseased(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+		
+		assertEquals("Tree needs to be selected to be marked as diseased.", error);	
+	}
 	
+	@Test
+	public void testMarkDiseasedAlready() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+		
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Diseased);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+		
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+		
+		try {
+			ts.markDiseased(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+		
+		assertEquals("Tree was already diseased!", error);	
+	}
+	
+	@Test
+	public void testMarkToBeCutSuccess() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+		
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Diseased);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+		
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+		
+		try {
+			ts.markToBeCut(tree);
+		} catch (InvalidInputException e) {
+			fail("Tree couldn't be marked as to be cut due to Invalid Input.");
+		}
+		
+		assertEquals(true, tree.getTreeStatus().getToBeCut());	
+	}
+	
+	@Test
+	public void testMarkToBeCutNull() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+		
+		Tree tree = null;
+		
+		try {
+			ts.markToBeCut(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+		
+		assertEquals("Tree needs to be selected to be mark as to be cut.", error);	
+	}
+	
+	@Test
+	public void testMarkToBeCutAlready() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+		
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Cut);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+		
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+		
+		try {
+			ts.markToBeCut(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+		
+		assertEquals("Tree was already cut down!", error);	
+	}
 }
