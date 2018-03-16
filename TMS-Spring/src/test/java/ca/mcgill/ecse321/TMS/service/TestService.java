@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -52,8 +53,6 @@ public class TestService {
 	public void tearDown() throws Exception {
 		ple.delete();
 	}
-	
-	  
 	
 	@Test
 	public void testCreatetree() {
@@ -202,6 +201,102 @@ public class TestService {
 		
 	}
 	
+	@Test
+	public void TestLoadFileInput() {
+		// input.csv must be a correctly formatted csv file  containing a single tree with
+		// the tree data that is checked afterwards.
+		File input = new File("input.csv");
+		
+		TMSService ts = new TMSService(ple);
+		ts.loadFile(input);
+		
+		Tree foundTree;
+		//Check that Tree is in system
+		for(Tree tree : ple.getTrees()) {
+			if (tree.getLocal().getUsername().equals("idodin"))
+				foundTree = tree;
+		}
+		if(foundTree == null) {
+			fail("Input tree was not found within system");
+		}
+		
+		assertEquals("daisy", foundTree.getSpecies().getName());
+		assertEquals("McGill", foundTree.getMunicipality().getName());
+		assertEquals(1, foundTree.getMunicipality().getIdNumber());
+		assertEquals(10, foundTree.getTreeLocation().getX());
+		assertEquals(11, foundTree.getTreeLocation().getY());
+		assertEquals(TreeStatus.Status.Healthy, foundTree.getTreeStatus().getStatus());
+		assertEquals("South", foundTree.getTreeLocation().getDescription());
+		assertEquals(LocationType.LandUseType.Institutional, foundTree.getTreeLocation().getLocationType().getLandUseType());
+		
+		Park park;
+		if(foundTree.getTreeLocation().getLocationType() instanceof Park) {
+			park = (Park)foundTree.getTreeLocation().getLocationType();
+		}
+		else {
+			fail("Location type was not a park");
+		}
+		
+		assertEquals(9, park.getParkCode());
+		assertEquals("Mt. Royal", park.getParkName());
+		
+	}
+	
+	@Test
+	public void TestEmptyFileInput() {
+		File input = new File("empty.csv");
+		
+		TMSService ts = new TMSService(ple);
+		ts.loadFile(input);
+		
+		assertEquals(0, ple.getTrees().size());
+	}
+	
+	@Test
+	public void TestNullFileInput() {
+		File input = null;
+		String errorMessage = "";
+		
+		TMSService ts = new TMSService(ple);
+		try{
+			ts.loadFile(input);
+		} catch(InvalidInputException e) {
+			errorMessage = e.getMessage();
+		}
+		
+		assertEquals("Must select a file to input!", errorMessage);
+		
+	}
+	
+	@Test
+	public void TestBadContentFileInput() {
+		File input = new File("badcontent.csv");
+		String errorMessage = "";
+		
+		TMSService ts = new TMSService(ple);
+		try {
+			ts.loadFile(input);
+		} catch(InvalidInputException e) {
+			errorMessage = e.getMessage();
+		}
+		
+		assertEquals("Please check contents of file!", errorMessage);
+	}
+	
+	@Test
+	public void TestBadFileFormatInput() {
+		File input = new File("hello.jpeg");
+		String errorMessage = "";
+		
+		TMSService ts = new TMSService(ple);
+		try {
+			ts.loadFile(input);
+		} catch(InvalidInputException e) {
+			errorMessage = e.getMessage();
+		}
+		
+		assertEquals("Please ensure file is of type .csv", errorMessage);
+	}
 	
 
 	
