@@ -198,6 +198,11 @@ public class TMSService {
 		if(treeList.size()==0) {
 			throw new InvalidInputException("List cannot be empty");
 		}
+		for(Tree tree: treeList) {
+			if(tree == null) {
+				throw new InvalidInputException("The list contains a null entry");
+			}
+		}
 		
 		return 4*2;
 	}
@@ -209,6 +214,11 @@ public class TMSService {
 		}
 		if(treeList.size()==0) {
 			throw new InvalidInputException("List cannot be empty");
+		}
+		for(Tree tree: treeList) {
+			if(tree == null) {
+				throw new InvalidInputException("The list contains a null entry");
+			}
 		}
 		
 		return 3*2;

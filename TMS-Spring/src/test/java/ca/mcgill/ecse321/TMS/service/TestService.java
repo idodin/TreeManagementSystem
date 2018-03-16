@@ -328,6 +328,46 @@ public class TestService {
 		}
 	}
 	
+	@Test
+	//test null list entry between valid list entries
+	public void testNullEntryBioForecast() {
+		int height=5;
+		int diameter=10;
+		User user=new User("aehwany", ple);
+		Species species1= new Species("dandelion", 18, 10, ple);
+		Species species2= new Species("Coconut", 8, 2, ple);
+		Species species3= new Species("Pine", 10, 6, ple);
+		Municipality municipality=new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted=new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded=new Date(c2.getTimeInMillis());
+		TreeStatus status1=new TreeStatus(ple);
+		TreeStatus status2=new TreeStatus(ple);
+		TreeStatus status3=new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		//Create trees
+		Tree tree1 = new Tree(height, diameter, datePlanted,dateAdded, status1,species1, user, municipality, ple);
+		Tree tree2 = new Tree(height, diameter, datePlanted,dateAdded, status2,species2, user, municipality, ple);	
+		Tree tree3 = new Tree(height, diameter, datePlanted,dateAdded, status3,species3, user, municipality, ple);
+
+		List<Tree> treeList=new java.util.ArrayList<>();
+		treeList.add(tree1);
+		treeList.add(tree2);
+		treeList.add(tree3);
+		treeList.add(null);
+		TMSService erc = new TMSService(ple);
+		String error = "";
+		try {
+			int bioForecast = erc.bioForecast(treeList);
+		}catch(InvalidInputException e){
+			error=e.getMessage();
+			assertEquals("The list contains a null entry", error);
+		}
+	}
+	
 	//test empty list input for bioForecast
 	@Test
 	public void testEmptyListBioForecast() {
@@ -397,6 +437,46 @@ public class TestService {
 			}
 		}
 		
+		@Test
+		//test null list entry between valid list entries
+		public void testNullEntryBioIndex() {
+			int height=5;
+			int diameter=10;
+			User user=new User("aehwany", ple);
+			Species species1= new Species("dandelion", 18, 10, ple);
+			Species species2= new Species("Coconut", 8, 2, ple);
+			Species species3= new Species("Pine", 10, 6, ple);
+			Municipality municipality=new Municipality(10, "rosemont", ple);
+			Calendar c1 = Calendar.getInstance();
+			Date datePlanted=new Date(c1.getTimeInMillis());
+			Calendar c2 = Calendar.getInstance();
+			Date dateAdded=new Date(c2.getTimeInMillis());
+			TreeStatus status1=new TreeStatus(ple);
+			TreeStatus status2=new TreeStatus(ple);
+			TreeStatus status3=new TreeStatus(ple);
+			status1.setStatus(Status.Healthy);
+			status2.setStatus(Status.Cut);
+			status3.setStatus(Status.Diseased);
+			//Create trees
+			Tree tree1 = new Tree(height, diameter, datePlanted,dateAdded, status1,species1, user, municipality, ple);
+			Tree tree2 = new Tree(height, diameter, datePlanted,dateAdded, status2,species2, user, municipality, ple);	
+			Tree tree3 = new Tree(height, diameter, datePlanted,dateAdded, status3,species3, user, municipality, ple);
+
+			List<Tree> treeList=new java.util.ArrayList<>();
+			treeList.add(tree1);
+			treeList.add(tree2);
+			treeList.add(tree3);
+			treeList.add(null);
+			TMSService erc = new TMSService(ple);
+			String error = "";
+			try {
+				int bioForecast = erc.bioIndexCalculator(treeList);
+			}catch(InvalidInputException e){
+				error=e.getMessage();
+				assertEquals("The list contains a null entry", error);
+			}
+		}
+		
 		//test empty list input for bioIndexCalculator
 		@Test
 		public void testEmptyListBioIndex() {
@@ -452,11 +532,5 @@ public class TestService {
 			assertEquals(8, bioForecast);
 		}
 	
-	
-
-
-
-
-
 
 }
