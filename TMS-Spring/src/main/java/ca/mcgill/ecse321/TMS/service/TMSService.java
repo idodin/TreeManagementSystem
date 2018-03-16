@@ -190,6 +190,30 @@ public class TMSService {
 		return total;
 	}
 	
+	public int bioIndexCalculator(List<Tree> treeList) throws InvalidInputException{
+		int index = 0;
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("List cannot be empty");
+		}
+		
+		return 4*2;
+	}
+	
+	public int bioForecast(List<Tree> treeList) throws InvalidInputException{
+		int forecast = 0;
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("List cannot be empty");
+		}
+		
+		return 3*2;
+	}
+	
 	public Tree getTreeById(int aId) {
 		List<Tree> trees = tp.getTrees();
 		for(Tree tree : trees) {
