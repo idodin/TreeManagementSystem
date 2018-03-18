@@ -246,4 +246,14 @@ public class TMSService {
 		return s.getTrees();
 	}
 
+	public int calcChangeOxygenProd(List<Tree> treeList, String string) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int calcChangeCarbonConsump(List<Tree> treeList, String string) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
