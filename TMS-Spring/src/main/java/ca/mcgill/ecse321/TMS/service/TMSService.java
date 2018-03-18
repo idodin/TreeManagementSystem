@@ -245,6 +245,16 @@ public class TMSService {
 	public List<Tree> getTreesForSpecies(Species s) {
 		return s.getTrees();
 	}
+	
+	public Tree markDiseased(Tree tree) throws InvalidInputException{
+		// TODO implement method
+		return null;
+	}
+	
+	public Tree markToBeCut(Tree tree) throws InvalidInputException {
+		// TODO implement method
+		return null;
+	}
 
 	public int calcChangeOxygenProd(List<Tree> treeList, String string) {
 		// TODO Auto-generated method stub

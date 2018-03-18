@@ -1,11 +1,11 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.27.0.3728.d139ed893 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 import java.sql.Date;
 
-// line 62 "../../../../../TreePLE.ump"
+// line 63 "../../../../../TreePLE.ump"
 public class Species
 {
 
@@ -167,7 +167,7 @@ public class Species
   {
     return 0;
   }
-
+  /* Code from template association_AddManyToOne */
   public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
     return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, this, aLocal, aMunicipality, aTreePLE);
@@ -240,7 +240,10 @@ public class Species
     speciessByName.remove(getName());
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
-    placeholderTreePLE.removeSpecies(this);
+    if(placeholderTreePLE != null)
+    {
+      placeholderTreePLE.removeSpecies(this);
+    }
     for(int i=trees.size(); i > 0; i--)
     {
       Tree aTree = trees.get(i - 1);

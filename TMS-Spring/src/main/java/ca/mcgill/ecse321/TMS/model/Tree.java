@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.26.1-f40f105-3613 modeling language!*/
+/*This code was generated using the UMPLE 1.27.0.3728.d139ed893 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
 import java.sql.Date;
@@ -296,19 +296,34 @@ public class Tree
   {
     TreeStatus placeholderTreeStatus = treeStatus;
     this.treeStatus = null;
-    placeholderTreeStatus.removeTree(this);
+    if(placeholderTreeStatus != null)
+    {
+      placeholderTreeStatus.removeTree(this);
+    }
     Species placeholderSpecies = species;
     this.species = null;
-    placeholderSpecies.removeTree(this);
+    if(placeholderSpecies != null)
+    {
+      placeholderSpecies.removeTree(this);
+    }
     User placeholderLocal = local;
     this.local = null;
-    placeholderLocal.removeTree(this);
+    if(placeholderLocal != null)
+    {
+      placeholderLocal.removeTree(this);
+    }
     Municipality placeholderMunicipality = municipality;
     this.municipality = null;
-    placeholderMunicipality.removeTree(this);
+    if(placeholderMunicipality != null)
+    {
+      placeholderMunicipality.removeTree(this);
+    }
     TreePLE placeholderTreePLE = treePLE;
     this.treePLE = null;
-    placeholderTreePLE.removeTree(this);
+    if(placeholderTreePLE != null)
+    {
+      placeholderTreePLE.removeTree(this);
+    }
     TreeLocation existingTreeLocation = treeLocation;
     treeLocation = null;
     if (existingTreeLocation != null)

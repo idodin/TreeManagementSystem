@@ -23,8 +23,9 @@ class Tree {
 }
 
 class TreeStatus{
-  enum Status {healthy, diseased, toBeCut, cut}
+  enum Status {healthy, diseased, cut}
   lazy Status status;
+  lazy boolean toBeCut;
 }
 
 
