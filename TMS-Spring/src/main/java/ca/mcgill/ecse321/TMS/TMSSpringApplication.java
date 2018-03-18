@@ -31,7 +31,7 @@ public class TMSSpringApplication extends SpringBootServletInitializer {
 		// Let the model matcher map corresponding fields by name
 		modelMapper.getConfiguration().setFieldMatchingEnabled(true).setFieldAccessLevel(AccessLevel.PRIVATE);
 		modelMapper.getConfiguration().setSourceNamingConvention(NamingConventions.NONE)
-				.setDestinationNamingConvention(NamingConventions.NONE);
+		.setDestinationNamingConvention(NamingConventions.NONE);
 		return modelMapper;
 	}
 
@@ -47,19 +47,19 @@ public class TMSSpringApplication extends SpringBootServletInitializer {
 
 	@Autowired
 	private WebFrontendProperties webFrontendProperties;
-	
+
 	// Enable CORS globally
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurerAdapter() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-//				// Allow web client
-//				String frontendUrl = "http://" + webFrontendProperties.getIp() + ":" + webFrontendProperties.getPort();
-//				// Allow android client
-//				String androidUrl = "http://" + androidProperties.getIp() + ":" + androidProperties.getPort();
-//				// For debug purposes, allow connecting  from localhost as well
-//				registry.addMapping("/**").allowedOrigins(frontendUrl, androidUrl, "http://localhost:8087", "http://127.0.0.1:8087");
+				//Allow web client
+				String frontendUrl = "http://" + webFrontendProperties.getIp() + ":" + webFrontendProperties.getPort();
+				//Allow android client
+				String androidUrl = "http://" + androidProperties.getIp() + ":" + androidProperties.getPort();
+				//For debug purposes, allow connecting  from localhost as well
+				registry.addMapping("/**").allowedOrigins(frontendUrl, androidUrl, "http://localhost:8087", "http://127.0.0.1:8087");
 			}
 		};
 	}
