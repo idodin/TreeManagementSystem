@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.TMS.service;
 
+import java.io.File;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -256,14 +257,25 @@ public class TMSService {
 		return null;
 	}
 
-	public int calcChangeOxygenProd(List<Tree> treeList, String string) {
+	public int calcChangeOxygenProd(List<Tree> treeList, String string) throws InvalidInputException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int calcChangeCarbonConsump(List<Tree> treeList, String string) {
+	public int calcChangeCarbonConsump(List<Tree> treeList, String string) throws InvalidInputException {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void loadFile(File input) throws InvalidInputException{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void updateTree(Tree tree, int i, int j, Date newDatePlanted, TreeStatus newStatus, Species newSpecies,
+			User newUser, Municipality newMunicipality, int k, int l, String string, LocationType newLocationType) throws InvalidInputException{
+		// TODO Auto-generated method stub
+		
 	}
 
 }
