@@ -1,7 +1,7 @@
 <template>
 <div id="treemanagement">
     <h2>Tree</h2>
-        <button id="updateButton" @click="findAllTrees()">List Trees</button>
+        <button id="updateButton" @click="findAllTrees()">List absolutely all Trees</button>
         </br></br></br>
       <div id="tableDiv">
       <table border="1" align="center">
