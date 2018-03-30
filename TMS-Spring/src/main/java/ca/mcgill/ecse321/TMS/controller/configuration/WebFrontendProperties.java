@@ -10,7 +10,7 @@ public class WebFrontendProperties {
 	/**
 	 * The IP adress of the web frontend client
 	 */
-	private String ip = "127.0.0.1";
+	private String ip = "http://ecse321-9.ece.mcgill.ca";
 	/**
 	 * The port on which the web frontend listens
 	 */
