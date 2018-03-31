@@ -20,7 +20,7 @@ export default {
     }
   },
   created: function () {
-    console.log("yea i was here);
+    console.log("yea i was here");
 	  AXIOS.get(`/trees`)
 	 .then(response => {
 		// JSON responses are automatically parsed.
