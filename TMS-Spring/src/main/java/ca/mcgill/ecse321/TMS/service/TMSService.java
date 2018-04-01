@@ -151,7 +151,7 @@ public class TMSService {
 		return description;
 	}
 	
-	public int calculateOxygenProduction(List<Tree> treeList) throws InvalidInputException {
+	public int calcOxygenProd(List<Tree> treeList) throws InvalidInputException {
 		int total=0;
 		if(treeList.size()==0) {
 			throw new InvalidInputException("Please enter a list of trees");
@@ -171,7 +171,55 @@ public class TMSService {
 		return total;
 	}
 	
-	public int calculateCarbonConsumption(List<Tree> treeList) throws InvalidInputException {
+	public int oxygenForecast(List<Tree> treeList, String strStatus) throws InvalidInputException{
+		if(strStatus==null) {
+			throw new InvalidInputException("String cannot be null");
+		}
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+
+		int forecast=0;
+		int predicted=0;
+		int current=0;
+		Status status;
+		if("Diseased".equals(strStatus)) {status=Status.Diseased;}
+		else if("Cut".equals(strStatus)) {status=Status.Cut;}
+		else if("Healthy".equals(strStatus)) {status=Status.Healthy;}
+		else if("ToBeCut".equals(strStatus)) {status=Status.Healthy;}
+		else {
+			throw new InvalidInputException("Please enter a valid tree status");
+		}
+		for(Tree tree: treeList) {
+			if(tree==null) {
+				throw new InvalidInputException("Cannot have null entry for tree in list");
+			}
+			if(status!=Status.Cut) {
+				if(status==Status.Diseased) {
+					int index=tree.getSpecies().getOxygenProduction();
+					predicted+=index/2;
+				}
+				else {
+					int index=tree.getSpecies().getOxygenProduction();
+					predicted+=index;
+				}
+			}	
+		}
+		current=calcOxygenProd(treeList);
+		forecast=predicted-current;
+		
+		
+		return forecast;
+	}
+	
+	public int calcCarbonConsump(List<Tree> treeList) throws InvalidInputException {
 		int total=0;
 		if(treeList.size()==0) {
 			throw new InvalidInputException("Please enter a list of trees");
@@ -190,6 +238,54 @@ public class TMSService {
 			}
 		}
 		return total;
+	}
+	
+	public int carbonForecast(List<Tree> treeList, String strStatus) throws InvalidInputException{
+		if(strStatus==null) {
+			throw new InvalidInputException("String cannot be null");
+		}
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		int forecast=0;
+		int predicted=0;
+		int current=0;
+		Status status;
+		if("Diseased".equals(strStatus)) {status=Status.Diseased;}
+		else if("Cut".equals(strStatus)) {status=Status.Cut;}
+		else if("Healthy".equals(strStatus)) {status=Status.Healthy;}
+		else if("ToBeCut".equals(strStatus)) {status=Status.Healthy;}
+		else {
+			throw new InvalidInputException("Please enter a valid tree status");
+		}
+		
+		for(Tree tree: treeList) {
+			if(tree==null) {
+				throw new InvalidInputException("Cannot have null entry for tree in list");
+			}
+			if(status!=Status.Cut) {
+				if(status==Status.Diseased) {
+					int index=tree.getSpecies().getCarbonConsumption();
+					predicted+=index/2;
+				}
+				else {
+					int index=tree.getSpecies().getCarbonConsumption();
+					predicted+=index;
+				}
+			}	
+		}
+		current=calcCarbonConsump(treeList);
+		forecast=predicted-current;
+		
+		
+		return forecast;
 	}
 	
 	public int bioIndexCalculator(List<Tree> treeList) throws InvalidInputException{
