@@ -34,7 +34,6 @@ export default {
       console.log("yea i was here");
 			AXIOS.get(`/trees`)
 			.then(response => {
-        console.log("inside axios");
 				// JSON responses are automatically parsed.
 				this.trees = response.data
 			})
