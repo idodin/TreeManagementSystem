@@ -56,6 +56,7 @@ public class TestService {
 	@After
 	public void tearDown() throws Exception {
 		ple.delete();
+		ple2.delete();
 	}
 
 	@Test
@@ -109,17 +110,18 @@ public class TestService {
 
 		Date dateAdded = new Date(c2.getTimeInMillis());
 		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(Status.Healthy);
 		Tree tree = new Tree(height, diameter, datePlanted, dateAdded, status, species, user, municipality, ple);
 
-		assertEquals(1, ple.getTrees().size());
+		assertEquals(Status.Healthy, ple.getTree(0).getTreeStatus().getStatus());
 
 		TMSService erc = new TMSService(ple);
 		erc.removeTree(tree);
 
 		TreePLE ple1 = ple;
-		assertEquals(0, ple.getTrees().size());
+		assertEquals(Status.Cut, ple1.getTree(0).getTreeStatus().getStatus());
 		TreePLE ple2 = (TreePLE) PersistenceXStream.loadFromXMLwithXStream();
-		assertEquals(0, ple.getTrees().size());
+		assertEquals(Status.Cut, ple2.getTree(0).getTreeStatus().getStatus());
 
 		ple1.delete();
 		ple2.delete();
@@ -533,348 +535,349 @@ public class TestService {
 //
 //	}
 //
-//	// test null input for bioForecast
-//	@Test
-//	public void testNullListBioForecast() {
-//		String error = "";
-//		List<Tree> treeList = null;
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			int bioForecast = erc.bioForecast(treeList);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("List cannot be null", error);
-//		}
-//	}
-//
-//	@Test
-//	public void testMarkDiseasedSuccess() {
-//		TMSService ts = new TMSService(ple);
-//
-//		Date datePlanted = Date.valueOf("2002-02-02");
-//		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
-//		TreeStatus status = new TreeStatus(ple);
-//		status.setStatus(TreeStatus.Status.Healthy);
-//		Species species = new Species("daisy", 1, 1, ple);
-//		User user = new User("idodin", ple);
-//		Municipality municipality = new Municipality(1, "McGill", ple);
-//
-//		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
-//
-//		try {
-//			ts.markDiseased(tree);
-//		} catch (InvalidInputException e) {
-//			fail("Tree couldn't be marked as diseased due to invalid input");
-//		}
-//
-//		assertEquals(TreeStatus.Status.Diseased, tree.getTreeStatus().getStatus());
-//	}
-//
-//	@Test
-//	public void testMarkDiseasedNull() {
-//		TMSService ts = new TMSService(ple);
-//		String error = "";
-//
-//		Tree tree = null;
-//
-//		try {
-//			ts.markDiseased(tree);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//		}
-//
-//		assertEquals("Tree needs to be selected to be marked as diseased.", error);
-//	}
-//
-//	@Test
-//	public void testMarkDiseasedAlready() {
-//		TMSService ts = new TMSService(ple);
-//		String error = "";
-//
-//		Date datePlanted = Date.valueOf("2002-02-02");
-//		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
-//		TreeStatus status = new TreeStatus(ple);
-//		status.setStatus(TreeStatus.Status.Diseased);
-//		Species species = new Species("daisy", 1, 1, ple);
-//		User user = new User("idodin", ple);
-//		Municipality municipality = new Municipality(1, "McGill", ple);
-//
-//		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
-//
-//		try {
-//			ts.markDiseased(tree);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//		}
-//
-//		assertEquals("Tree was already diseased!", error);
-//	}
-//
-//	@Test
-//	public void testMarkToBeCutSuccess() {
-//		TMSService ts = new TMSService(ple);
-//		String error = "";
-//
-//		Date datePlanted = Date.valueOf("2002-02-02");
-//		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
-//		TreeStatus status = new TreeStatus(ple);
-//		status.setStatus(TreeStatus.Status.Diseased);
-//		Species species = new Species("daisy", 1, 1, ple);
-//		User user = new User("idodin", ple);
-//		Municipality municipality = new Municipality(1, "McGill", ple);
-//
-//		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
-//
-//		try {
-//			ts.markToBeCut(tree);
-//		} catch (InvalidInputException e) {
-//			fail("Tree couldn't be marked as to be cut due to Invalid Input.");
-//		}
-//
-//		assertEquals(true, tree.getTreeStatus().getToBeCut());
-//	}
-//
-//	@Test
-//	public void testMarkToBeCutNull() {
-//		TMSService ts = new TMSService(ple);
-//		String error = "";
-//
-//		Tree tree = null;
-//
-//		try {
-//			ts.markToBeCut(tree);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//		}
-//
-//		assertEquals("Tree needs to be selected to be mark as to be cut.", error);
-//	}
-//
-//	@Test
-//	public void testMarkToBeCutAlready() {
-//		TMSService ts = new TMSService(ple);
-//		String error = "";
-//
-//		Date datePlanted = Date.valueOf("2002-02-02");
-//		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
-//		TreeStatus status = new TreeStatus(ple);
-//		status.setStatus(TreeStatus.Status.Cut);
-//		Species species = new Species("daisy", 1, 1, ple);
-//		User user = new User("idodin", ple);
-//		Municipality municipality = new Municipality(1, "McGill", ple);
-//
-//		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
-//
-//		try {
-//			ts.markToBeCut(tree);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//		}
-//
-//		assertEquals("Tree was already cut down!", error);
-//	}
-//
-//	// test null list entry between valid list entries
-//	public void testNullEntryBioForecast() {
-//		int height = 5;
-//		int diameter = 10;
-//		User user = new User("aehwany", ple);
-//		Species species1 = new Species("dandelion", 18, 10, ple);
-//		Species species2 = new Species("Coconut", 8, 2, ple);
-//		Species species3 = new Species("Pine", 10, 6, ple);
-//		Municipality municipality = new Municipality(10, "rosemont", ple);
-//		Calendar c1 = Calendar.getInstance();
-//		Date datePlanted = new Date(c1.getTimeInMillis());
-//		Calendar c2 = Calendar.getInstance();
-//		Date dateAdded = new Date(c2.getTimeInMillis());
-//		TreeStatus status1 = new TreeStatus(ple);
-//		TreeStatus status2 = new TreeStatus(ple);
-//		TreeStatus status3 = new TreeStatus(ple);
-//		status1.setStatus(Status.Healthy);
-//		status2.setStatus(Status.Cut);
-//		status3.setStatus(Status.Diseased);
-//		// Create trees
-//		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
-//		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
-//		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
-//
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		treeList.add(tree1);
-//		treeList.add(tree2);
-//		treeList.add(tree3);
-//		treeList.add(null);
-//		TMSService erc = new TMSService(ple);
-//		String error = "";
-//		try {
-//			int bioForecast = erc.bioForecast(treeList);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("The list contains a null entry", error);
-//		}
-//	}
-//
-//	// test empty list input for bioForecast
-//	@Test
-//	public void testEmptyListBioForecast() {
-//		String error = "";
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			int bioForecast = erc.bioForecast(treeList);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("List cannot be empty", error);
-//		}
-//	}
-//
-//	// test valid input for BioForecast
-//	@Test
-//	public void testValidInputBioForecast() {
-//		int height = 5;
-//		int diameter = 10;
-//		User user = new User("aehwany", ple);
-//		Species species1 = new Species("dandelion", 18, 10, ple);
-//		Species species2 = new Species("Coconut", 8, 2, ple);
-//		Species species3 = new Species("Pine", 10, 6, ple);
-//		Municipality municipality = new Municipality(10, "rosemont", ple);
-//		Calendar c1 = Calendar.getInstance();
-//		Date datePlanted = new Date(c1.getTimeInMillis());
-//		Calendar c2 = Calendar.getInstance();
-//		Date dateAdded = new Date(c2.getTimeInMillis());
-//		TreeStatus status1 = new TreeStatus(ple);
-//		TreeStatus status2 = new TreeStatus(ple);
-//		TreeStatus status3 = new TreeStatus(ple);
-//		status1.setStatus(Status.Healthy);
-//		status2.setStatus(Status.Cut);
-//		status3.setStatus(Status.Diseased);
-//		// Create trees
-//		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
-//		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
-//		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
-//
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		treeList.add(tree1);
-//		treeList.add(tree2);
-//		treeList.add(tree3);
-//
-//		int bioForecast = 0;
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			bioForecast = erc.bioForecast(treeList);
-//		} catch (InvalidInputException e) {
-//			fail();
-//		}
-//		assertEquals(6, bioForecast);
-//	}
-//
-//	// test null input for bioIndexCalculator
-//	@Test
-//	public void testNullListBioIndex() {
-//		String error = "";
-//		List<Tree> treeList = null;
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			int bioForecast = erc.bioIndexCalculator(treeList);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("List cannot be null", error);
-//		}
-//	}
-//
-//	@Test
-//	// test null list entry between valid list entries
-//	public void testNullEntryBioIndex() {
-//		int height = 5;
-//		int diameter = 10;
-//		User user = new User("aehwany", ple);
-//		Species species1 = new Species("dandelion", 18, 10, ple);
-//		Species species2 = new Species("Coconut", 8, 2, ple);
-//		Species species3 = new Species("Pine", 10, 6, ple);
-//		Municipality municipality = new Municipality(10, "rosemont", ple);
-//		Calendar c1 = Calendar.getInstance();
-//		Date datePlanted = new Date(c1.getTimeInMillis());
-//		Calendar c2 = Calendar.getInstance();
-//		Date dateAdded = new Date(c2.getTimeInMillis());
-//		TreeStatus status1 = new TreeStatus(ple);
-//		TreeStatus status2 = new TreeStatus(ple);
-//		TreeStatus status3 = new TreeStatus(ple);
-//		status1.setStatus(Status.Healthy);
-//		status2.setStatus(Status.Cut);
-//		status3.setStatus(Status.Diseased);
-//		// Create trees
-//		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
-//		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
-//		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
-//
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		treeList.add(tree1);
-//		treeList.add(tree2);
-//		treeList.add(tree3);
-//		treeList.add(null);
-//		TMSService erc = new TMSService(ple);
-//		String error = "";
-//		try {
-//			int bioForecast = erc.bioIndexCalculator(treeList);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("The list contains a null entry", error);
-//		}
-//	}
-//
-//	// test empty list input for bioIndexCalculator
-//	@Test
-//	public void testEmptyListBioIndex() {
-//		String error = "";
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			int bioForecast = erc.bioIndexCalculator(treeList);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("List cannot be empty", error);
-//		}
-//	}
-//
-//	// test valid input for bioIndexCalculator
-//	@Test
-//	public void testValidInputBioIndex() {
-//		int height = 5;
-//		int diameter = 10;
-//		User user = new User("aehwany", ple);
-//		Species species1 = new Species("dandelion", 18, 10, ple);
-//		Species species2 = new Species("Coconut", 8, 2, ple);
-//		Species species3 = new Species("Pine", 10, 6, ple);
-//		Municipality municipality = new Municipality(10, "rosemont", ple);
-//		Calendar c1 = Calendar.getInstance();
-//		Date datePlanted = new Date(c1.getTimeInMillis());
-//		Calendar c2 = Calendar.getInstance();
-//		Date dateAdded = new Date(c2.getTimeInMillis());
-//		TreeStatus status1 = new TreeStatus(ple);
-//		TreeStatus status2 = new TreeStatus(ple);
-//		TreeStatus status3 = new TreeStatus(ple);
-//		status1.setStatus(Status.Healthy);
-//		status2.setStatus(Status.Cut);
-//		status3.setStatus(Status.Diseased);
-//		// Create trees
-//		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
-//		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
-//		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
-//
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		treeList.add(tree1);
-//		treeList.add(tree2);
-//		treeList.add(tree3);
-//
-//		int bioForecast = 0;
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			bioForecast = erc.bioIndexCalculator(treeList);
-//		} catch (InvalidInputException e) {
-//			fail();
-//		}
-//		assertEquals(8, bioForecast);
-//	}
-//
+	// test null input for bioForecast
+	@Test
+	public void testNullListBioForecast() {
+		String error = "";
+		List<Tree> treeList = null;
+		TMSService erc = new TMSService(ple);
+		try {
+			int bioForecast = erc.bioForecast(treeList);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("List cannot be null", error);
+		}
+	}
+
+	@Test
+	public void testMarkDiseasedSuccess() {
+		TMSService ts = new TMSService(ple);
+
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Healthy);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+
+		try {
+			ts.markDiseased(tree);
+		} catch (InvalidInputException e) {
+			fail("Tree couldn't be marked as diseased due to invalid input");
+		}
+
+		assertEquals(TreeStatus.Status.Diseased, tree.getTreeStatus().getStatus());
+	}
+
+	@Test
+	public void testMarkDiseasedNull() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+
+		Tree tree = null;
+
+		try {
+			ts.markDiseased(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+
+		assertEquals("Tree needs to be selected to be marked as diseased.", error);
+	}
+
+	@Test
+	public void testMarkDiseasedAlready() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Diseased);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+
+		try {
+			ts.markDiseased(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+
+		assertEquals("Tree was already diseased!", error);
+	}
+
+	@Test
+	public void testMarkToBeCutSuccess() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Diseased);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+
+		try {
+			ts.markToBeCut(tree);
+		} catch (InvalidInputException e) {
+			fail("Tree couldn't be marked as to be cut due to Invalid Input.");
+		}
+
+		assertEquals(true, tree.getTreeStatus().getToBeCut());
+	}
+
+	@Test
+	public void testMarkToBeCutNull() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+
+		Tree tree = null;
+
+		try {
+			ts.markToBeCut(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+
+		assertEquals("Tree needs to be selected to be mark as to be cut.", error);
+	}
+
+	@Test
+	public void testMarkToBeCutAlready() {
+		TMSService ts = new TMSService(ple);
+		String error = "";
+
+		Date datePlanted = Date.valueOf("2002-02-02");
+		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
+		TreeStatus status = new TreeStatus(ple);
+		status.setStatus(TreeStatus.Status.Cut);
+		Species species = new Species("daisy", 1, 1, ple);
+		User user = new User("idodin", ple);
+		Municipality municipality = new Municipality(1, "McGill", ple);
+
+		Tree tree = new Tree(1, 1, datePlanted, dateAdded, status, species, user, municipality, ple);
+
+		try {
+			ts.markToBeCut(tree);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+
+		assertEquals("Tree was already cut down!", error);
+	}
+
+	@Test
+	// test null list entry between valid list entries
+	public void testNullEntryBioForecast() {
+		int height = 5;
+		int diameter = 10;
+		User user = new User("aehwany", ple);
+		Species species1 = new Species("dandelion", 18, 10, ple);
+		Species species2 = new Species("Coconut", 8, 2, ple);
+		Species species3 = new Species("Pine", 10, 6, ple);
+		Municipality municipality = new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted = new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded = new Date(c2.getTimeInMillis());
+		TreeStatus status1 = new TreeStatus(ple);
+		TreeStatus status2 = new TreeStatus(ple);
+		TreeStatus status3 = new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		// Create trees
+		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
+		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
+		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
+
+		List<Tree> treeList = new java.util.ArrayList<>();
+		treeList.add(tree1);
+		treeList.add(tree2);
+		treeList.add(tree3);
+		treeList.add(null);
+		TMSService erc = new TMSService(ple);
+		String error = "";
+		try {
+			int bioForecast = erc.bioForecast(treeList);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("The list contains a null entry", error);
+		}
+	}
+
+	// test empty list input for bioForecast
+	@Test
+	public void testEmptyListBioForecast() {
+		String error = "";
+		List<Tree> treeList = new java.util.ArrayList<>();
+		TMSService erc = new TMSService(ple);
+		try {
+			int bioForecast = erc.bioForecast(treeList);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("List cannot be empty", error);
+		}
+	}
+
+	 //test validInputBioForecast
+	@Test
+	public void testValidInputBioForecast() {
+		int height = 5;
+		int diameter = 10;
+		User user = new User("aehwany", ple);
+		Species species1 = new Species("dandelion", 18, 10, ple);
+		Species species2 = new Species("Coconut", 8, 2, ple);
+		Species species3 = new Species("Pine", 10, 6, ple);
+		Municipality municipality = new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted = new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded = new Date(c2.getTimeInMillis());
+		TreeStatus status1 = new TreeStatus(ple);
+		TreeStatus status2 = new TreeStatus(ple);
+		TreeStatus status3 = new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		// Create trees
+		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
+		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
+		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
+
+		List<Tree> treeList = new java.util.ArrayList<>();
+		treeList.add(tree1);
+		treeList.add(tree2);
+		treeList.add(tree3);
+
+		int bioForecast = 0;
+		TMSService erc = new TMSService(ple);
+		try {
+			bioForecast = erc.bioForecast(treeList);
+		} catch (InvalidInputException e) {
+			fail();
+		}
+		assertEquals(-2, bioForecast);
+	}
+
+	// test null input for bioIndexCalculator
+	@Test
+	public void testNullListBioIndex() {
+		String error = "";
+		List<Tree> treeList = null;
+		TMSService erc = new TMSService(ple);
+		try {
+			int bioForecast = erc.bioIndexCalculator(treeList);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("List cannot be null", error);
+		}
+	}
+
+	@Test
+	// test null list entry between valid list entries
+	public void testNullEntryBioIndex() {
+		int height = 5;
+		int diameter = 10;
+		User user = new User("aehwany", ple);
+		Species species1 = new Species("dandelion", 18, 10, ple);
+		Species species2 = new Species("Coconut", 8, 2, ple);
+		Species species3 = new Species("Pine", 10, 6, ple);
+		Municipality municipality = new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted = new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded = new Date(c2.getTimeInMillis());
+		TreeStatus status1 = new TreeStatus(ple);
+		TreeStatus status2 = new TreeStatus(ple);
+		TreeStatus status3 = new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		// Create trees
+		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
+		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
+		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
+
+		List<Tree> treeList = new java.util.ArrayList<>();
+		treeList.add(tree1);
+		treeList.add(tree2);
+		treeList.add(tree3);
+		treeList.add(null);
+		TMSService erc = new TMSService(ple);
+		String error = "";
+		try {
+			int bioForecast = erc.bioIndexCalculator(treeList);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("The list contains a null entry", error);
+		}
+	}
+
+	// test empty list input for bioIndexCalculator
+	@Test
+	public void testEmptyListBioIndex() {
+		String error = "";
+		List<Tree> treeList = new java.util.ArrayList<>();
+		TMSService erc = new TMSService(ple);
+		try {
+			int bioForecast = erc.bioIndexCalculator(treeList);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("List cannot be empty", error);
+		}
+	}
+
+	// test valid input for bioIndexCalculator
+	@Test
+	public void testValidInputBioIndex() {
+		int height = 5;
+		int diameter = 10;
+		User user = new User("aehwany", ple);
+		Species species1 = new Species("dandelion", 18, 10, ple);
+		Species species2 = new Species("Coconut", 8, 2, ple);
+		Species species3 = new Species("Pine", 10, 6, ple);
+		Municipality municipality = new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted = new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded = new Date(c2.getTimeInMillis());
+		TreeStatus status1 = new TreeStatus(ple);
+		TreeStatus status2 = new TreeStatus(ple);
+		TreeStatus status3 = new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		// Create trees
+		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
+		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
+		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
+
+		List<Tree> treeList = new java.util.ArrayList<>();
+		treeList.add(tree1);
+		treeList.add(tree2);
+		treeList.add(tree3);
+
+		int bioIndex = 0;
+		TMSService erc = new TMSService(ple);
+		try {
+			bioIndex = erc.bioIndexCalculator(treeList);
+		} catch (InvalidInputException e) {
+			fail();
+		}
+		assertEquals(2, bioIndex);
+	}
+
 //	// Test for valid calculation of a change in oxygen production
 //	// for list of trees
 //	@Test
