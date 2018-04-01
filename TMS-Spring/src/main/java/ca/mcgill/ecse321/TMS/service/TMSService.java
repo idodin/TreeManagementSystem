@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.TMS.service;
 
 import java.io.File;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.sql.Date;
@@ -57,7 +58,7 @@ public class TMSService {
 
 	public Tree removeTree(Tree aTree) {
 		
-		aTree.delete();
+		aTree.getTreeStatus().setStatus(Status.Cut);
 		PersistenceXStream.saveToXMLwithXStream(tp);
 		return aTree;
 	}
@@ -193,6 +194,7 @@ public class TMSService {
 	
 	public int bioIndexCalculator(List<Tree> treeList) throws InvalidInputException{
 		int index = 0;
+		List <Species> speciesList= new ArrayList<Species>();
 		if(treeList == null) {
 			throw new InvalidInputException("List cannot be null");
 		}
@@ -203,9 +205,18 @@ public class TMSService {
 			if(tree == null) {
 				throw new InvalidInputException("The list contains a null entry");
 			}
+			if(tree.getTreeStatus().getStatus()!= Status.Cut) {
+				Species newSpecies= tree.getSpecies();
+				Boolean marker=true;
+				for(int i=0; treeList.get(i)!=tree;i++) {
+					if(treeList.get(i).getSpecies()==newSpecies) {marker=false;}
+				}
+				if(marker) {index++;}
+				
+			}
 		}
 		
-		return 4*2;
+		return index;
 	}
 	
 	public int bioForecast(List<Tree> treeList) throws InvalidInputException{
@@ -221,8 +232,9 @@ public class TMSService {
 				throw new InvalidInputException("The list contains a null entry");
 			}
 		}
+		forecast=0-bioIndexCalculator(treeList);
 		
-		return 3*2;
+		return forecast;
 	}
 	
 	public Tree getTreeById(int aId) {
@@ -248,24 +260,28 @@ public class TMSService {
 	}
 	
 	public Tree markDiseased(Tree tree) throws InvalidInputException{
-		// TODO implement method
-		return null;
+		if(tree==null) {
+			throw new InvalidInputException("Tree needs to be selected to be marked as diseased.");
+		}
+		if(tree.getTreeStatus().getStatus()== Status.Diseased) {
+			throw new InvalidInputException("Tree was already diseased!");
+		}
+		tree.getTreeStatus().setStatus(Status.Diseased);
+		return tree;
 	}
 	
 	public Tree markToBeCut(Tree tree) throws InvalidInputException {
-		// TODO implement method
-		return null;
+		if(tree==null) {
+			throw new InvalidInputException("Tree needs to be selected to be mark as to be cut.");
+		}
+		if(tree.getTreeStatus().getStatus()==Status.Cut) {
+			throw new InvalidInputException("Tree was already cut down!");
+		}
+		tree.getTreeStatus().setToBeCut(true);
+		return tree;
 	}
 
-	public int calcChangeOxygenProd(List<Tree> treeList, String string) throws InvalidInputException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int calcChangeCarbonConsump(List<Tree> treeList, String string) throws InvalidInputException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 
 	public void loadFile(File input) throws InvalidInputException{
 		// TODO Auto-generated method stub
