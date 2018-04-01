@@ -9,7 +9,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'DONT CHAET'
+      msg: 'DONT CHEAT'
     }
   }
 }
