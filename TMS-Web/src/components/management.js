@@ -11,14 +11,50 @@ var AXIOS = axios.create({
 
 
 export default {
-  name: 'tms',
+  nameNew: 'tms',
   data () {
     return {
       trees: [],
       newTree: '',
-      listTreesError: ''
+      newLat: '',
+      newLong: '',
+      listTreesError: '',
+      mapName: this.name + "-map",
+      markerCoordinates: [{
+        latitude: 45.502986,
+        longitude: -73.586569
+      }, {
+        latitude: 45.498233,
+        longitude: -73.584037
+      }, {
+        latitude: 45.495066,
+        longitude: -73.578198
+      }],
+      map: null,
+      bounds: null,
+      markers: []
     }
   },
+
+  mounted: function () {
+    this.bounds = new google.maps.LatLngBounds();
+    const element = document.getElementById(this.mapName)
+    const mapCentre = this.markerCoordinates[0]
+    const options = {
+      center: new google.maps.LatLng(mapCentre.latitude, mapCentre.longitude)
+    }
+    this.map = new google.maps.Map(element, options);
+    this.markerCoordinates.forEach((coord) => {
+      const position = new google.maps.LatLng(coord.latitude, coord.longitude);
+      const marker = new google.maps.Marker({
+        position,
+        map: this.map
+      });
+      this.markers.push(marker)
+      this.map.fitBounds(this.bounds.extend(position))
+    });
+  },
+
   created: function () {
 	  AXIOS.get(`/trees`)
 	 .then(response => {
@@ -41,7 +77,18 @@ export default {
 			.catch(e => {
 				this.listTreesError = e;
 			});
-		}
+		},
+
+    pins : function(lat, long){
+      const position = new google.maps.LatLng(lat, long);
+      const marker = new google.maps.Marker({
+        position,
+        map: this.map,
+        // icon: iconBase + 'if_firefox_png_148659.png'
+      });
+      this.markers.push(marker)
+      this.map.fitBounds(this.bounds.extend(position))
+    }
 	}
   //...
 }

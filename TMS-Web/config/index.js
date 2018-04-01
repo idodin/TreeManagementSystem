@@ -3,6 +3,7 @@ var path = require('path')
 
 module.exports = {
   build: {
+    //adasdas
     env: require('./prod.env'),
     port: 8087,
     host:  '132.206.4.78', // set the real address of frontend VM
