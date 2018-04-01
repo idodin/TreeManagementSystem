@@ -5,11 +5,9 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
