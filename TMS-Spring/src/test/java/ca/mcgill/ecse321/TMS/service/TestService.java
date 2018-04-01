@@ -5,11 +5,9 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -190,7 +188,6 @@ public class TestService {
 	@Test
 	public void TestUnavailableTreeInputException() {
 		TMSService ts = new TMSService(ple);
-		TMSService ts2 = new TMSService(ple2);
 
 		Date datePlanted = Date.valueOf("2002-02-02");
 		TreeStatus status = new TreeStatus(ple2);
@@ -472,7 +469,7 @@ public class TestService {
 		List<Tree> treeList = new java.util.ArrayList<>();
 		TMSService erc = new TMSService(ple);
 		try {
-			int production = erc.calcOxygenProd(treeList);
+			erc.calcOxygenProd(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("Please enter a list of trees", error);
@@ -527,7 +524,7 @@ public class TestService {
 		List<Tree> treeList = new java.util.ArrayList<>();
 		TMSService erc = new TMSService(ple);
 		try {
-			int consumption = erc.calcCarbonConsump(treeList);
+			erc.calcCarbonConsump(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("Please enter a list of trees", error);
@@ -542,7 +539,7 @@ public class TestService {
 		List<Tree> treeList = null;
 		TMSService erc = new TMSService(ple);
 		try {
-			int bioForecast = erc.bioForecast(treeList);
+			erc.bioForecast(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("List cannot be null", error);
@@ -615,7 +612,6 @@ public class TestService {
 	@Test
 	public void testMarkToBeCutSuccess() {
 		TMSService ts = new TMSService(ple);
-		String error = "";
 
 		Date datePlanted = Date.valueOf("2002-02-02");
 		Date dateAdded = new Date(Calendar.getInstance().getTime().getTime());
@@ -709,7 +705,7 @@ public class TestService {
 		TMSService erc = new TMSService(ple);
 		String error = "";
 		try {
-			int bioForecast = erc.bioForecast(treeList);
+			erc.bioForecast(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("The list contains a null entry", error);
@@ -723,7 +719,7 @@ public class TestService {
 		List<Tree> treeList = new java.util.ArrayList<>();
 		TMSService erc = new TMSService(ple);
 		try {
-			int bioForecast = erc.bioForecast(treeList);
+			erc.bioForecast(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("List cannot be empty", error);
@@ -777,7 +773,7 @@ public class TestService {
 		List<Tree> treeList = null;
 		TMSService erc = new TMSService(ple);
 		try {
-			int bioForecast = erc.bioIndexCalculator(treeList);
+			erc.bioIndexCalculator(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("List cannot be null", error);
@@ -817,7 +813,7 @@ public class TestService {
 		TMSService erc = new TMSService(ple);
 		String error = "";
 		try {
-			int bioForecast = erc.bioIndexCalculator(treeList);
+			erc.bioIndexCalculator(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("The list contains a null entry", error);
@@ -831,7 +827,7 @@ public class TestService {
 		List<Tree> treeList = new java.util.ArrayList<>();
 		TMSService erc = new TMSService(ple);
 		try {
-			int bioForecast = erc.bioIndexCalculator(treeList);
+			erc.bioIndexCalculator(treeList);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("List cannot be empty", error);
@@ -880,175 +876,175 @@ public class TestService {
 
 	// Test for valid calculation of a change in oxygen production
 	// for list of trees
-//	@Test
-//	public void testValidChangeInOxygenProduction() {
-//		int height = 4;
-//		int diameter = 11;
-//		User user1 = new User("fouad", ple);
-//		User user2 = new User("bitar", ple);
-//		Species species1 = new Species("dandelion", 18, 10, ple);
-//		Species species2 = new Species("Coconut", 8, 2, ple);
-//		Species species3 = new Species("Pine", 10, 6, ple);
-//		Municipality municipality1 = new Municipality(223, "countySquare", ple);
-//		Municipality municipality2 = new Municipality(133, "countyCircle", ple);
-//		Calendar c1 = Calendar.getInstance();
-//		Date datePlanted1 = new Date(c1.getTimeInMillis());
-//		Calendar c2 = Calendar.getInstance();
-//		Date dateAdded1 = new Date(c2.getTimeInMillis());
-//		Calendar c3 = Calendar.getInstance();
-//		Date datePlanted2 = new Date(c3.getTimeInMillis());
-//		Calendar c4 = Calendar.getInstance();
-//		Date dateAdded2 = new Date(c4.getTimeInMillis());
-//		TreeStatus status1 = new TreeStatus(ple);
-//		TreeStatus status2 = new TreeStatus(ple);
-//		TreeStatus status3 = new TreeStatus(ple);
-//		status1.setStatus(Status.Healthy);
-//		status2.setStatus(Status.Cut);
-//		status3.setStatus(Status.Diseased);
-//
-//		Tree tree1 = new Tree(height - 1, diameter, datePlanted1, dateAdded1, status2, species1, user1, municipality1,
-//				ple);
-//		Tree tree2 = new Tree(height + 1, diameter + 1, datePlanted2, dateAdded2, status3, species1, user1,
-//				municipality2, ple);
-//		Tree tree3 = new Tree(height - 2, diameter + 2, datePlanted1, dateAdded2, status3, species2, user2,
-//				municipality1, ple);
-//		Tree tree4 = new Tree(height, diameter + 2, datePlanted1, dateAdded2, status3, species3, user2, municipality1,
-//				ple);
-//		Tree tree5 = new Tree(height + 2, diameter + 2, datePlanted1, dateAdded2, status1, species1, user2,
-//				municipality2, ple);
-//		Tree tree6 = new Tree(height, diameter + 2, datePlanted1, dateAdded2, status2, species2, user2, municipality1,
-//				ple);
-//		Tree tree7 = new Tree(height, diameter + 2, datePlanted1, dateAdded2, status1, species3, user2, municipality2,
-//				ple);
-//
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		treeList.add(tree1);
-//		treeList.add(tree2);
-//		treeList.add(tree3);
-//		treeList.add(tree4);
-//		treeList.add(tree5);
-//		treeList.add(tree6);
-//		treeList.add(tree7);
-//
-//		int changeInOxygenProduction = 0;
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "Healthy");
-//		} catch (InvalidInputException e) {
-//			fail();
-//		}
-//		assertEquals(21, changeInOxygenProduction);
-//		try {
-//			changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "Cut");
-//		} catch (InvalidInputException e) {
-//			fail();
-//		}
-//		assertEquals(-25, changeInOxygenProduction);
-//		try {
-//			changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "Diseased");
-//		} catch (InvalidInputException e) {
-//			fail();
-//		}
-//		assertEquals(-2, changeInOxygenProduction);
-//	}
+	@Test
+	public void testValidChangeInOxygenProduction() {
+		int height = 4;
+		int diameter = 11;
+		User user1 = new User("fouad", ple);
+		User user2 = new User("bitar", ple);
+		Species species1 = new Species("dandelion", 18, 10, ple);
+		Species species2 = new Species("Coconut", 8, 2, ple);
+		Species species3 = new Species("Pine", 10, 6, ple);
+		Municipality municipality1 = new Municipality(223, "countySquare", ple);
+		Municipality municipality2 = new Municipality(133, "countyCircle", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted1 = new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded1 = new Date(c2.getTimeInMillis());
+		Calendar c3 = Calendar.getInstance();
+		Date datePlanted2 = new Date(c3.getTimeInMillis());
+		Calendar c4 = Calendar.getInstance();
+		Date dateAdded2 = new Date(c4.getTimeInMillis());
+		TreeStatus status1 = new TreeStatus(ple);
+		TreeStatus status2 = new TreeStatus(ple);
+		TreeStatus status3 = new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
 
-//	@Test
-//	public void testNullInputOxygenProd() {
-//		String error = "";
-//		List<Tree> treeList = null;
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			int changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "Healthy");
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("List cannot be null", error);
-//		}
-//		try {
-//			int changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "Cut");
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("List cannot be null", error);
-//		}
-//		try {
-//			int changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "Diseased");
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("List cannot be null", error);
-//		}
-//	}
-//
-//	@Test
-//	public void testStringErrorInput() {
-//		String error = "";
-//		int height = 4;
-//		int diameter = 11;
-//		User user1 = new User("fouad", ple);
-//		Species species1 = new Species("dandelion", 18, 10, ple);
-//		Calendar c1 = Calendar.getInstance();
-//		Municipality municipality1 = new Municipality(223, "countySquare", ple);
-//		Date datePlanted1 = new Date(c1.getTimeInMillis());
-//		Calendar c2 = Calendar.getInstance();
-//		Date dateAdded1 = new Date(c2.getTimeInMillis());
-//		TreeStatus status1 = new TreeStatus(ple);
-//		status1.setStatus(Status.Cut);
-//		Tree tree1 = new Tree(height - 1, diameter, datePlanted1, dateAdded1, status1, species1, user1, municipality1,
-//				ple);
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		treeList.add(tree1);
-//		TMSService erc = new TMSService(ple);
-//		try {
-//			int changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, null);
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("String cannot be null", error);
-//		}
-//		try {
-//			int changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "hug");
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("Must select valid status to change to", error);
-//		}
-//	}
-//
-//	@Test
-//	public void testNullEntryOxygenProd() {
-//		int height = 5;
-//		int diameter = 10;
-//		User user = new User("aehwany", ple);
-//		Species species1 = new Species("dandelion", 18, 10, ple);
-//		Species species2 = new Species("Coconut", 8, 2, ple);
-//		Species species3 = new Species("Pine", 10, 6, ple);
-//		Municipality municipality = new Municipality(10, "rosemont", ple);
-//		Calendar c1 = Calendar.getInstance();
-//		Date datePlanted = new Date(c1.getTimeInMillis());
-//		Calendar c2 = Calendar.getInstance();
-//		Date dateAdded = new Date(c2.getTimeInMillis());
-//		TreeStatus status1 = new TreeStatus(ple);
-//		TreeStatus status2 = new TreeStatus(ple);
-//		TreeStatus status3 = new TreeStatus(ple);
-//		status1.setStatus(Status.Healthy);
-//		status2.setStatus(Status.Cut);
-//		status3.setStatus(Status.Diseased);
-//		// Create trees
-//		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
-//		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
-//		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
-//
-//		List<Tree> treeList = new java.util.ArrayList<>();
-//		treeList.add(tree1);
-//		treeList.add(tree2);
-//		treeList.add(null);
-//		treeList.add(tree3);
-//		TMSService erc = new TMSService(ple);
-//		String error = "";
-//		try {
-//			int changeInOxygenProduction = erc.calcChangeOxygenProd(treeList, "Healthy");
-//		} catch (InvalidInputException e) {
-//			error = e.getMessage();
-//			assertEquals("Cannot have null entry for tree in list", error);
-//		}
-//	}
-//
+		Tree tree1 = new Tree(height - 1, diameter, datePlanted1, dateAdded1, status2, species1, user1, municipality1,
+				ple);
+		Tree tree2 = new Tree(height + 1, diameter + 1, datePlanted2, dateAdded2, status3, species1, user1,
+				municipality2, ple);
+		Tree tree3 = new Tree(height - 2, diameter + 2, datePlanted1, dateAdded2, status3, species2, user2,
+				municipality1, ple);
+		Tree tree4 = new Tree(height, diameter + 2, datePlanted1, dateAdded2, status3, species3, user2, municipality1,
+				ple);
+		Tree tree5 = new Tree(height + 2, diameter + 2, datePlanted1, dateAdded2, status1, species1, user2,
+				municipality2, ple);
+		Tree tree6 = new Tree(height, diameter + 2, datePlanted1, dateAdded2, status2, species2, user2, municipality1,
+				ple);
+		Tree tree7 = new Tree(height, diameter + 2, datePlanted1, dateAdded2, status1, species3, user2, municipality2,
+				ple);
+
+		List<Tree> treeList = new java.util.ArrayList<>();
+		treeList.add(tree1);
+		treeList.add(tree2);
+		treeList.add(tree3);
+		treeList.add(tree4);
+		treeList.add(tree5);
+		treeList.add(tree6);
+		treeList.add(tree7);
+
+		int changeInOxygenProduction = 0;
+		TMSService erc = new TMSService(ple);
+		try {
+			changeInOxygenProduction = erc.oxygenForecast(treeList, "Healthy");
+		} catch (InvalidInputException e) {
+			fail();
+		}
+		assertEquals(21, changeInOxygenProduction);
+		try {
+			changeInOxygenProduction = erc.oxygenForecast(treeList, "Cut");
+		} catch (InvalidInputException e) {
+			fail();
+		}
+		assertEquals(-25, changeInOxygenProduction);
+		try {
+			changeInOxygenProduction = erc.oxygenForecast(treeList, "Diseased");
+		} catch (InvalidInputException e) {
+			fail();
+		}
+		assertEquals(-2, changeInOxygenProduction);
+	}
+
+	@Test
+	public void testNullInputOxygenProd() {
+		String error = "";
+		List<Tree> treeList = null;
+		TMSService erc = new TMSService(ple);
+		try {
+			erc.oxygenForecast(treeList, "Healthy");
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("List cannot be null", error);
+		}
+		try {
+			erc.oxygenForecast(treeList, "Cut");
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("List cannot be null", error);
+		}
+		try {
+			erc.oxygenForecast(treeList, "Diseased");
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("List cannot be null", error);
+		}
+	}
+
+	@Test
+	public void testStringErrorInput() {
+		String error = "";
+		int height = 4;
+		int diameter = 11;
+		User user1 = new User("fouad", ple);
+		Species species1 = new Species("dandelion", 18, 10, ple);
+		Calendar c1 = Calendar.getInstance();
+		Municipality municipality1 = new Municipality(223, "countySquare", ple);
+		Date datePlanted1 = new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded1 = new Date(c2.getTimeInMillis());
+		TreeStatus status1 = new TreeStatus(ple);
+		status1.setStatus(Status.Cut);
+		Tree tree1 = new Tree(height - 1, diameter, datePlanted1, dateAdded1, status1, species1, user1, municipality1,
+				ple);
+		List<Tree> treeList = new java.util.ArrayList<>();
+		treeList.add(tree1);
+		TMSService erc = new TMSService(ple);
+		try {
+			erc.oxygenForecast(treeList, null);
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("String cannot be null", error);
+		}
+		try {
+			erc.oxygenForecast(treeList, "hug");
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("Please enter a valid tree status", error);
+		}
+	}
+
+	@Test
+	public void testNullEntryOxygenProd() {
+		int height = 5;
+		int diameter = 10;
+		User user = new User("aehwany", ple);
+		Species species1 = new Species("dandelion", 18, 10, ple);
+		Species species2 = new Species("Coconut", 8, 2, ple);
+		Species species3 = new Species("Pine", 10, 6, ple);
+		Municipality municipality = new Municipality(10, "rosemont", ple);
+		Calendar c1 = Calendar.getInstance();
+		Date datePlanted = new Date(c1.getTimeInMillis());
+		Calendar c2 = Calendar.getInstance();
+		Date dateAdded = new Date(c2.getTimeInMillis());
+		TreeStatus status1 = new TreeStatus(ple);
+		TreeStatus status2 = new TreeStatus(ple);
+		TreeStatus status3 = new TreeStatus(ple);
+		status1.setStatus(Status.Healthy);
+		status2.setStatus(Status.Cut);
+		status3.setStatus(Status.Diseased);
+		// Create trees
+		Tree tree1 = new Tree(height, diameter, datePlanted, dateAdded, status1, species1, user, municipality, ple);
+		Tree tree2 = new Tree(height, diameter, datePlanted, dateAdded, status2, species2, user, municipality, ple);
+		Tree tree3 = new Tree(height, diameter, datePlanted, dateAdded, status3, species3, user, municipality, ple);
+
+		List<Tree> treeList = new java.util.ArrayList<>();
+		treeList.add(tree1);
+		treeList.add(tree2);
+		treeList.add(null);
+		treeList.add(tree3);
+		TMSService erc = new TMSService(ple);
+		String error = "";
+		try {
+			erc.oxygenForecast(treeList, "Healthy");
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+			assertEquals("Cannot have null entry for tree in list", error);
+		}
+	}
+
 	@Test
 	public void testValidChangeInCarbonConsumption() {
 		int height = 4;
@@ -1129,19 +1125,19 @@ public class TestService {
 		List<Tree> treeList = null;
 		TMSService erc = new TMSService(ple);
 		try {
-			int changeInCarbonConsumption = erc.carbonForecast(treeList, "Healthy");
+			erc.carbonForecast(treeList, "Healthy");
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("List cannot be null", error);
 		}
 		try {
-			int changeInCarbonConsumption = erc.carbonForecast(treeList, "Cut");
+			erc.carbonForecast(treeList, "Cut");
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("List cannot be null", error);
 		}
 		try {
-			int changeInCarbonConsumption = erc.carbonForecast(treeList, "Diseased");
+			erc.carbonForecast(treeList, "Diseased");
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("List cannot be null", error);
@@ -1168,13 +1164,13 @@ public class TestService {
 		treeList.add(tree1);
 		TMSService erc = new TMSService(ple);
 		try {
-			int changeInCarbonConsumption = erc.carbonForecast(treeList, null);
+			erc.carbonForecast(treeList, null);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("String cannot be null", error);
 		}
 		try {
-			int changeInCarbonConsumption = erc.carbonForecast(treeList, "hug");
+			erc.carbonForecast(treeList, "hug");
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("Please enter a valid tree status", error);
@@ -1213,7 +1209,7 @@ public class TestService {
 		TMSService erc = new TMSService(ple);
 		String error = "";
 		try {
-			int changeInCarbonConsumption = erc.carbonForecast(treeList, "Healthy");
+			erc.carbonForecast(treeList, "Healthy");
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 			assertEquals("Cannot have null entry for tree in list", error);

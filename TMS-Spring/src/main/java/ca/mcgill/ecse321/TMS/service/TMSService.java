@@ -181,11 +181,6 @@ public class TMSService {
 		if(treeList.size()==0) {
 			throw new InvalidInputException("Please enter a list of trees");
 		}
-		
-		if(treeList.size()==0) {
-			throw new InvalidInputException("Please enter a list of trees");
-		}
-
 		int forecast=0;
 		int predicted=0;
 		int current=0;
@@ -247,10 +242,6 @@ public class TMSService {
 		if(treeList == null) {
 			throw new InvalidInputException("List cannot be null");
 		}
-		if(treeList.size()==0) {
-			throw new InvalidInputException("Please enter a list of trees");
-		}
-		
 		if(treeList.size()==0) {
 			throw new InvalidInputException("Please enter a list of trees");
 		}
