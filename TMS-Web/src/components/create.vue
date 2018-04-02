@@ -68,7 +68,6 @@
   height: 215px;
   background: #f7f9fc;
   border-radius: 0.5em;
-  border-top: groove;
 }
 h2{
   color: white;
