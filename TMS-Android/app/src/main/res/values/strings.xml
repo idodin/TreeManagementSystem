@@ -3,4 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="newparticipant_hint">Who?</string>
     <string name="newparticipant_button">Add Part</string>
+    <string name="launch_plant_tree">Report Planted Tree</string>
+    <string name="launch_cutdown_tree">Report Cut Down Tree</string>
+    <string name="launch_diseased_tree">Mark Diseased Tree</string>
+    <string name="launch_tobecutdown_tree">Mark Tree To Be Cut Down</string>
 </resources>
