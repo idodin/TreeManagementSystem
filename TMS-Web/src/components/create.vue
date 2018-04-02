@@ -4,42 +4,31 @@
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
       <a href="#about">Forecast</a>
       <a href="/#/app">Visualizer</a>
-      <a href="/#/create">Create</a>
-      <a class="active" href="#home">Home</a>
+      <a class="active" href="/#/create">Create</a>
+      <a href="/#/">Home</a>
     </div>
     <br /><br /><br />
 
-    <h3>Someone's sitting in the shade today because...</h3>
-    <h3>TreePLE kept the trees alive ♧</h3>
-    <br /><br /><br />
+    <h3>add a tree ♧ </h3>
+    <br /><br />
 
-    <div id="login">
-      <div class="tab">
-        <button id="def" class="tablinks" @click="register($event, 'one')">Login</button>
-        <button class="tablinks" @click="register($event, 'register')">Register</button>
-      </div>
+    <div id="create">
+          <input type="number" v-model="treeHeight" placeholder="Height">
+          <input type="number" v-model="treeDiameter" placeholder="Diameter">
+          <input type="number" v-model="xCoord" placeholder="longitude">
+          <input type="number" v-model="yCoord" placeholder="latitude">
+          <input type="text" v-model="description" placeholder="description"></br>
+          <input type="text" v-model="treeSpecies" placeholder="Species">
+          <input type="text" v-model="municipality" placeholder="Municipality">
+          <b-form-select id="typeMenu" v-model="locationType" :options="locations" class="mb-3"/>
+          <input type="date" style="width:200px; height:10px"v-model="datePlanted" placeholder="datePlanted">
 
-      <!-- Tab content -->
-      <div id="one" class="tabcontent" style="display:block">
-        <input type="text" v-model="username" placeholder="Username">
-        <input type="password" v-model="password" placeholder="Password">
-        <br /> <br />
-        <button id="regButton">login</button>
-      </div>
+          <br /><br />
 
-      <div id="register" class="tabcontent">
-        <input type="text" v-model="username" placeholder="Username">
-        <input type="password" v-model="password" placeholder="Password">
-        <br /> <br />
-        <b-form-checkbox id="checkbox1"
-                     v-model="isScientist"
-                     value="scientist"
-                     unchecked-value="not_scientist">
-      scientist
-    </b-form-checkbox>
-        <button id="regButton">register</button>
-      </div>
+          <b-button @onclick="creatTree()">add tree</b-button>
+
     </div>
+
     <div id="trees">
       <img src="static/tree.png" alt="Mountain View" height="100px">
       <img src="static/tree.png" alt="Mountain View" height="100px">
@@ -57,7 +46,7 @@
   </div>
 </template>
 
-<script src="./hello.js"></script>
+<script src="./createTree.js"></script>
 
 <style scoped>
 #hello {
@@ -72,13 +61,14 @@
 
 }
 
-#login{
+#create{
   margin: auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 400px;
-  height: 200px;
+  width: 850px;
+  height: 215px;
   background: #f7f9fc;
   border-radius: 0.5em;
+  border-top: groove;
 }
 h2{
   color: white;
@@ -124,79 +114,22 @@ li {
     color: white;
 }
 
-/* Style the tab */
-.tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-
-}
-
-/* Style the buttons that are used to open the tab content */
-.tab button {
-    background-color: inherit;
-    float: left;
-    border: 10px;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    width: 50%;
-    
-}
-
-#regButton{
-  box-sizing: border-box;
-	padding: 1em;
-	border: 10px solid #0c0c0c;
-	border-radius: 0.5em;
-  background-color: #4d564d;
-  float: right;
-  color: white;
-  border: 20px;
-  outline: 20px;
-  cursor: pointer;
-  padding: 4px 6px;
-  margin-right: 30px;
-  transition: 0.3s;
-  width: 30%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
 #trees{
   position: fixed;
   bottom: 0;
   width: 100%;
 }
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #ddd;
+
+#typeMenu{
+  margin-top: 15px;
+  box-sizing: border-box;
+	width: 160px;
+  height: 36px;
+	border: 0.15em solid #808080;
+	border-radius: 0.5em;
+  text-align: center;
+  color: grey;
 }
-
-/* Create an active/current tablink class */
-.tab button.active {
-    background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border-top: none;
-}
-
-.tabcontent {
-    animation: fadeEffect 1s; /* Fading effect takes 1 second */
-}
-
-
-
-/* Go from zero to full opacity */
-@keyframes fadeEffect {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
 input {
 	box-sizing: border-box;
 	width: 160px;
@@ -206,6 +139,10 @@ input {
 	border-radius: 0.5em;
 	text-align: center;
   margin-top: 20px;
+}
+
+.createTable{
+  margin-left: 20px;
 }
 
 ::-webkit-input-placeholder {

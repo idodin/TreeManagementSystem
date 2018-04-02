@@ -14,6 +14,8 @@ export default {
   nameNew: 'tms',
   data () {
     return {
+      user: '',
+      userType: '',
       trees: [],
       newTree: '',
       newLat: '',

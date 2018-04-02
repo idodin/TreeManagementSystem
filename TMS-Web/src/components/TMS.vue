@@ -2,16 +2,13 @@
   <div id="treemanagement">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
-      <a href="#about">About</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
-      <a class="active" href="/#/">Home</a>
+      <a href="#about">Forecast</a>
+      <a class="active" href="#news">Visualizer</a>
+      <a href="/#/create">Create</a>
+      <a href="/#/">Home</a>
     </div>
   </br>
 
-  <div id="createTree">
-
-  </div>
   <button id="updateButton" @click="findAllTrees()">List absolutely all Trees</button>
   <div id="tableDiv">
     <table border="1" align="center">
