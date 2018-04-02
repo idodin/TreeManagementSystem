@@ -9,7 +9,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'DONT CHEAT'
+      msg: 'Website under construction. The working prototype is not within the master branch of the repo'
     }
   }
 }
