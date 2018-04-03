@@ -16,4 +16,4 @@ new Vue({
   router,
   template: '<App/>',
   components: { App }
-})
+}).mount('#')
