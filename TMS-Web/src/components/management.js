@@ -16,11 +16,42 @@ export default {
     return {
       user: '',
       userType: '',
-      trees: [],
       newTree: '',
       newLat: '',
+      treeID: '',
+      ids: [],
+      trees: [{
+        id: '1',
+        species: 'fl',
+        city: 'toronto'
+      }, {
+        id: '2',
+        species: 'fl',
+        city: 'montreal'
+      }, {
+        id: '3',
+        species: 'fn',
+        city: 'vanc'
+      },{
+        id: '4',
+        species: 'fn',
+        city: 'montreal'
+      }, {
+        id: '5',
+        species: 'fm',
+        city: 'toronto'
+      }, {
+        id: '6',
+        species: 'fm',
+        city: 'vanc'
+      }, {
+        id: '7',
+        species: 'fx',
+        city: 'vanc'
+      }],
       front: 'ALDhk',
       newLong: '',
+      newIDS: [],
       listTreesError: '',
       mapName: this.name + "-map",
       markerCoordinates: [{
@@ -40,6 +71,7 @@ export default {
   },
 
   mounted: function () {
+    this.newIDs = this.ids;
     this.bounds = new google.maps.LatLngBounds();
     const element = document.getElementById(this.mapName)
     const mapCentre = this.markerCoordinates[0]
@@ -92,26 +124,17 @@ export default {
       this.markers.push(marker)
       this.map.fitBounds(this.bounds.extend(position))
     },
-    register : function(cityName) {
-      // Declare all variables
-      var i, tabcontent, tablinks;
-
-      // Get all elements with class="tabcontent" and hide them
-      tabcontent = document.getElementsByClassName("tabcontent");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-      }
-
-      // Get all elements with class="tablinks" and remove the class "active"
-      tablinks = document.getElementsByClassName("tablinks");
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-      }
-
-      // Show the current tab, and add an "active" class to the button that opened the tab
-      document.getElementById(cityName).style.display = "block";
-      evt.currentTarget.className += " active";
+    emptyList : function() {
+      this.ids = [];
     }
-	}
+	},
+
+  computed: {
+    noDupList: function(){
+      return this.ids.filter(function(item){
+        return 1 === 1;
+      });
+    }
+  }
   //...
 }

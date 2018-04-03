@@ -7,25 +7,29 @@
       <a href="/#/create">Create</a>
       <a href="/#/">Home</a>
     </div>
-  </br>
-
-  <button id="updateButton" @click="findAllTrees()">List absolutely all Trees</button>
-  <div id="tableDiv">
-    <table border="1" align="center">
-      <tr v-for="tree in trees">
-        <td>{{ tree.id }}</td>
-        <td>{{ tree.diameter }}</td>
+    <br />
+    <h3>List of trees</h3>
+    <div id="list">
+      <table>
+        <tr v-for="tree in trees">
+          <template v-if="ids.includes(tree.city)">
+          <td>{{ tree.id }}</td>
+          <td>{{ tree.species }}</td>
+          <td>{{ tree.city }}</td>
+          </template>
       </tr>
     </table>
-  </div></br>
-  <p>
-    <!-- <span v-if="listTreesError" style="color:red">Error: {{listTreesError}} </span> -->
-  </p>
+  </div>
+  <template v-for="tree in trees">
+  <input type="checkbox" id="tree.id" :value="tree.city" v-model="ids">
+  <label for="tree.id">{{tree.city}}</label>
+  </template>
 
-  <input type="text" v-model="newLat" placeholder="New Lat">
-  <input type="text" v-model="newLong" placeholder="New Long">
-  <p>{{newLat}}, {{newLong}}</p>
-  <button id="updateButton" @click="pins(newLat, newLong)">Locate Trees</button>
+  <button @click="emptyList()">Enmpty list</button>
+  <br />
+  <span v-if="ids.length > 0">Checked names: {{ ids }}</span>
+    <br />
+
   <div class="google-map" v-bind:id="mapName"></div>
 </div>
 </template>
@@ -35,7 +39,7 @@
 <style scoped>
 #treemanagement {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  color: #90e6c0;
+  color: black;
   background: #f4f9f4;
   position: absolute; /*position: fixed;*/
   top: 0;
@@ -44,19 +48,21 @@
   height: 100%;
 
 }
-#updateButton{
-  margin: 0 auto;
+
+#list{
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 850px;
+  height: 215px;
+  background: #f7f9fc;
+  border-radius: 0.5em;
 }
-#tableDiv{
-  overflow-y: auto;
-  height: 150px;
-  display: inline-block;
-}
+
 h2{
   color: white;
 }
 .google-map {
-  width: 800px;
+  width: 1000px;
   height: 600px;
   margin: auto;
   background: gray;
@@ -105,11 +111,4 @@ li {
   color: white;
 }
 
-#createTree{
-  margin: auto;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 400px;
-  height: 200px;
-  background: #f7f9fc;
-}
 </style>
