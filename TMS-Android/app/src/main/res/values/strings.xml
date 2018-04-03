@@ -7,4 +7,8 @@
     <string name="launch_cutdown_tree">Report Cut Down Tree</string>
     <string name="launch_diseased_tree">Mark Diseased Tree</string>
     <string name="launch_tobecutdown_tree">Mark Tree To Be Cut Down</string>
+    <string name="user_hint">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
 </resources>
