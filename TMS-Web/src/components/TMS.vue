@@ -8,30 +8,61 @@
       <a href="/#/">Home</a>
     </div>
     <br />
-    <h3>List of trees</h3>
+    <h6>List of trees</h6>
+    <h5>{{myMaps}}</h5>
+
+
+    <div id="filters">
+      <b-btn id="oneButs"v-b-toggle.collapse1 variant="primary">Toggle Collapse</b-btn>
+      <b-collapse id="collapse1" class="mt-2">
+        <b-card>
+          <b-tabs>
+            <b-tab title="first" active>
+              <div class="fcheck">
+                <b-form-group label="Button style checkboxes">
+                  <b-form-checkbox-group buttons v-model="ids" name="butons1" :options="cities">
+                  </b-form-checkbox-group>
+                </b-form-group>
+              </div>
+            </b-tab>
+            <b-tab title="second" >
+              <br>I'm the second tab content
+            </b-tab>
+            <b-tab title="disabled">
+              <br>Disabled tab!
+            </b-tab>
+          </b-tabs>
+        </b-card>
+      </b-collapse>
+    </div>
+
+
     <div id="list">
       <table>
         <tr v-for="tree in trees">
           <template v-if="ids.includes(tree.city)">
-          <td>{{ tree.id }}</td>
-          <td>{{ tree.species }}</td>
-          <td>{{ tree.city }}</td>
+            <td>{{ tree.id }}</td>
+            <td>{{ tree.species }}</td>
+            <td>{{ tree.city }}</td>
           </template>
-      </tr>
-    </table>
-  </div>
-  <template v-for="tree in trees">
-  <input type="checkbox" id="tree.id" :value="tree.city" v-model="ids">
-  <label for="tree.id">{{tree.city}}</label>
-  </template>
-
-  <button @click="emptyList()">Enmpty list</button>
-  <br />
-  <span v-if="ids.length > 0">Checked names: {{ ids }}</span>
+        </tr>
+      </table>
+    </div>
+    <template v-for="tree in cities">
+      <input type="checkbox" id="tree" :value="tree" v-model="ids">
+      <label for="tree">{{tree}}</label>
+    </template>
+    <input type="text" v-model="newTree" />
+    <button @click="addCity(newTree)">Add Tree</button>
+    <h4>{{cities}}</h4>
+    <button @click="emptyList()">Enmpty list</button>
+    <br />
+    <span v-if="ids.length > 0">Checked names: {{ ids }}</span>
     <br />
 
-  <div class="google-map" v-bind:id="mapName"></div>
-</div>
+    <br />
+    <div class="google-map" v-bind:id="mapName"></div>
+  </div>
 </template>
 
 <script src="./management.js"></script>
@@ -58,6 +89,15 @@
   border-radius: 0.5em;
 }
 
+#filters{
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 850px;
+  height: 215px;
+  background: #f7f9fc;
+  border-radius: 0.5em;
+}
+
 h2{
   color: white;
 }
@@ -69,7 +109,6 @@ h2{
   margin-bottom: 100px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-
 ul {
   list-style-type: none;
   padding: 0;

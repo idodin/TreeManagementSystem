@@ -9,7 +9,6 @@ var AXIOS = axios.create({
   headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-
 export default {
   nameNew: 'tms',
   data () {
@@ -18,36 +17,53 @@ export default {
       userType: '',
       newTree: '',
       newLat: '',
-      treeID: '',
+      treeID: 'oldONe',
       ids: [],
+      myMaps: [],
+      cit: 'vanc',
       trees: [{
         id: '1',
         species: 'fl',
-        city: 'toronto'
+        city: 'toronto',
+        latitude: 45.495619,
+        longitude: -73.608229
       }, {
         id: '2',
         species: 'fl',
-        city: 'montreal'
+        city: 'montreal',
+        latitude: 45.415066,
+        longitude: -73.478198
       }, {
         id: '3',
         species: 'fn',
-        city: 'vanc'
+        city: 'vanc',
+        latitude: 45.595066,
+        longitude: -73.378198
       },{
         id: '4',
         species: 'fn',
-        city: 'montreal'
+        city: 'montreal',
+        latitude: 45.695066,
+        longitude: -73.878198
+        //lastone
       }, {
         id: '5',
         species: 'fm',
-        city: 'toronto'
+        city: 'toronto',
+        latitude: 45.402986,
+        longitude: -73.586569
       }, {
         id: '6',
         species: 'fm',
-        city: 'vanc'
+        city: 'vanc',
+        latitude: 45.398233,
+        longitude: -73.784037
       }, {
         id: '7',
         species: 'fx',
-        city: 'vanc'
+        city: 'vanc',
+        latitude: 45.695066,
+        longitude: -73.578198
       }],
       front: 'ALDhk',
       newLong: '',
@@ -60,9 +76,6 @@ export default {
       }, {
         latitude: 45.498233,
         longitude: -73.584037
-      }, {
-        latitude: 45.495066,
-        longitude: -73.578198
       }],
       map: null,
       bounds: null,
@@ -119,21 +132,50 @@ export default {
       const marker = new google.maps.Marker({
         position,
         map: this.map,
-        // icon: iconBase + 'if_firefox_png_148659.png'
       });
       this.markers.push(marker)
       this.map.fitBounds(this.bounds.extend(position))
     },
     emptyList : function() {
       this.ids = [];
+    },
+    printThis: function(){
+      console.log("this is for template change")
+      for(var k = 0; k<this.markers.length; k++){
+        this.markers[k].setMap(null);
+      }
+
+      for(var i = 0; i<this.trees.length; i++){
+        if(this.ids.includes(this.trees[i].city)){
+          this.pins(this.trees[i].latitude, this.trees[i].longitude);
+        }
+      }
+    },
+    addCity: function(ci){
+      this.trees.push({
+        id: '82',
+        species: 'fg',
+        city: ci,
+        latitude: 46.495619,
+        longitude: -75.608229
+      })
     }
 	},
 
   computed: {
-    noDupList: function(){
-      return this.ids.filter(function(item){
-        return 1 === 1;
-      });
+    cities () {
+      return [...new Set(this.trees.map(p => p.city))]
+    },
+    maPins: function(){
+      var idList = this.ids;
+      return this.trees.filter(function(item){
+        return idList.includes(item.id);
+      })
+    }
+  },
+  watch: {
+    ids : function(val){
+      this.printThis();
     }
   }
   //...
