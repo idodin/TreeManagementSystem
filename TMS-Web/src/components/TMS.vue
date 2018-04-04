@@ -8,56 +8,55 @@
       <a href="/#/">Home</a>
     </div>
     <br />
-    <h6>List of trees</h6>
-    <h5>{{myMaps}}</h5>
 
+    <div style="display:inline">
 
+      <b-card id="card">
+        <b-tabs>
+          <b-tab title="City" active>
+            <div id="stack">
+              <b-form-group>
+                <b-form-checkbox-group buttons v-model="ids" stacked :options="cities">
+                </b-form-checkbox-group>
+              </b-form-group>
+            </div>
+          </b-tab>
+          <b-tab title="Species" >
+            <div id="stack">
+              <b-form-group>
+                <b-form-checkbox-group buttons v-model="ids" stacked :options="speciess">
+                </b-form-checkbox-group>
+              </b-form-group>
+            </div>
+          </b-tab>
+          <b-tab title="Status">
+            <div id="stack">
+              <b-form-group>
+                <b-form-checkbox-group buttons v-model="ids" stacked :options="statuses">
+                </b-form-checkbox-group>
+              </b-form-group>
+            </div>
+          </b-tab>
+        </b-tabs>
+      </b-card>
+      <br />
+      <div id="list">
+        <template>
+          <b-table striped hover :items="trees" :fields="fields"></b-table>
+        </template>
+        <!-- <table>
 
-        <b-card id="card">
-          <b-tabs>
-            <b-tab title="first" active>
-              <div>
-                <b-form-group label="Button style checkboxes">
-                  <b-form-checkbox-group buttons v-model="ids" name="butons1" :options="cities">
-                  </b-form-checkbox-group>
-                </b-form-group>
-              </div>
-            </b-tab>
-            <b-tab title="second" >
-              <br>I'm the second tab content
-            </b-tab>
-            <b-tab title="disabled">
-              <br>Disabled tab!
-            </b-tab>
-          </b-tabs>
-        </b-card>
-
-
-    <br />
-    <div id="list">
-      <table>
-        <tr v-for="tree in trees">
-          <template v-if="ids.includes(tree.city)">
-            <td>{{ tree.id }}</td>
-            <td>{{ tree.species }}</td>
-            <td>{{ tree.city }}</td>
-          </template>
-        </tr>
-      </table>
+          <tr v-for="tree in trees">
+            <template v-if="ids.includes(tree.city)">
+              <td>{{ tree.id }}</td>
+              <td>{{ tree.species }}</td>
+              <td>{{ tree.city }}</td>
+            </template>
+          </tr>
+        </table> -->
+      </div>
+      <br />
     </div>
-    <template v-for="tree in cities">
-      <input type="checkbox" id="tree" :value="tree" v-model="ids">
-      <label for="tree">{{tree}}</label>
-    </template>
-    <input type="text" v-model="newTree" />
-    <button @click="addCity(newTree)">Add Tree</button>
-    <h4>{{cities}}</h4>
-    <button @click="emptyList()">Enmpty list</button>
-    <br />
-    <span v-if="ids.length > 0">Checked names: {{ ids }}</span>
-    <br />
-
-    <br />
     <div class="google-map" v-bind:id="mapName"></div>
   </div>
 </template>
@@ -79,30 +78,44 @@
 
 #list{
   margin: auto;
+  float: left;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 850px;
+  width: 700px;
   height: 215px;
   background: #f7f9fc;
   border-radius: 0.5em;
-}
-
-#filters{
-  margin: auto;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 850px;
-  height: 215px;
-  background: #f7f9fc;
-  border-radius: 0.5em;
+  margin-left: 132px;
+  margin-bottom: 30px;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 
 #card{
-  margin: auto;
+  float: right;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 850px;
+  width: 280px;
+  height: 217px;
   background: #f7f9fc;
   border-radius: 0.5em;
+  margin-right: 132px;
+  margin-top: 24px;
+  overflow-y: auto;
 }
 
+#stack{
+  height: 130px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
 #oneButs{
   background: #4f4f4f;
 }
@@ -112,7 +125,7 @@ h2{
 }
 .google-map {
   width: 1000px;
-  height: 600px;
+  height: 400px;
   margin: auto;
   background: gray;
   margin-bottom: 100px;

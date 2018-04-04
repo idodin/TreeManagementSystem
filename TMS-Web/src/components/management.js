@@ -20,29 +20,52 @@ export default {
       treeID: 'oldONe',
       ids: [],
       myMaps: [],
-      cit: 'vanc',
+      fields:[{
+          key: 'id',
+          sortable: true
+        },{
+          key: 'species',
+          sortable: true
+        },{
+          key: 'city',
+          sortable: true
+        },{
+          key: 'status',
+          sortable: true
+        },{
+          key: 'latitude',
+          sortable: true
+        },{
+          key: 'longitude',
+          sortable: true
+        },
+      ],
       trees: [{
         id: '1',
         species: 'fl',
         city: 'toronto',
+        status: 'diseased',
         latitude: 45.495619,
         longitude: -73.608229
       }, {
         id: '2',
         species: 'fl',
         city: 'montreal',
+        status: 'healthy',
         latitude: 45.415066,
         longitude: -73.478198
       }, {
         id: '3',
         species: 'fn',
         city: 'vanc',
+        status: 'diseased',
         latitude: 45.595066,
         longitude: -73.378198
       },{
         id: '4',
         species: 'fn',
-        city: 'montreal',
+        city: 'oman',
+        status: 'to be cut',
         latitude: 45.695066,
         longitude: -73.878198
         //lastone
@@ -50,18 +73,21 @@ export default {
         id: '5',
         species: 'fm',
         city: 'toronto',
+        status: 'cut down',
         latitude: 45.402986,
         longitude: -73.586569
       }, {
         id: '6',
         species: 'fm',
         city: 'vanc',
+        status: 'healthy',
         latitude: 45.398233,
         longitude: -73.784037
       }, {
         id: '7',
         species: 'fx',
-        city: 'vanc',
+        city: 'hamra',
+        status: 'to be cut',
         latitude: 45.695066,
         longitude: -73.578198
       }],
@@ -165,6 +191,12 @@ export default {
   computed: {
     cities () {
       return [...new Set(this.trees.map(p => p.city))]
+    },
+    speciess (){
+      return [...new Set(this.trees.map(p => p.species))]
+    },
+    statuses (){
+      return [...new Set(this.trees.map(p => p.status))]
     },
     maPins: function(){
       var idList = this.ids;
