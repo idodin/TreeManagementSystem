@@ -27,21 +27,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         refreshErrorMessage();
     }
 
     public void addParticipant(View v) {
         error = "";
-        final TextView tv = (TextView) findViewById(R.id.newparticipant_name);
+        final TextView tv = (TextView) findViewById(R.id.password);
         HttpUtils.post("participants/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 refreshErrorMessage();
@@ -60,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshErrorMessage() {
         // set the error message
-        TextView tvError = (TextView)findViewById(R.id.error);
+        TextView tvError = (TextView)findViewById(R.id.password);
         tvError.setText(error);
 
         if (error == null || error.length() == 0) {
@@ -91,5 +82,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }3
+    }
 }
