@@ -5,7 +5,7 @@
       <a href="#about">Forecast</a>
       <a class="active" href="#news">Visualizer</a>
       <a href="/#/create">Create</a>
-      <a href="/#/">Home</a>
+      <a href="/#/home">Home</a>
     </div>
     <br />
     <br />
