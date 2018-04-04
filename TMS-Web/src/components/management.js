@@ -19,7 +19,7 @@ export default {
       newLat: '',
       treeID: 'oldONe',
       ids: [],
-      myMaps: [],
+      filterTrees: [],
       fields:[{
           key: 'id',
           sortable: true
@@ -130,14 +130,15 @@ export default {
   },
 
   created: function () {
-	  AXIOS.get(`/trees`)
-	 .then(response => {
-		// JSON responses are automatically parsed.
-		this.trees = response.data
-	 })
-		.catch(e => {
-			this.listTreesError = e;
-		});
+    
+	 //  AXIOS.get(`/trees`)
+	 // .then(response => {
+		// // JSON responses are automatically parsed.
+		// this.trees = response.data
+	 // })
+		// .catch(e => {
+		// 	this.listTreesError = e;
+		// });
 	 },
 	methods: {
 		findAllTrees: function(){
@@ -177,14 +178,13 @@ export default {
         }
       }
     },
-    addCity: function(ci){
-      this.trees.push({
-        id: '82',
-        species: 'fg',
-        city: ci,
-        latitude: 46.495619,
-        longitude: -75.608229
-      })
+    listTrees: function(){
+      this.filterTrees = [];
+      this.trees.forEach((tree) => {
+        if(this.ids.includes(tree.city) || this.ids.includes(tree.species) || this.ids.includes(tree.status)){
+          this.filterTrees.push(tree);
+        }
+      });
     }
 	},
 
@@ -208,6 +208,7 @@ export default {
   watch: {
     ids : function(val){
       this.printThis();
+      this.listTrees();
     }
   }
   //...

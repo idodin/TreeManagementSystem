@@ -42,7 +42,7 @@
       <br />
       <div id="list">
         <template>
-          <b-table striped hover :items="trees" :fields="fields"></b-table>
+          <b-table striped hover :items="filterTrees" :fields="fields"></b-table>
         </template>
         <!-- <table>
 
