@@ -8,7 +8,9 @@
       <a href="/#/">Home</a>
     </div>
     <br />
-
+    <br />
+    <button @click="clear()">clear</button>
+    <h5>{{ids}}</h5>
     <div style="display:inline">
 
       <b-card id="card">

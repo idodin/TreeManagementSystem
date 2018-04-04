@@ -19,7 +19,6 @@ export default {
       newLat: '',
       treeID: 'oldONe',
       ids: [],
-      filterTrees: [],
       fields:[{
           key: 'id',
           sortable: true
@@ -104,12 +103,14 @@ export default {
         longitude: -73.584037
       }],
       map: null,
+      filterTrees: [],
       bounds: null,
       markers: []
     }
   },
 
   mounted: function () {
+    this.filterTrees = this.trees;
     this.newIDs = this.ids;
     this.bounds = new google.maps.LatLngBounds();
     const element = document.getElementById(this.mapName)
@@ -118,7 +119,7 @@ export default {
       center: new google.maps.LatLng(mapCentre.latitude, mapCentre.longitude)
     }
     this.map = new google.maps.Map(element, options);
-    this.markerCoordinates.forEach((coord) => {
+    this.filterTrees.forEach((coord) => {
       const position = new google.maps.LatLng(coord.latitude, coord.longitude);
       const marker = new google.maps.Marker({
         position,
@@ -130,7 +131,7 @@ export default {
   },
 
   created: function () {
-    
+
 	 //  AXIOS.get(`/trees`)
 	 // .then(response => {
 		// // JSON responses are automatically parsed.
@@ -185,6 +186,10 @@ export default {
           this.filterTrees.push(tree);
         }
       });
+    },
+    clear: function(){
+      this.filterTrees = [];
+      this.ids = [];
     }
 	},
 
@@ -198,11 +203,8 @@ export default {
     statuses (){
       return [...new Set(this.trees.map(p => p.status))]
     },
-    maPins: function(){
-      var idList = this.ids;
-      return this.trees.filter(function(item){
-        return idList.includes(item.id);
-      })
+    startTrees (){
+      return cities.concat(species)
     }
   },
   watch: {
