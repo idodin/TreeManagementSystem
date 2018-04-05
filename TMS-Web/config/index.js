@@ -29,7 +29,7 @@ module.exports = {
     env: require('./dev.env'),
     port: 8087,
     host:  '132.206.4.78',
-    backendHost: '132.206.4.78',
+    backendHost: '132.206.4.78', // set it to real address of backend VM
     backendPort: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
