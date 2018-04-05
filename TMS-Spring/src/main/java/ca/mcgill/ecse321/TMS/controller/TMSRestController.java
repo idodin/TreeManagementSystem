@@ -74,9 +74,13 @@ public class TMSRestController {
 	
 	//For now we'll force the Tree to be registered to already created status, species, user, municipality and locationtype
 	@PostMapping(value = {"/trees/"})
-	public TreeDto createTree(@RequestParam int height,
-			@RequestParam int diameter, @RequestParam Date datePlanted, @RequestParam int x,
-			@RequestParam int y, @RequestParam String description) throws InvalidInputException {	
+	public TreeDto createTree(
+			@RequestParam int height,
+			@RequestParam int diameter, 
+			@RequestParam Date datePlanted, 
+			@RequestParam int x,
+			@RequestParam int y, 
+			@RequestParam String description) throws InvalidInputException {	
 		
 		TreeStatus testStatus;
 		Species testSpecies;
