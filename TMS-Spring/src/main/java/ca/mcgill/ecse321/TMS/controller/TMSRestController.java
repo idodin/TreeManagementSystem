@@ -95,7 +95,7 @@ public class TMSRestController {
 			testStatus = treePLE.getStatus(0);
 		}
 		if(treePLE.getSpecies().size()==0) {
-			testSpecies = treePLE.addSpecies("Test", 11, 12);
+			testSpecies = treePLE.addSpecies("corn", 11, 12);
 		}
 		else {
 			testSpecies = treePLE.getSpecies(0);
