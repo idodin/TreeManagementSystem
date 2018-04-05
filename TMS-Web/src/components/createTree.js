@@ -16,7 +16,7 @@ export default {
     return {
       treeHeight: '',
       treeDiameter: '',
-      datePlanted: '01-01-2018',
+      datePlanted: '2018-01-01',
       xCoord: '',
       yCoord: '',
       description: '',
@@ -33,6 +33,27 @@ export default {
     }
   },
   methods: {
+	  createTree: function(height, diameter, datePlanted, x, y, description) {
+			      AXIOS.post(`/trees/`+ '?height=' + height + '&diameter=' + diameter + '&date=' + datePlanted + '&x' + x + '&y' + y +'&description' + description + {}, {})
+			        .then(response => {
+			          // JSON responses are automatically parsed.
+			          this.trees.push(response.data)
+			          this.treeHeight = ''
+			          this.treeDiameter = ''
+			          this.datePlanted = ''  
+			          this.xCoord = ''
+			          this.yCoord = ''
+			          this.description = ''
+			          this.treeSpecies = ''
+			          this.newTree = ''
+			          this.errorTree = ''
+			        })
+			        .catch(e => {
+			          var errorMsg = e.response.data.message
+			          console.log(errorMsg)
+			          this.errorTree = errorMsg
+			        })
+			    },
 
   }
   //...
