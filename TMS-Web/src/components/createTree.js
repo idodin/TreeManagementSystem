@@ -34,7 +34,7 @@ export default {
   },
   methods: {
 	  createTree: function(height, diameter, datePlanted, x, y, description) {
-			      AXIOS.post(`/trees/`+ '?height=' + height + '&diameter=' + diameter + '&date=' + datePlanted + '&x' + x + '&y' + y +'&description' + description + {}, {})
+			      AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&date=' + datePlanted + '&x' + x + '&y' + y +'&description' + description + {}, {})
 			        .then(response => {
 			          // JSON responses are automatically parsed.
 			          this.trees.push(response.data)
