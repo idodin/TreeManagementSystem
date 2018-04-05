@@ -10,7 +10,7 @@
     <br />
     <br />
     <button @click="clear()">clear</button>
-    <h5>{{ids}}</h5>
+    <button @click="testRequest()">testTrees</button>
     <div style="display:inline">
 
       <b-card id="card">
@@ -48,19 +48,19 @@
         </template>
         <!-- <table>
 
-          <tr v-for="tree in trees">
-            <template v-if="ids.includes(tree.city)">
-              <td>{{ tree.id }}</td>
-              <td>{{ tree.species }}</td>
-              <td>{{ tree.city }}</td>
-            </template>
-          </tr>
-        </table> -->
-      </div>
-      <br />
-    </div>
-    <div class="google-map" v-bind:id="mapName"></div>
-  </div>
+        <tr v-for="tree in trees">
+        <template v-if="ids.includes(tree.city)">
+        <td>{{ tree.id }}</td>
+        <td>{{ tree.species }}</td>
+        <td>{{ tree.city }}</td>
+      </template>
+    </tr>
+  </table> -->
+</div>
+<br />
+</div>
+<div class="google-map" v-bind:id="mapName"></div>
+</div>
 </template>
 
 <script src="./management.js"></script>
@@ -111,12 +111,12 @@
 }
 
 ::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+  width: 0px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
 }
 /* optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+  background: #FF0000;
 }
 #oneButs{
   background: #4f4f4f;
@@ -172,6 +172,40 @@ li {
 .topnav a.active {
   background-color: #4CAF50;
   color: white;
+}
+
+.gm-style .gm-style-iw {
+  background-color: #3C61AD !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 120px !important;
+  padding-top: 10px;
+  display: block !important;
+}
+
+/*style the p tag*/
+.gm-style .gm-style-iw #google-popup p{
+  padding: 10px;
+}
+
+
+/*style the arrow*/
+.gm-style div div div div div div div div {
+  background-color: #3C61AD !important;
+  padding: 0;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  color: #fff;
+  font-size: 16px;
+}
+
+/*style the link*/
+.gm-style div div div div div div div div a {
+  color: #f1f1f1;
+  font-weight: bold;
 }
 
 </style>
