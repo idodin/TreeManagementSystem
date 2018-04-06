@@ -4,8 +4,6 @@ import java.io.File;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
-import java.sql.Date;
-import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
 
@@ -20,47 +18,64 @@ import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
-import ca.mcgill.ecse321.TMS.dto.TreeDto;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
 
 
 @Service
 public class TMSService {
+	
 	private TreePLE tp;
 	
 	public TMSService(TreePLE tp) {
 		this.tp=tp;
 	}
 	
+	/////////////////////	TREES  /////////////////////
 	public Tree createTree(int aHeight, int aDiameter,
 			Date aDatePlanted, TreeStatus aTreeStatus,
 			Species aSpecies, User aLocal, Municipality aMunicipality,
 			int x, int y, String description, LocationType locationType) throws InvalidInputException{
 		
 		Date aDateAdded = new Date(Calendar.getInstance().getTime().getTime());
-		
 		description = checkTreeInputException(aHeight, aDiameter, aDatePlanted, aTreeStatus, aSpecies, aLocal,
 				aMunicipality, x, y, description, locationType, aDateAdded);
-		
-
 		Tree tree = tp.addTree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality);
-		PersistenceXStream.saveToXMLwithXStream(tp);
 		TreeLocation location = new TreeLocation(x, y, description, tree, locationType);
+		PersistenceXStream.saveToXMLwithXStream(tp);
 		return tree;
-		
+	}
+	
+	public Tree removeTree(Tree aTree) {
+		aTree.delete();
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return aTree;
 	}
 	
 	public List<Tree> findAllTrees(){
 		return tp.getTrees();
 	}
 	
-
-	public Tree removeTree(Tree aTree) {
-		
-		aTree.delete();
-		PersistenceXStream.saveToXMLwithXStream(tp);
-		return aTree;
+	
+	/////////////////////	SPECIES  /////////////////////
+	public List<Species> findAllSpecies() {
+		return tp.getSpecies();
 	}
+	
+	public Species createSpecies(String name, int carbonConsumption, int oxygenProduction) {
+		return new Species(name, carbonConsumption, oxygenProduction, tp);
+	}
+	
+	
+	/////////////////////	MUNICIPALITIES  /////////////////////
+	public List<Municipality> findAllMunicipalities() {
+		return tp.getMunicipalities();
+	}
+	
+	public Municipality createMunicipality(String name, int id) {
+		return new Municipality(id, name, tp);
+	}
+	
+
 
 
 	public String checkTreeInputException(int aHeight, int aDiameter, Date aDatePlanted,

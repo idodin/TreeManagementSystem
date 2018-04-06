@@ -61,22 +61,19 @@ public class TMSRestController {
 	
 	@RequestMapping("/")
 	public String index() {
-		
 		return "TreePLE application root. Use the REST API to manage trees.\n";
 	}
 
+	///////////////	HTTP REQUESTS ///////////////
 
-
-	/*
-	 * Here will have get and post requests
-	 */
-
-	
-	//For now we'll force the Tree to be registered to already created status, species, user, municipality and locationtype
+	// temporary
 	@PostMapping(value = {"/trees/"})
 	public TreeDto createTree(@RequestParam int height,
-			@RequestParam int diameter, @RequestParam Date datePlanted, @RequestParam int x,
-			@RequestParam int y, @RequestParam String description) throws InvalidInputException {	
+			@RequestParam int diameter, 
+			@RequestParam Date datePlanted, 
+			@RequestParam int x,
+			@RequestParam int y, 
+			@RequestParam String description) throws InvalidInputException {	
 		
 		TreeStatus testStatus;
 		Species testSpecies;
@@ -121,7 +118,6 @@ public class TMSRestController {
 		return convertToDto(tree);
 	}
 
-	
 	@GetMapping(value = { "/trees", "/trees/" })
 	public List<TreeDto> findAllTrees() {
 		List<TreeDto> trees = Lists.newArrayList();
@@ -131,17 +127,50 @@ public class TMSRestController {
 		return trees;
 	}
 
-	@PostMapping(value = { "/removeTree/{Id}", "/removeTree/{Id}/" })
-	public TreeDto removeTree(@PathVariable ("Id") int id) throws InvalidInputException {
-		// get tree by ID
+	@PostMapping(value = { "/removeTree/{id}", "/removeTree/{id}/" })
+	public TreeDto removeTree(@PathVariable ("id") int id) throws InvalidInputException {
 		Tree t = service.getTreeById(id);
 		TreeDto treeDto = convertToDto(t);
 		service.removeTree(t);
 		return treeDto;
 	}
+	
+	@PostMapping(value = { "/species/{name}", "/species/{name}/" })
+	public SpeciesDto createSpecies(
+			@PathVariable("name") String name,
+			@RequestParam int carbonConsumption,
+			@RequestParam int oxygenProduction) throws InvalidInputException {
+		return convertToDto(service.createSpecies(name, carbonConsumption, oxygenProduction));
+	}
+	
+	@GetMapping(value = { "/species", "/species/" })
+	public List<SpeciesDto> findAllSpecies() {
+		List<SpeciesDto> species = Lists.newArrayList();
+		for (Species sp : service.findAllSpecies()) {
+			species.add(convertToDto(sp));
+		}
+		return species;
+	}
+	
+	@GetMapping(value = { "/municipalities", "/municipalities/" })
+	public List<MunicipalityDto> findAllMunicipalities() {
+		List<MunicipalityDto> municipalities = Lists.newArrayList();
+		for (Municipality m : service.findAllMunicipalities()) {
+			municipalities.add(convertToDto(m));
+		}
+		return municipalities;
+	}
+	
+	
+	
+	
+	
+	
+	//need a method to update the tree location and updates for the rest 
 
-	// TODO Conversion methods
 
+
+	///////////////	DTO CONVERSION METHODS ///////////////
 	private MunicipalityDto convertToDto(Municipality m) {
 		return modelMapper.map(m, MunicipalityDto.class);
 	}
@@ -179,8 +208,6 @@ public class TMSRestController {
 		return usD;
 	}
 	
-
-
 	private TreeDto convertToDto(Tree t) {
 		TreeDto treeDto = modelMapper.map(t, TreeDto.class);
 		treeDto.setLocation(convertToDto(t.getTreeLocation()));
@@ -191,4 +218,6 @@ public class TMSRestController {
 		return treeDto;
 	}
 
+	
+	
 }
