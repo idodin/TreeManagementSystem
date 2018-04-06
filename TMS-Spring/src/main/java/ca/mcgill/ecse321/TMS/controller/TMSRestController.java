@@ -131,13 +131,13 @@ public class TMSRestController {
 
 	
 	@GetMapping(value = { "/trees", "/trees/" })
-	//public List<TreeDto> findAllTrees() {
-	//	List<TreeDto> trees = Lists.newArrayList();
+	public List<TreeDto> findAllTrees() {
+		List<TreeDto> trees = Lists.newArrayList();
 	//	for (Tree tree : service.findAllTrees()) {
 	//		trees.add(convertToDto(tree));
 	//	}
-	//	return trees;
-	//}
+		return trees;
+	}
 
 	@PostMapping(value = { "/removeTree/{Id}", "/removeTree/{Id}/" })
 	public TreeDto removeTree(@PathVariable ("Id") int id) throws InvalidInputException {
