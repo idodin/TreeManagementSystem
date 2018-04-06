@@ -10,10 +10,21 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorToolbar"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
 
-        <include layout="@layout/content_map" />
+        <include layout="@layout/content_map"
+            android:visibility="gone"
+            android:id="@+id/content_map"/>
+
     </FrameLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
