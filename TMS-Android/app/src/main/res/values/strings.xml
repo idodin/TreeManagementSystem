@@ -14,4 +14,11 @@
     <string name="home">Home</string>
     <string name="map">Map</string>
     <string name="list_trees">List Trees</string>
+    <string name="home_content">
+        Welcome to TreePLE.
+        The world\'s leading tree management system.
+        Thanks to users like you, professionals can keep track of the sustainability of different cities around the world.
+        And make sure to care for trees that need it!
+        Access the menu to start adding trees through our map, or see a list of added trees! :)
+    </string>
 </resources>

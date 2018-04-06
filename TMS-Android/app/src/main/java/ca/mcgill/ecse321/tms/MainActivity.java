@@ -51,13 +51,24 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
+                        ConstraintLayout mapLayout = findViewById(R.id.content_map);
+                        ConstraintLayout homeLayout = findViewById(R.id.content_home);
+                        ConstraintLayout listLayout = findViewById(R.id.content_list_tree);
                         switch (menuItem.getItemId()){
-                            case  R.id.map : ConstraintLayout mapLayout = findViewById(R.id.content_map);
+                            case  R.id.map :
                                         mapLayout.setVisibility(View.VISIBLE);
+                                        homeLayout.setVisibility(View.GONE);
+                                        listLayout.setVisibility(View.GONE);
                                         break;
                             case R.id.main_home:
+                                        mapLayout.setVisibility(View.GONE);
+                                        homeLayout.setVisibility(View.VISIBLE);
+                                        listLayout.setVisibility(View.GONE);
                                         break;
                             case R.id.list_trees:
+                                        mapLayout.setVisibility(View.GONE);
+                                        homeLayout.setVisibility(View.GONE);
+                                        listLayout.setVisibility(View.VISIBLE);
                                         break;
                             default:
                                         break;

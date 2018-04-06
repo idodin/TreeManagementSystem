@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Map to be inserted"
+            android:text="List to be inserted"
             android:textColor="@color/colorAccent"
             tools:layout_editor_absoluteX="192dp"
             tools:layout_editor_absoluteY="360dp" />

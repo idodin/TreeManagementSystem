@@ -22,8 +22,16 @@
 
 
         <include layout="@layout/content_map"
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/content_map"/>
+
+        <include layout="@layout/content_home"
+            android:visibility="gone"
+            android:id="@+id/content_home"/>
+
+        <include layout="@layout/content_list_tree"
+            android:visibility="gone"
+            android:id="@+id/content_list_tree"/>
 
     </FrameLayout>
 
