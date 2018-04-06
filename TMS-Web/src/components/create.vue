@@ -21,12 +21,16 @@
           <input type="text" v-model="treeSpecies" placeholder="Species">
           <input type="text" v-model="municipality" placeholder="Municipality">
           <b-form-select id="typeMenu" v-model="locationType" :options="locations" class="mb-3"/>
-          <b-form-select id="typeMenu" v-model="status" :options="stats" class="mb-3"/>
+          <b-form-select id="typeMenu" v-model="Status" :options="statuses" class="mb-3"/>
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
-
-          <b-button @click="createTree()">add tree</b-button>
-
+		 <h5>{{ newTrees }}</h5>
+         <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description)">add tree</b-button>
+		 <b-button @click="findAllTrees()">getTrees</b-button>
+				<!-- <ul v-for="tree in foundTrees">
+				<li> {{tree.municipality}}</li>
+				</ul> -->
+		<h5>{{ foundTrees }}</h5>
 
     </div>
 
