@@ -101,7 +101,7 @@ public class TMSRestController {
 			testSpecies = treePLE.getSpecies(0);
 		}
 		if(treePLE.getUsers().size()==0) {
-			testUser = treePLE.addUser("Imad");
+			testUser = treePLE.addUser("Karim");
 		}
 		else {
 			testUser = treePLE.getUser(0);
