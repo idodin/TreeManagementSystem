@@ -23,6 +23,7 @@ export default {
       treeStatus: '',
       municipality: '',
       locationType: null,
+      Status: null;
       treeSpecies: '',
       locations: [
         { value: null, text: 'Location', disabled: true },
