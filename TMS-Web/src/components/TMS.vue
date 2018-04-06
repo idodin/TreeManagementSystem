@@ -126,8 +126,8 @@ h2{
   color: white;
 }
 .google-map {
-  width: 1000px;
-  height: 400px;
+  width: 1020px;
+  height: 430px;
   margin: auto;
   background: gray;
   margin-bottom: 100px;

@@ -25,15 +25,23 @@ export default {
       locationType: null,
       treeSpecies: '',
       locations: [
-        { value: null, text: 'Location Type', disabled: true },
+        { value: null, text: 'Location', disabled: true },
         { value: 'Residential', text: 'Residential' },
         { value: 'Institutional', text: 'Institutional' },
         { value: 'Municipal', text: 'Municipal' }
       ],
+      stats: [
+        { value: null, text: 'Status', disabled: true },
+        { value: 'Healthy', text: 'Healthy' },
+        { value: 'Cut', text: 'Cut' },
+        { value: 'Diseased', text: 'Diseased' }
+      ],
     }
   },
   methods: {
-
+    createTree: function(){
+      console.log("for ahmed")
+    }
   }
   //...
 }

@@ -21,10 +21,12 @@
           <input type="text" v-model="treeSpecies" placeholder="Species">
           <input type="text" v-model="municipality" placeholder="Municipality">
           <b-form-select id="typeMenu" v-model="locationType" :options="locations" class="mb-3"/>
+          <b-form-select id="typeMenu" v-model="locationType" :options="stats" class="mb-3"/>
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
 
-          <b-button @onclick="creatTree()">add tree</b-button>
+          <b-button @click="createTree()">add tree</b-button>
+
 
     </div>
 
@@ -113,7 +115,7 @@ li {
 #typeMenu{
   margin-top: 13px;
   box-sizing: border-box;
-	width: 160px;
+	width: 140px;
   height: 40px;
 	border: 0.15em solid #808080;
 	border-radius: 0.5em;
