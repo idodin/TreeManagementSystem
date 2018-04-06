@@ -28,6 +28,7 @@ import ca.mcgill.ecse321.TMS.dto.UserDto;
 import ca.mcgill.ecse321.TMS.model.Local;
 
 import ca.mcgill.ecse321.TMS.model.LocationType;
+import ca.mcgill.ecse321.TMS.model.LocationType.LandUseType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Specialist;
 import ca.mcgill.ecse321.TMS.model.Species;
@@ -38,6 +39,7 @@ import ca.mcgill.ecse321.TMS.model.TreePLE;
 
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+import ca.mcgill.ecse321.TMS.model.User.UserType;
 import ca.mcgill.ecse321.TMS.model.UserRole;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
@@ -102,6 +104,7 @@ public class TMSRestController {
 		}
 		//if(treePLE.getUsers().size()==0) {
 			testUser = treePLE.addUser("Karim");
+			testUser.setUserType(UserType.Scientist);
 		//}
 		//else {
 		//	testUser = treePLE.getUser(0);
@@ -118,6 +121,7 @@ public class TMSRestController {
 		else {
 			testType = treePLE.getPark(0);
 		}
+		testType.setLandUseType(LandUseType.Residential);
 		
 		Tree tree = service.createTree(height, diameter, datePlanted, testStatus, testSpecies, testUser, testMunicipality, x, y, description, testType);
 		System.out.println(tree.getId());
