@@ -20,16 +20,15 @@
           <input type="text" v-model="description" placeholder="description"></br>
 
 		  <b-form-select id="typeMenu" type="text" v-model="treeSpecies" :options="speciesSelection" class="mb-3"/>
-		  <b-form-select id="typeMenu" v-model="municipality" :options="municipalitiesSelection" class="mb-3"/>
-          <b-form-select id="typeMenu" v-model="locationType" :options="locations" class="mb-3"/>
-          <b-form-select id="typeMenu" v-model="Status" :options="statuses" class="mb-3"/>
+		  <b-form-select id="typeMenu" v-model="treeMunicipality" :options="municipalitiesSelection" class="mb-3"/>
+          <b-form-select id="typeMenu" v-model="locationType" :options="locationsSelection" class="mb-3"/>
+          <b-form-select id="typeMenu" v-model="treeStatus" :options="statusSelection" class="mb-3"/>
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
-          <h5>{{ errorMessage }}</h5>
-          <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, treeSpecies)">add tree</b-button>
+          <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, treeSpecies, treeMunicipality)">add tree</b-button>
           <b-button @click="findAllTrees()">getTrees</b-button>
           <b-button @click="createSpecies(description, treeHeight, treeDiameter)">create specimen</b-button>
-          <h5>{{ species }}</h5>
+          <!-- <h5>{{ species }}</h5> -->
     </div>
 
     <div id="trees">

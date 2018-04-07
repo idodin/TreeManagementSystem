@@ -24,21 +24,21 @@ export default {
       yCoord: '',
       description: '',
       treeStatus: '',
-      municipality: '',
       locationType: null,
-      Status: null,
-      treeSpecies: '',
+      treeStatus: null,
+      treeSpecies: null,
+      treeMunicipality: null,
       species: [],
       speciesSelection: [],
       municipalities: [],
       municipalitiesSelection: [],
-      locations: [
+      locationsSelection: [
         { value: null, text: 'Location', disabled: true },
         { value: 'Residential', text: 'Residential' },
         { value: 'Institutional', text: 'Institutional' },
         { value: 'Municipal', text: 'Municipal' }
       ],
-      statuses: [
+      statusSelection: [
         { value: null, text: 'Status', disabled: true },
         { value: 'Healthy', text: 'Healthy' },
         { value: 'Cut', text: 'Cut' },
@@ -50,7 +50,7 @@ export default {
   created: function () {
 	  AXIOS.get('/species/').then(response => {
 		  this.species = response.data
-		  this.speciesSelection.push({value: null, text: 'Species', disabled: true})
+		  this.speciesSelection.push({ value: null, text: 'Species', disabled: true })
 		  for (var i=0; i<this.species.length;i++) {
 			  var name = this.species[i].name
 	    	  this.speciesSelection.push({ value: name, text: name })
@@ -82,8 +82,9 @@ export default {
   },
   
   methods: {
-	  createTree: function (height, diameter, datePlanted, x, y, description, spec) {
-		  AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x + '&y=' + y +'&description=' + description + '&species' + spec, {}, {})
+	  createTree: function (height, diameter, datePlanted, x, y, description, species, municipality) {
+		  AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x
+				  + '&y=' + y +'&description=' + description + '&species=' + species + '&municipality=' + municipality, {}, {})
 		  .then(response => {
 			  this.trees.push(response.data)
 	          this.treeHeight = ''
@@ -92,8 +93,8 @@ export default {
 	          this.xCoord = ''
 	          this.yCoord = ''
 	          this.description = ''
-	          this.treeSpecies = ''
-	          this.newTree = ''
+	          this.treeSpecies = null
+	          this.treeMunicipality = null
 	          this.errorMessage = ''
 		  }).catch(e => {
 			  var errorMsg = e.response.data.message
