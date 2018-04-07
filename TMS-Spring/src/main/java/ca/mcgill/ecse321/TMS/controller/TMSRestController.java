@@ -102,13 +102,13 @@ public class TMSRestController {
 		else {
 			testSpecies = treePLE.getSpecies(0);
 		}
-		//if(treePLE.getUsers().size()==0) {
+		if(treePLE.getUsers().size()==0) {
 			testUser = treePLE.addUser("Karim");
 			
-		//}
-		//else {
+		}
+		else {
 			testUser = treePLE.getUser(0);
-		//}
+		}
 		testUser.setUserType(UserType.Scientist);
 		if(treePLE.getMunicipalities().size()==0) {
 			testMunicipality = treePLE.addMunicipality(1, "McGill");
