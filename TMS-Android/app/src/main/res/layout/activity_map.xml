@@ -13,6 +13,19 @@
         android:layout_height="match_parent"
         android:background="@color/colorBackground">
 
+
+        <include layout="@layout/content_map"
+            android:visibility="gone"
+            android:id="@+id/content_map"/>
+
+        <include layout="@layout/content_home"
+            android:visibility="visible"
+            android:id="@+id/content_home"/>
+
+        <include layout="@layout/content_list_tree"
+            android:visibility="gone"
+            android:id="@+id/content_list_tree"/>
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -20,18 +33,6 @@
             android:background="@color/colorToolbar"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
-
-        <include layout="@layout/content_map"
-            android:visibility="visible"
-            android:id="@+id/content_map"/>
-
-        <include layout="@layout/content_home"
-            android:visibility="gone"
-            android:id="@+id/content_home"/>
-
-        <include layout="@layout/content_list_tree"
-            android:visibility="gone"
-            android:id="@+id/content_list_tree"/>
 
     </FrameLayout>
 
