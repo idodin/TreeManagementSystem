@@ -18,8 +18,10 @@
           <input type="number" v-model="xCoord" placeholder="longitude">
           <input type="number" v-model="yCoord" placeholder="latitude">
           <input type="text" v-model="description" placeholder="description"></br>
-          <input type="text" v-model="treeSpecies" placeholder="Species">
-          <input type="text" v-model="municipality" placeholder="Municipality">
+		  <!--<input type="text" v-model="treeSpecies" placeholder="Species"> -->
+		  <!-- <input type="text" v-model="municipality" placeholder="Municipality"> -->
+		  <b-form-select id="typeMenu" v-model="treeSpecies" :options="speciesSelection" class="mb-3"/>
+		  <b-form-select id="typeMenu" v-model="municipality" :options="municipalitiesSelection" class="mb-3"/>
           <b-form-select id="typeMenu" v-model="locationType" :options="locations" class="mb-3"/>
           <b-form-select id="typeMenu" v-model="Status" :options="statuses" class="mb-3"/>
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
@@ -31,6 +33,8 @@
 				<li> {{tree.municipality}}</li>
 				</ul> -->
 		<h5>{{ foundTrees }}</h5>
+		<h5>{{ speciesSelection }}</h5>
+
 
     </div>
 

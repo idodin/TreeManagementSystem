@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.TMS.dto.LocationTypeDto;
 
 import com.google.common.collect.Lists;
+import com.thoughtworks.xstream.XStream;
 
 import ca.mcgill.ecse321.TMS.dto.MunicipalityDto;
 import ca.mcgill.ecse321.TMS.dto.SpeciesDto;
@@ -39,6 +41,7 @@ import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.model.UserRole;
+import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
 
@@ -66,6 +69,9 @@ public class TMSRestController {
 
 	///////////////	HTTP REQUESTS ///////////////
 
+//	@PostMapping(value = {"trees/"})
+//	public TreeDto updateTree(
+//			@RequestPara)
 	// temporary
 	@PostMapping(value = {"/trees/"})
 	public TreeDto createTree(@RequestParam int height,
@@ -73,12 +79,14 @@ public class TMSRestController {
 			@RequestParam Date datePlanted, 
 			@RequestParam int x,
 			@RequestParam int y, 
-			@RequestParam String description) throws InvalidInputException {	
+			@RequestParam String description,
+			@RequestParam Species species,
+			@RequestParam Municipality municipality) throws InvalidInputException {	
 		
 		TreeStatus testStatus;
-		Species testSpecies;
+		//Species testSpecies = (Species) PersistenceXStream.xstream.fromXML(species);
 		User testUser;
-		Municipality testMunicipality;
+		//Municipality testMunicipality;
 		LocationType testType;
 		
 		if(treePLE.getStatuses().size()==0) {
@@ -87,24 +95,24 @@ public class TMSRestController {
 		else {
 			testStatus = treePLE.getStatus(0);
 		}
-		if(treePLE.getSpecies().size()==0) {
-			testSpecies = treePLE.addSpecies("Test", 11, 12);
-		}
-		else {
-			testSpecies = treePLE.getSpecies(0);
-		}
+//		if(treePLE.getSpecies().size()==0) {
+//			testSpecies = treePLE.addSpecies("Test", 11, 12);
+//		}
+//		else {
+//			testSpecies = treePLE.getSpecies(0);
+//		}
 		if(treePLE.getUsers().size()==0) {
 			testUser = treePLE.addUser("Imad");
 		}
 		else {
 			testUser = treePLE.getUser(0);
 		}
-		if(treePLE.getMunicipalities().size()==0) {
-			testMunicipality = treePLE.addMunicipality(1, "McGill");
-		}
-		else {
-			testMunicipality = treePLE.getMunicipality(0);
-		}
+//		if(treePLE.getMunicipalities().size()==0) {
+//			testMunicipality = treePLE.addMunicipality(1, "McGill");
+//		}
+//		else {
+//			testMunicipality = treePLE.getMunicipality(0);
+//		}
 		if(treePLE.getParks().size()==0) {
 			testType = treePLE.addPark(1, "Mont Royal");
 		}
@@ -112,7 +120,7 @@ public class TMSRestController {
 			testType = treePLE.getPark(0);
 		}
 		
-		Tree tree = service.createTree(height, diameter, datePlanted, testStatus, testSpecies, testUser, testMunicipality, x, y, description, testType);
+		Tree tree = service.createTree(height, diameter, datePlanted, testStatus, species, testUser, municipality, x, y, description, testType);
 		System.out.println(tree.getId());
 		
 		return convertToDto(tree);
@@ -159,6 +167,13 @@ public class TMSRestController {
 			municipalities.add(convertToDto(m));
 		}
 		return municipalities;
+	}
+	
+	@PostMapping(value = { "/municipalities/{name}", "/municipalities/{name}/" })
+	public MunicipalityDto createMunicipality(
+			@PathVariable("name") String name,
+			@RequestParam int id) throws InvalidInputException {
+		return convertToDto(service.createMunicipality(name, id));
 	}
 	
 	

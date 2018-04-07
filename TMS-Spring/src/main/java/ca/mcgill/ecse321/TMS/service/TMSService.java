@@ -62,7 +62,9 @@ public class TMSService {
 	}
 	
 	public Species createSpecies(String name, int carbonConsumption, int oxygenProduction) {
-		return new Species(name, carbonConsumption, oxygenProduction, tp);
+		Species sp = new Species(name, carbonConsumption, oxygenProduction, tp);
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return sp;
 	}
 	
 	

@@ -27,7 +27,11 @@ export default {
       municipality: '',
       locationType: null,
       Status: null,
-      treeSpecies: '',
+      treeSpecies: null,
+      species: [],
+      speciesSelection: [],
+      municipalities: [],
+      municipalitiesSelection: [],
       locations: [
         { value: null, text: 'Location', disabled: true },
         { value: 'Residential', text: 'Residential' },
@@ -42,12 +46,33 @@ export default {
       ],
     }
   },
+  created: function () {
+	    AXIOS.get('/species/').then(response => {
+	      this.species = response.data
+	      for (var i=0; i<this.species.length;i++) {
+	    	  this.speciesSelection.push({value:this.species[i], text:this.species[i].name})
+	      }
+	    }).catch(e => {
+	      this.treeError = e
+	    })
+	    AXIOS.get('/municipalities/').then(response => {
+	      this.municipalities = response.data
+	      for (var i=0; i<this.municipalities.length;i++) {
+	    	  this.municipalitiesSelection.push({value:this.municipalities[i], text:this.municipalities[i].name})
+	      }
+	    }).catch(e => {
+	      this.errorEvent = e
+	    })
+	  },
+//	  var e = document.getElementById("speciesSelection");
+//	  var s = e.options[e.selectedIndex].text;
   methods: {
 	  createTree: function(height, diameter, datePlanted, x, y, description) {
-	      AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x + '&y=' + y +'&description=' + description + {}, {})
+	      AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x + '&y=' + y +'&description=' + description + '&species=' + this.species[1] + '&municipality=' + this.municipalities[1] + {}, {})
 	        .then(response => {
 	          // JSON responses are automatically parsed.
-	          //this.newTrees.push(response.data)
+	          this.newTrees.push(response.data)
+	        	console.log(treeSpecies)
 	          this.treeHeight = ''
 	          this.treeDiameter = ''
 	          this.datePlanted = '2018-01-01'
@@ -67,9 +92,11 @@ export default {
 		findAllTrees: function(){
 		    AXIOS.get('/trees').then(response => {
 		    	this.foundTrees = response.data
+		    	console.log(this.foundTrees[0].height)
 		    	}).catch(e => {
 			      this.errorTree = e
 			    })
+		    
 		    },
 		}
   //...
