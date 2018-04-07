@@ -50,7 +50,7 @@ export default {
 	          //this.newTrees.push(response.data)
 	          this.treeHeight = ''
 	          this.treeDiameter = ''
-	          this.datePlanted = '2018-01-01'  
+	          this.datePlanted = '2018-01-01'
 	          this.xCoord = ''
 	          this.yCoord = ''
 	          this.description = ''
@@ -74,9 +74,3 @@ export default {
 		}
   //...
 }
-
-
-
-
-
-
