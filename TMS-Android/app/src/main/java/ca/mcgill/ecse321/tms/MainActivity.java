@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.tms;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
@@ -9,9 +10,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +37,7 @@ import cz.msebera.android.httpclient.entity.mime.Header;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private String error = null;
     private DrawerLayout mDrawerLayout;
+    private Dialog myDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +99,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.getMenu().getItem(0).setChecked(true);
     }
 
+
+    //TODO onMapClick should trigger pop up menu
+    // Popup menu should allow user to issue http request
+    // marker should only be added on http request success
     @Override
-    public void onMapReady(GoogleMap googleMap){
+    public void onMapReady(final GoogleMap googleMap){
         LatLng sydney = new LatLng(-33.852, 151.211);
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+
+                callLoginDialog();
+
+                MarkerOptions marker = new MarkerOptions().position(
+                        new LatLng(point.latitude, point.longitude)).title("New Marker");
+
+                googleMap.addMarker(marker);
+
+                System.out.println(point.latitude+"---"+ point.longitude);
+            }
+        });
 
     }
 
@@ -151,6 +177,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    private void callLoginDialog()
+    {
+        myDialog = new Dialog(this);
+        myDialog.setContentView(R.layout.plant_dialog);
+        myDialog.setCancelable(false);
+        myDialog.setCanceledOnTouchOutside(true);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(myDialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+
+        myDialog.getWindow().setAttributes(lp);
+
+        Button login = (Button) myDialog.findViewById(R.id.plant_tree);
+
+        EditText emailaddr = (EditText) myDialog.findViewById(R.id.email);
+        EditText password = (EditText) myDialog.findViewById(R.id.password);
+        myDialog.show();
+
+        login.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                //your login calculation goes here
+            }
+        });
+
+
     }
 
 }

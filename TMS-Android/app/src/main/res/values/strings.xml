@@ -21,4 +21,12 @@
         And make sure to care for trees that need it!
         Access the menu to start adding trees through our map, or see a list of added trees! :)
     </string>
+    <string name="enter_height">Enter Height</string>
+    <string name="edit_height">Height</string>
+    <string name="enter_diameter">Enter Diameter</string>
+    <string name="edit_diameter">Edit Diameter</string>
+    <string name="select_species">Select Species</string>
+    <string name="select_municipality">Select Municipality</string>
+    <string name="select_location">Select Location</string>
+    <string name="plant_tree">Plant Tree</string>
 </resources>

@@ -1,0 +1,107 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="10dip"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/label_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dip"
+            android:gravity="center"
+            android:text="@string/enter_height"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/edit_height"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@color/colorClean"
+            android:hint="@string/edit_height"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/label_diameter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:gravity="center"
+            android:text="@string/enter_diameter"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/edit_diameter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@color/colorClean"
+            android:hint="@string/edit_diameter"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/label_species"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dip"
+            android:gravity="center"
+            android:text="@string/select_species"
+            android:textColor="#000000" />
+
+        <Spinner
+            android:id="@+id/species_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dip" />
+
+        <TextView
+            android:id="@+id/label_municipality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dip"
+            android:gravity="center"
+            android:text="@string/select_municipality"
+            android:textColor="#000000" />
+
+        <Spinner
+            android:id="@+id/municipality_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dip" />
+
+        <TextView
+            android:id="@+id/label_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dip"
+            android:gravity="center"
+            android:text="@string/select_location"
+            android:textColor="#000000" />
+
+        <Spinner
+            android:id="@+id/location_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dip" />
+
+        <Button
+            android:id="@+id/plant_tree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/plant_tree" />
+
+    </LinearLayout>
+
+</LinearLayout>
