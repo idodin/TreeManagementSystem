@@ -9,7 +9,7 @@
     </div>
     <br /><br /><br />
 
-    <h3>add a tree ♧ </h3>
+    <h3>Add a Tree ♧ </h3>
     <br /><br />
 
     <div id="create">
@@ -18,24 +18,18 @@
           <input type="number" v-model="xCoord" placeholder="longitude">
           <input type="number" v-model="yCoord" placeholder="latitude">
           <input type="text" v-model="description" placeholder="description"></br>
-		  <!--<input type="text" v-model="treeSpecies" placeholder="Species"> -->
-		  <!-- <input type="text" v-model="municipality" placeholder="Municipality"> -->
-		  <b-form-select id="typeMenu" v-model="treeSpecies" :options="speciesSelection" class="mb-3"/>
+
+		  <b-form-select id="typeMenu" type="text" v-model="treeSpecies" :options="speciesSelection" class="mb-3"/>
 		  <b-form-select id="typeMenu" v-model="municipality" :options="municipalitiesSelection" class="mb-3"/>
           <b-form-select id="typeMenu" v-model="locationType" :options="locations" class="mb-3"/>
           <b-form-select id="typeMenu" v-model="Status" :options="statuses" class="mb-3"/>
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
-		 <h5>{{ newTrees }}</h5>
-         <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, treeSpecies)">add tree</b-button>
-		 <b-button @click="findAllTrees()">getTrees</b-button>
-				<!-- <ul v-for="tree in foundTrees">
-				<li> {{tree.municipality}}</li>
-				</ul> -->
-		<h5>{{ speciesSelection }}</h5>
-		<h5>{{ treeSpecies }}</h5>
-
-
+          <h5>{{ errorMessage }}</h5>
+          <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, treeSpecies)">add tree</b-button>
+          <b-button @click="findAllTrees()">getTrees</b-button>
+          <b-button @click="createSpecies(description, treeHeight, treeDiameter)">create specimen</b-button>
+          <h5>{{ species }}</h5>
     </div>
 
     <div id="trees">
@@ -51,7 +45,6 @@
       <img src="static/tree.png" alt="Mountain View" height="100px">
       <img src="static/tree.png" alt="Mountain View" height="100px">
     </div>
-
   </div>
 </template>
 

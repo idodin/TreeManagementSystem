@@ -14,14 +14,13 @@ export default {
   nameNew: 'tms',
   data () {
     return {
-      newTrees:[],
-      errorTree: '',
-      foundTrees:[],
+      errorMessage: '',
+      newSpecies: [],
+      trees:[],
       treeHeight: '',
       treeDiameter: '',
       datePlanted: '2018-01-01',
       xCoord: '',
-      spMethod: '',
       yCoord: '',
       description: '',
       treeStatus: '',
@@ -47,33 +46,46 @@ export default {
       ],
     }
   },
+
   created: function () {
-	    AXIOS.get('/species/').then(response => {
-	      this.species = response.data
-	      for (var i=0; i<this.species.length;i++) {
-	    	  this.speciesSelection.push({ value: this.species[i], text: this.species[i].name })
+	  AXIOS.get('/species/').then(response => {
+		  this.species = response.data
+		  this.speciesSelection.push({value: null, text: 'Species', disabled: true})
+		  for (var i=0; i<this.species.length;i++) {
+			  var name = this.species[i].name
+	    	  this.speciesSelection.push({ value: name, text: name })
 	      }
-	    }).catch(e => {
-	      this.treeError = e
-	    })
-	    AXIOS.get('/municipalities/').then(response => {
-	      this.municipalities = response.data
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
+	          console.log(errorMsg)
+	          this.errorMessage = errorMsg
+	      })
+	  AXIOS.get('/municipalities/').then(response => {
+		  this.municipalities = response.data
+		  this.municipalitiesSelection.push({value: null, text: 'Municipalities', disabled: true})
 	      for (var i=0; i<this.municipalities.length;i++) {
-	    	  this.municipalitiesSelection.push( { value: this.municipalities[i], text: this.municipalities[i].name })
+			  var name = this.municipalities[i].name
+	    	  this.municipalitiesSelection.push( { value: name, text: name })
 	      }
-	    }).catch(e => {
-	      this.errorEvent = e
-	    })
-	  },
-//	  var e = document.getElementById("speciesSelection");
-//	  var s = e.options[e.selectedIndex].text;
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
+	          console.log(errorMsg)
+	          this.errorMessage = errorMsg
+		  })
+	  AXIOS.get('/trees/').then(response => {
+		  this.trees = response.data
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
+	          console.log(errorMsg)
+	          this.errorMessage = errorMsg
+		  })
+  },
+  
   methods: {
-	  createTree: function(height, diameter, datePlanted, x, y, description, treeSpecies) {
-    	  var str = treeSpecies.name
-	      AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x + '&y=' + y +'&description=' + description + '&species=' + str + {}, {})
-	        .then(response => {
-	          // JSON responses are automatically parsed.
-	          this.newTrees.push(response.data)
+	  createTree: function (height, diameter, datePlanted, x, y, description, spec) {
+		  AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x + '&y=' + y +'&description=' + description + '&species' + spec, {}, {})
+		  .then(response => {
+			  this.trees.push(response.data)
 	          this.treeHeight = ''
 	          this.treeDiameter = ''
 	          this.datePlanted = '2018-01-01'
@@ -82,23 +94,34 @@ export default {
 	          this.description = ''
 	          this.treeSpecies = ''
 	          this.newTree = ''
-	          this.errorTree = ''
-	        })
-	        .catch(e => {
-	          var errorMsg = e.response.data.message
+	          this.errorMessage = ''
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
 	          console.log(errorMsg)
-	          this.errorTree = errorMsg
-	        })
-	    },
-		findAllTrees: function(){
-		    AXIOS.get('/trees').then(response => {
-		    	this.foundTrees = response.data
-		    	console.log(this.foundTrees[0].height)
-		    	}).catch(e => {
-			      this.errorTree = e
-			    })
-		    
-		    },
-		}
+	          this.errorMessage = errorMsg
+		  })
+	  },
+	  findAllTrees: function() {
+		  AXIOS.get('/trees').then(response => {
+			  this.trees = response.data
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
+	          console.log(errorMsg)
+	          this.errorMessage = errorMsg
+		  })
+	  },
+	  createSpecies: function(speciesName, carbonCon, oxygenProd) {
+		  AXIOS.post('/species/' + speciesName + '?&carbonConsumption=' + carbonCon + '&oxygenProduction=' + oxygenProd)
+		  .then(response => {
+			  this.species.push(response.data)
+			  this.newSpecies.push(response.data)
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
+	          console.log(errorMsg)
+	          this.errorMessage = errorMsg
+		  })
+	  }
+	}
+  
   //...
 }
