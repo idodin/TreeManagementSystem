@@ -27,13 +27,13 @@
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
 		 <h5>{{ newTrees }}</h5>
-         <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description)">add tree</b-button>
+         <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, treeSpecies)">add tree</b-button>
 		 <b-button @click="findAllTrees()">getTrees</b-button>
 				<!-- <ul v-for="tree in foundTrees">
 				<li> {{tree.municipality}}</li>
 				</ul> -->
-		<h5>{{ foundTrees }}</h5>
 		<h5>{{ speciesSelection }}</h5>
+		<h5>{{ treeSpecies }}</h5>
 
 
     </div>
