@@ -29,4 +29,7 @@
     <string name="select_municipality">Select Municipality</string>
     <string name="select_location">Select Location</string>
     <string name="plant_tree">Plant Tree</string>
+    <string name="enter_date">Date Planted:</string>
+    <string name="date_planted">01-01-2010</string>
+    <string name="select_tree_status">Select Tree Status</string>
 </resources>

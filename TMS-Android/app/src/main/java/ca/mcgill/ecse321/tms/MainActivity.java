@@ -9,15 +9,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +32,9 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.msebera.android.httpclient.entity.mime.Header;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -39,10 +42,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DrawerLayout mDrawerLayout;
     private Dialog myDialog;
 
+    private List<String> speciesNames = new ArrayList<>();
+    private ArrayAdapter<String> speciesAdapter;
+    private List<String> municipalityNames = new ArrayList<>();
+    private ArrayAdapter<String> municipalityAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_functions);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
             .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -52,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         refreshErrorMessage();
+
+        Spinner speciesSpinner = (Spinner) findViewById(R.id.species_spinner);
+        Spinner municipalitySpinner = (Spinner) findViewById(R.id.municipality_spinner);
+        Spinner locationSpinner = (Spinner) findViewById(R.id.location_spinner);
+        Spinner statusSpinner = (Spinner) findViewById(R.id.status_spinner);
+
 
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -211,6 +225,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
 
+    }
+
+    public void showDatePickerDialog(View v) {
+        TextView tf = (TextView) v;
+        Bundle args = getDateFromLabel(tf.getText().toString());
+        args.putInt("id", v.getId());
+
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void setDate(int id, int d, int m, int y) {
+        TextView tv = (TextView) findViewById(id);
+        tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
+    }
+
+    private Bundle getDateFromLabel(String text) {
+        Bundle rtn = new Bundle();
+        String comps[] = text.toString().split("-");
+        int day = 1;
+        int month = 1;
+        int year = 1;
+
+        if (comps.length == 3) {
+            day = Integer.parseInt(comps[0]);
+            month = Integer.parseInt(comps[1]);
+            year = Integer.parseInt(comps[2]);
+        }
+
+        rtn.putInt("day", day);
+        rtn.putInt("month", month-1);
+        rtn.putInt("year", year);
+
+        return rtn;
     }
 
 }

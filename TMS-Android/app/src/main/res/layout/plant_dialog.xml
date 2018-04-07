@@ -49,6 +49,41 @@
             android:singleLine="true" />
 
         <TextView
+            android:id="@+id/label_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:gravity="center"
+            android:text="@string/enter_date"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/date_planted"
+            android:layout_gravity="center"
+            android:id="@+id/tree_date"
+            android:textColor="#000000"
+            android:background="@color/colorClean"
+            android:onClick="showDatePickerDialog"/>
+
+        <TextView
+            android:id="@+id/label_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dip"
+            android:gravity="center"
+            android:text="@string/select_tree_status"
+            android:textColor="#000000" />
+
+        <Spinner
+            android:id="@+id/status_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dip" />
+
+        <TextView
             android:id="@+id/label_species"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
