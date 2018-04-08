@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse321.TMS.model;
 
-// line 32 "../../../../../TreePLE.ump"
+// line 45 "../../../../../TreePLE.ump"
 public class TreeLocation
 {
 
@@ -12,8 +12,8 @@ public class TreeLocation
   //------------------------
 
   //TreeLocation Attributes
-  private int x;
-  private int y;
+  private double x;
+  private double y;
   private String description;
 
   //TreeLocation Associations
@@ -29,7 +29,7 @@ public class TreeLocation
   // CONSTRUCTOR
   //------------------------
 
-  public TreeLocation(int aX, int aY, String aDescription, Tree aTree, LocationType aLocationType)
+  public TreeLocation(double aX, double aY, String aDescription, Tree aTree, LocationType aLocationType)
   {
     cachedHashCode = -1;
     canSetTree = true;
@@ -53,7 +53,7 @@ public class TreeLocation
   // INTERFACE
   //------------------------
 
-  public boolean setX(int aX)
+  public boolean setX(double aX)
   {
     boolean wasSet = false;
     x = aX;
@@ -61,7 +61,7 @@ public class TreeLocation
     return wasSet;
   }
 
-  public boolean setY(int aY)
+  public boolean setY(double aY)
   {
     boolean wasSet = false;
     y = aY;
@@ -77,12 +77,12 @@ public class TreeLocation
     return wasSet;
   }
 
-  public int getX()
+  public double getX()
   {
     return x;
   }
 
-  public int getY()
+  public double getY()
   {
     return y;
   }
