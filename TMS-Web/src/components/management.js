@@ -656,7 +656,6 @@ mounted: function () {
 
 created: function () {
 
-<<<<<<< HEAD
   AXIOS.get(`/trees`)
   .then(response => {
     // JSON responses are automatically parsed.
@@ -672,9 +671,9 @@ methods: {
 			  var treeIDs= [1,2,3,4];
 			  status = "HEALTHY";
 //				  rectTrees.forEach((tree) =>{
-//					  treeIDs.push(tree.id);	  
+//					  treeIDs.push(tree.id);
 //				  });
-				  
+
 			  AXIOS.post('/updateTrees/?treeIDs=' + treeIDs + '&status='+ status, {}, {})
 			  .then(response => {
 				  //this.findAllTrees();
@@ -686,14 +685,14 @@ methods: {
 		          console.log(errorMsg)
 		          this.errorMessage = errorMsg
 			  })
-			  
+
 	},
-	
+
   findAllTrees: function(){
     console.log("yea i was here");
     AXIOS.get(`/trees`)
     .then(response => {
-    	
+
       console.log("inside axios");
       // JSON responses are automatically parsed.
       this.trees = response.data
@@ -722,7 +721,7 @@ methods: {
     st = tree.status;
     la = tree.latitude;
     lo = tree.longitude;
-    
+
     var contentString = '<table class="mapWindow">'  +
     '<tr>' +
     '<td>ID</td>' +
@@ -751,7 +750,6 @@ methods: {
     '</table>'+
     '<button>BUTT</button>'
 
-<<<<<<< HEAD
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
@@ -763,10 +761,6 @@ methods: {
       icon: image,
     });
 
-=======
->>>>>>> parent of c29ac699... Update background
-=======
->>>>>>> parent of c29ac699... Update background
     this.markers.push(marker)
     this.map.fitBounds(this.bounds.extend(position))
   });
