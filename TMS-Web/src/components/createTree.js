@@ -9,15 +9,15 @@ var AXIOS = axios.create({
   headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-
 export default {
   nameNew: 'tms',
   data () {
     return {
-    	value: currUser.userName,
+      value: currUser.userName,
       errorMessage: '',
       newSpecies: [],
       trees:[],
+      newTree: [],
       treeHeight: '',
       treeDiameter: '',
       datePlanted: '2018-01-01',
@@ -45,6 +45,11 @@ export default {
         { value: 'Cut', text: 'Cut' },
         { value: 'Diseased', text: 'Diseased' }
       ],
+      speciesName: '',
+      speciesCarbon: '',
+      speciesOxygen: '',
+      municipalityName: '',
+      municipalityId: ''
     }
   },
 
@@ -53,7 +58,8 @@ export default {
 	  //document.getElementById("mytest").value = currUser;
 	  AXIOS.get('/species/').then(response => {
 		  this.species = response.data
-		  this.speciesSelection.push({ value: null, text: 'Species', disabled: true })
+		  this.speciesSelection.push({ value: null, text: 'Species', disabled: true },
+				  {value: 'other', text: 'other'})
 		  for (var i=0; i<this.species.length;i++) {
 			  var name = this.species[i].name
 	    	  this.speciesSelection.push({ value: name, text: name })
@@ -65,7 +71,8 @@ export default {
 	      })
 	  AXIOS.get('/municipalities/').then(response => {
 		  this.municipalities = response.data
-		  this.municipalitiesSelection.push({value: null, text: 'Municipalities', disabled: true})
+		  this.municipalitiesSelection.push({value: null, text: 'Municipalities', disabled: true},
+				  {value: 'other', text: 'other'})
 	      for (var i=0; i<this.municipalities.length;i++) {
 			  var name = this.municipalities[i].name
 	    	  this.municipalitiesSelection.push( { value: name, text: name })
@@ -85,14 +92,13 @@ export default {
   },
   
   methods: {
-	  test: function(){
-	  window.location.href = "http://localhost:8087/#/home/";
-	  },
-	  createTree: function (height, diameter, datePlanted, x, y, description, species, municipality) {
+	  createTree: function (height, diameter, datePlanted, x, y, description, location, status, species, municipality) {
 		  AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x
-				  + '&y=' + y +'&description=' + description + '&species=' + species + '&municipality=' + municipality, {}, {})
+				  + '&y=' + y +'&description=' + description + '&location=' + location + '&status=' + status + '&species=' + species 
+				  + '&municipality=' + municipality, {}, {})
 		  .then(response => {
 			  this.trees.push(response.data)
+			  this.newTree.push(response.data)
 	          this.treeHeight = ''
 	          this.treeDiameter = ''
 	          this.datePlanted = '2018-01-01'
@@ -100,6 +106,8 @@ export default {
 	          this.yCoord = ''
 	          this.description = ''
 	          this.treeSpecies = null
+	          this.treeStatus = null
+	          this.locationType = null
 	          this.treeMunicipality = null
 	          this.errorMessage = ''
 		  }).catch(e => {
@@ -118,10 +126,26 @@ export default {
 		  })
 	  },
 	  createSpecies: function(speciesName, carbonCon, oxygenProd) {
-		  AXIOS.post('/species/' + speciesName + '?carbonConsumption=' + carbonCon + '&oxygenProduction=' + oxygenProd)
+		  AXIOS.post('/species/' + speciesName + '?&carbonConsumption=' + carbonCon + '&oxygenProduction=' + oxygenProd, {}, {})
 		  .then(response => {
-			  this.species.push(response.data)
-			  this.newSpecies.push(response.data)
+			  var sp = response.data
+			  this.species.push(sp)
+			  this.speciesSelection.push({value: sp.name, text: sp.name})
+			  this.speciesName = ''
+			  this.speciesCarbon = ''
+			  this.speciesOxygen = ''
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
+	          console.log(errorMsg)
+	          this.errorMessage = errorMsg
+		  })
+	  },
+	  createMunicipality: function(name, id) {
+		  AXIOS.post('/municipalities/' + name + '?&id=' + id, {}, {})
+		  .then(response => {
+			  this.municipalities.push(response.data)
+			  this.municipalityName = ''
+			  this.municipalityId = ''
 		  }).catch(e => {
 			  var errorMsg = e.response.data.message
 	          console.log(errorMsg)

@@ -29,12 +29,23 @@
           <b-form-select id="typeMenu" v-model="treeStatus" :options="statusSelection" class="mb-3"/>
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
-          <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, treeSpecies, treeMunicipality)">add tree</b-button>
+          <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, locationType, treeStatus, treeSpecies, treeMunicipality)">add tree</b-button>
           <b-button @click="findAllTrees()">getTrees</b-button>
-          <b-button @click="createSpecies(description, treeHeight, treeDiameter)">create species</b-button>
           <b-button @click=test()>transmit</b-button>
          
           <!-- <h5>{{ species }}</h5> -->
+          <!-- <h5>{{ trees }}</h5>  -->
+    </div>
+    <div v-if="treeSpecies === 'other'" id="createBox">
+    	<input type="text" v-model="speciesName" placeholder="Name">
+    	<input type="number" v-model="speciesCarbon" placeholder="Carbon Consumption">
+    	<input type="number" v-model="speciesOxygen" placeholder="Oxygen Production">
+    	<b-button @click="createSpecies(speciesName, speciesCarbon, speciesOxygen)">Add Species</b-button>
+    </div>
+    <div v-if="treeMunicipality === 'other'" id="createBox">
+    	<input type="text" v-model="municipalityName" placeholder="Name">
+    	<input type="number" v-model="municipalityId" placeholder="Municipality ID">
+    	<b-button @click="createMunicipality(municipalityName, municipalityId)">Add Municipality</b-button>
     </div>
 	
     <div id="trees">
@@ -131,12 +142,12 @@ li {
 input {
 	box-sizing: border-box;
 	width: 160px;
-  height: 40px;
+  	height: 40px;
 	/*padding: 1em;*/
 	border: 0.15em solid #808080;
 	border-radius: 0.5em;
 	text-align: center;
-  margin-top: 20px;
+  	margin-top: 20px;
 }
 .createTable{
   margin-left: 20px;
