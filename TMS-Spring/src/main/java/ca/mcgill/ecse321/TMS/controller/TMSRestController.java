@@ -78,8 +78,7 @@ public class TMSRestController {
 
 	
 	///////////////	HTTP REQUESTS ///////////////
-	
-	///////////////	TREES ///////////////
+	// TREES 
 	@PostMapping(value = {"/trees/"})
 	public TreeDto createTree(
 			@RequestParam double height,
@@ -158,7 +157,7 @@ public class TMSRestController {
 		return treeDto;
 	}
 	
-	///////////////	SPECIES ///////////////
+	// SPECIES 
 	@PostMapping(value = { "/species/{name}", "/species/{name}/" })
 	public SpeciesDto createSpecies(
 			@PathVariable("name") String name,
@@ -176,8 +175,14 @@ public class TMSRestController {
 		return species;
 	}
 	
+	// TREE STATUS
+	@GetMapping(value = {"/status", "/status/"})
+	public List<String> getAllTreeStatuses() {
+		return service.getTreeStatuses();
+	}
 	
-	///////////////	USERS ///////////////
+	
+	// USERS 
 	@PostMapping(value = { "/users/{name}", "/users/{name}/" })
 	public UserDto createUser(
 			@PathVariable("name") String name,
@@ -200,7 +205,7 @@ public class TMSRestController {
 	}
 	
 	
-	///////////////	MUNICIPALITIES ///////////////
+	// MUNICIPALITIES 
 	@GetMapping(value = { "/municipalities", "/municipalities/" })
 	public List<MunicipalityDto> findAllMunicipalities() {
 		List<MunicipalityDto> municipalities = Lists.newArrayList();
@@ -218,7 +223,7 @@ public class TMSRestController {
 	}
 	
 	
-	///////////////	FORECASTS ///////////////
+	// FORECASTS 
 	@GetMapping(value = {"/forecasts/"})
 	public int createForecast(
 			@RequestParam Integer[] treeIds,

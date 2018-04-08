@@ -3,9 +3,7 @@ package ca.mcgill.ecse321.TMS.service;
 import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -120,7 +118,18 @@ public class TMSService {
 		return null;
 	}
 	
+	
+	/////////////////////	STATUS  /////////////////////
+	public List<String> getTreeStatuses() {
+		Status[] statuses = TreeStatus.Status.values();
+		List<String> st = new ArrayList<String>();
+		for (Status s: statuses) {
+			st.add(s.toString());
+		}
+		return st;
+	}
 
+	
 	/////////////////////	ERROR HANDLING  /////////////////////
 	public String checkTreeInputException(double aHeight, double aDiameter, Date aDatePlanted,
 			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, double x, double y,
