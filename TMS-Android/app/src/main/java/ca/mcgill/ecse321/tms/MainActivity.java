@@ -202,25 +202,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(myDialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.CENTER;
 
         myDialog.getWindow().setAttributes(lp);
 
-        Button login = (Button) myDialog.findViewById(R.id.plant_tree);
+        Button register = (Button) myDialog.findViewById(R.id.plant_tree);
 
         EditText emailaddr = (EditText) myDialog.findViewById(R.id.email);
         EditText password = (EditText) myDialog.findViewById(R.id.password);
         myDialog.show();
 
-        login.setOnClickListener(new View.OnClickListener()
+        register.setOnClickListener(new View.OnClickListener()
         {
 
             @Override
             public void onClick(View v)
             {
-                //your login calculation goes here
+                //your register calculation goes here
             }
         });
 
@@ -237,8 +237,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+    public Dialog getMyDialog(){
+        return myDialog;
+    }
+
     public void setDate(int id, int d, int m, int y) {
-        TextView tv = (TextView) findViewById(id);
+        TextView tv = (TextView) myDialog.findViewById(id);
         tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
     }
 

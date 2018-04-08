@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="270dp"
+    android:layout_height="wrap_content"
     android:background="@color/colorBackground"
     android:orientation="vertical">
 
@@ -58,14 +58,14 @@
             android:textColor="#000000" />
 
         <TextView
-            android:layout_height="wrap_content"
+            android:id="@+id/plant_date"
             android:layout_width="wrap_content"
-            android:text="@string/date_planted"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/tree_date"
-            android:textColor="#000000"
             android:background="@color/colorClean"
-            android:onClick="showDatePickerDialog"/>
+            android:onClick="showDatePickerDialog"
+            android:text="@string/date_planted"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/label_status"
