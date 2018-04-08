@@ -1,10 +1,8 @@
 <template>
   <div id="hello">
     <div class="topnav">
-     <input type="hidden" id="mytest" v-model="value">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
      <br />
-      <h2 style="padding-top: 7px; padding-left: 15px; float: left ">hello {{value}}</h2>
      <br />
       
       <a href="#about">Forecast</a>
@@ -12,10 +10,11 @@
       <a class="active" href="/#/create/">Create</a>
       <a href="/#/home">Home</a>
     </div>
-    <h1 style="padding-top: 7px; padding-left: 15px; font-size: 15pt; float: left ">hello {{value}}</h1>
+    <h1 style="padding-top: 7px; padding-left: 15px; font-size: 15pt; float: left ">hello {{loggedUser}}</h1>
     <br /><br /><br />
     <h3>Add a Tree ♧ </h3>
     <br /><br />	
+   
     <div id="create">
           <input type="number" v-model="treeHeight" placeholder="Height">
           <input type="number" v-model="treeDiameter" placeholder="Diameter">
@@ -34,7 +33,7 @@
           <b-button @click=test()>transmit</b-button>
          
           <!-- <h5>{{ species }}</h5> -->
-          <h5>{{ trees }}</h5>
+           
     </div>
     <div v-if="treeSpecies === 'other'" id="createBox">
     	<input type="text" v-model="speciesName" placeholder="Name">

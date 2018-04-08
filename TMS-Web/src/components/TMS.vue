@@ -9,7 +9,7 @@
     </div>
     <br />
     <br />
-    <button @click="clear()">clear</button>
+    <button @click="updateTrees()">update trees</button>
     <button @click="testRequest()">testTrees</button>
     <div style="display:inline">
 

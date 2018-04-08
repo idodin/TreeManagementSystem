@@ -13,7 +13,7 @@ export default {
   nameNew: 'tms',
   data () {
     return {
-      value: currUser.userName,
+      loggedUser: currUser.userName,
       errorMessage: '',
       newSpecies: [],
       trees:[],
@@ -54,8 +54,7 @@ export default {
   },
 
   created: function () {
-	  console.log(currUser)
-	  //document.getElementById("mytest").value = currUser;
+	  //console.log(currUser)
 	  AXIOS.get('/species/').then(response => {
 		  this.species = response.data
 		  this.speciesSelection.push({ value: null, text: 'Species', disabled: true },
@@ -93,9 +92,11 @@ export default {
   
   methods: {
 	  createTree: function (height, diameter, datePlanted, x, y, description, location, status, species, municipality) {
+		  console.log("createTree called")
+		  console.log(this.loggedUser)
 		  AXIOS.post('/trees/?height=' + height + '&diameter=' + diameter + '&datePlanted=' + datePlanted + '&x=' + x
 				  + '&y=' + y +'&description=' + description + '&location=' + location + '&status=' + status + '&species=' + species 
-				  + '&municipality=' + municipality, {}, {})
+				  + '&municipality=' + municipality + '&loggedUser=' + this.loggedUser, {}, {})
 		  .then(response => {
 			  this.trees.push(response.data)
 			  this.newTree.push(response.data)

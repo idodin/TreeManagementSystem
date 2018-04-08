@@ -89,7 +89,8 @@ public class TMSRestController {
 	
 	///////////////	HTTP REQUESTS ///////////////
 	@PostMapping(value = {"/trees/"})
-	public TreeDto createTree(@RequestParam int height,
+	public TreeDto createTree(
+			@RequestParam int height,
 			@RequestParam int diameter, 
 			@RequestParam Date datePlanted, 
 			@RequestParam int x,
@@ -98,7 +99,8 @@ public class TMSRestController {
 			@RequestParam String location,
 			@RequestParam String status,
 			@RequestParam String species,
-			@RequestParam String municipality) throws InvalidInputException {	
+			@RequestParam String municipality,
+			@RequestParam String loggedUser) throws InvalidInputException {	
 		Species aSpecies = service.getSpeciesByName(species);
 		if (aSpecies == null) throw new InvalidInputException("Could not find species");
 		Municipality aMunicipality = service.getMunicipalityByName(municipality);
@@ -133,16 +135,38 @@ public class TMSRestController {
 		default:
 			throw new InvalidInputException("Must select location type");
 		}
-		User testUser;
-		if(treePLE.getUsers().size()==0) {
-			testUser = treePLE.addUser("Imad", "ecse321");
-		}
-		else {
-			testUser = treePLE.getUser(0);
-		}
-		Tree tree = service.createTree(height, diameter, datePlanted, aStatus, aSpecies, testUser, aMunicipality, x, y, description, aLocationType);
+		User user=service.getUserByName(loggedUser);
+		Tree tree = service.createTree(height, diameter, datePlanted, aStatus, aSpecies, user, aMunicipality, x, y, description, aLocationType);
 		System.out.println(tree.getId());
 		return convertToDto(tree);
+	}
+	
+	@PostMapping(value = { "/updateTrees", "/updateTrees/" })
+	public List<TreeDto> updateTree(
+		@RequestParam List<Integer> treeIDs,
+		@RequestParam String status) throws InvalidInputException{
+		System.out.println("in controller "+treeIDs);
+		TreeStatus aStatus=new TreeStatus(treePLE);
+		switch(status.toLowerCase()) {
+		case "healthy": 
+			aStatus.setStatus(Status.Healthy);
+			break;
+		case "diseased":
+			aStatus.setStatus(Status.Diseased);
+			break;
+		case "cut": 
+			aStatus.setStatus(Status.Cut);
+			break;
+		default:
+			treePLE.removeStatus(aStatus);
+			throw new InvalidInputException("Must select status");
+		}
+		List <Tree> trees = service.updateTrees(treeIDs, aStatus.getStatus());
+		List<TreeDto> treeDtos=new ArrayList();
+		for(Tree tree: trees) {
+			treeDtos.add(convertToDto(tree));
+		}
+			return treeDtos;
 	}
 
 	@GetMapping(value = { "/trees", "/trees/" })
@@ -213,6 +237,8 @@ public class TMSRestController {
 			@RequestParam int id) throws InvalidInputException {
 		return convertToDto(service.createMunicipality(name, id));
 	}
+	
+	
 	
 	
 	///////////////	DTO CONVERSION METHODS ///////////////

@@ -36,7 +36,11 @@ public class TMSService {
 			Date aDatePlanted, TreeStatus aTreeStatus,
 			Species aSpecies, User aLocal, Municipality aMunicipality,
 			int x, int y, String description, LocationType locationType) throws InvalidInputException{
-		
+		List<Tree> trees= tp.getTrees();
+		for(Tree aTree: trees) {
+			if( (x==aTree.getTreeLocation().getX()) && (y==aTree.getTreeLocation().getY()) ) {
+				throw new InvalidInputException("A tree already exists at the specified coordinates");			}
+		}
 		Date aDateAdded = new Date(Calendar.getInstance().getTime().getTime());
 		description = checkTreeInputException(aHeight, aDiameter, aDatePlanted, aTreeStatus, aSpecies, aLocal,
 				aMunicipality, x, y, description, locationType, aDateAdded);
@@ -339,15 +343,30 @@ public class TMSService {
 		return newUser;
 	}
 	
+	public User getUserByName(String name) {
+		List<User> users = tp.getUsers();
+		for (User user: users) {
+			if (user.getUsername().equals(name)) return user;
+		}
+		return null;
+	}
 	public void loadFile(File input) throws InvalidInputException{
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void updateTree(Tree tree, int i, int j, Date newDatePlanted, TreeStatus newStatus, Species newSpecies,
-			User newUser, Municipality newMunicipality, int k, int l, String string, LocationType newLocationType) throws InvalidInputException{
-		// TODO Auto-generated method stub
-		
+	public List<Tree> updateTrees(List<Integer> treeIDs, Status status) throws InvalidInputException{
+		List<Tree> trees=tp.getTrees();
+		for(int id: treeIDs) {
+			for(Tree tree: trees) {
+				if(id==tree.getId()) {
+					TreeStatus aTreeStatus= tree.getTreeStatus();
+					aTreeStatus.setStatus(status);
+				}
+			}
+		}
+		System.out.println("in service  " +trees);
+		return trees;
 	}
 
 }
