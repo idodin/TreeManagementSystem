@@ -9,10 +9,9 @@
     </div>
     <br />
     <br />
-    <button @click="clear()">clear</button>
-    <button @click="testRequest()">testTrees</button>
+    <button style="float:left"@click="clear()">clear</button>
+    <button style="float:left"@click="testRequest()">testTrees</button>
     <div style="display:inline">
-
       <b-card id="card">
         <b-tabs>
           <b-tab title="City" active>
@@ -43,9 +42,9 @@
       </b-card>
       <br />
       <div id="list">
-        <template>
+
           <b-table striped hover :items="filterTrees" :fields="fields"></b-table>
-        </template>
+
         <!-- <table>
 
         <tr v-for="tree in trees">
@@ -59,6 +58,8 @@
 </div>
 <br />
 </div>
+<button @click="forecasteTrees()">forecaste trees</button>
+<h5>{{rectTrees}}</h5>
 <div class="google-map" v-bind:id="mapName"></div>
 </div>
 </template>

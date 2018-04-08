@@ -14,7 +14,15 @@ export default {
   data () {
     return {
       user: '',
+      ne : '',
+      sw : '',
       userType: '',
+      rectBounds: {
+        north: 45.695066,
+        south: 45.495619,
+        east: -73.578198,
+        west: -73.608229
+      },
       newTree: '',
       requestTrees: '',
       newLat: '',
@@ -104,18 +112,176 @@ export default {
       longitude: -73.584037
     }],
     map: null,
+    rectangle: '',
     filterTrees: [],
     bounds: null,
-    markers: []
+    markers: [],
+    rectTrees: []
+  }
+},
+created: function () {
+
+  AXIOS.get(`/trees`)
+  .then(response => {
+    // JSON responses are automatically parsed.
+    this.requestTrees = response.data;
+  })
+  .catch(e => {
+    this.listTreesError = e;
+  });
+},
+methods: {
+  findAllTrees: function(){
+    console.log("yea i was here");
+    AXIOS.get(`/trees`)
+    .then(response => {
+      console.log("inside axios");
+      // JSON responses are automatically parsed.
+      this.trees = response.data
+    })
+    .catch(e => {
+      this.listTreesError = e;
+    });
+  },
+
+  pins : function(tree){
+    var image;
+    if(tree.status == 'diseased'){
+      image = '../static/forest_black.png'
+    }else if(tree.status == 'to be cut'){
+      image = '../static/forest_purple.png'
+    }else if(tree.status == 'cut down'){
+      image = '../static/forest_red.png'
+    }else{
+      image = '../static/forest_green.png'
+    }
+
+    var id, sp, ci, st, la, lo;
+    id = tree.id;
+    sp = tree.species;
+    ci = tree.city;
+    st = tree.status;
+    la = tree.latitude;
+    lo = tree.longitude;
+
+    var contentString = '<table class="mapWindow">'  +
+    '<tr>' +
+    '<td>ID</td>' +
+    '<td>'+id+'</td>' +
+    '</tr>' +
+    '<tr>'+
+    '<td>Species</td>'+
+    '<td>' + sp + '</td>' +
+    '</tr>' +
+    '<tr>' +
+    '<td>City</td>' +
+    '<td>' + ci + '</td>' +
+    '</tr>' +
+    '<tr>' +
+    '<td>Status</td>' +
+    '<td>' + st + '</td>' +
+    '</tr>' +
+    '<tr>' +
+    '<td>Longitude</td>' +
+    '<td>' + lo + '</td>' +
+    '</tr>' +
+    '<tr>' +
+    '<td>Latitude</td>' +
+    '<td>' + '      '+la + '</td>' +
+    '</tr>' +
+    '</table>'+
+    '<button>BUTT</button>'
+
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
+    const position = new google.maps.LatLng(tree.latitude, tree.longitude);
+    const marker = new google.maps.Marker({
+      position,
+      map: this.map,
+      icon: image,
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(this.map, marker);
+    });
+
+    this.markers.push(marker)
+    this.map.fitBounds(this.bounds.extend(position))
+  },
+  emptyList : function() {
+    this.ids = [];
+  },
+  testM : function() {
+    console.log("testing mounted")
+  },
+  printThis: function(){
+    for(var k = 0; k<this.markers.length; k++){
+      this.markers[k].setMap(null);
+    }
+    this.markers = [];
+    for(var i = 0; i<this.trees.length; i++){
+      if(this.ids.includes(this.trees[i].city) || this.ids.includes(this.trees[i].species) || this.ids.includes(this.trees[i].status)){
+        this.pins(this.trees[i]);
+      }
+    }
+  },
+  listTrees: function(){
+    this.filterTrees = [];
+    this.trees.forEach((tree) => {
+      if(this.ids.includes(tree.city) || this.ids.includes(tree.species) || this.ids.includes(tree.status)){
+        this.filterTrees.push(tree);
+      }
+    });
+  },
+  clear: function(){
+    this.filterTrees = [];
+    this.ids = [];
+  },
+  forecasteTrees: function (){
+    this.rectTrees = [];
+    var ne = this.rectangle.getBounds().getNorthEast();
+    var sw = this.rectangle.getBounds().getSouthWest();
+
+    this.filterTrees.forEach((tree) => {
+      if(tree.latitude < ne.lat() && tree.latitude > sw.lat() && tree.longitude < ne.lng() && tree.longitude > sw.lng()){
+        console.log(tree.id)
+        this.rectTrees.push(tree);
+      }
+
+    });
   }
 },
 
+computed: {
+  cities () {
+    return [...new Set(this.trees.map(p => p.city))]
+  },
+  speciess (){
+    return [...new Set(this.trees.map(p => p.species))]
+  },
+  statuses (){
+    return [...new Set(this.trees.map(p => p.status))]
+  }
+},
+watch: {
+  ids : function(val){
+    this.printThis();
+    this.listTrees();
+  },
+  rectangle : function(val){
+    console.log("testing watch")
+  }
+},
 mounted: function () {
   this.filterTrees = this.trees;
   this.newIDs = this.ids;
   this.bounds = new google.maps.LatLngBounds();
   const element = document.getElementById(this.mapName)
   const mapCentre = this.markerCoordinates[0]
+
+
   const options = {
     center: new google.maps.LatLng(mapCentre.latitude, mapCentre.longitude),
     styles: [
@@ -377,6 +543,19 @@ mounted: function () {
     ]
   }
   this.map = new google.maps.Map(element, options);
+
+  this.rectangle = new google.maps.Rectangle({
+    bounds: this.rectBounds,
+    editable: true,
+    draggable: true
+  });
+  this.rectangle.setMap(this.map);
+
+  this.rectangle.addListener('bounds_changed', function() {
+
+  });
+
+
   this.filterTrees.forEach((tree) => {
     var image;
     if(tree.status == 'diseased'){
@@ -443,157 +622,6 @@ mounted: function () {
     this.markers.push(marker)
     this.map.fitBounds(this.bounds.extend(position))
   });
-},
-
-created: function () {
-
-  AXIOS.get(`/trees`)
-  .then(response => {
-    // JSON responses are automatically parsed.
-    this.requestTrees = response.data;
-  })
-  .catch(e => {
-    this.listTreesError = e;
-  });
-},
-methods: {
-  findAllTrees: function(){
-    console.log("yea i was here");
-    AXIOS.get(`/trees`)
-    .then(response => {
-      console.log("inside axios");
-      // JSON responses are automatically parsed.
-      this.trees = response.data
-    })
-    .catch(e => {
-      this.listTreesError = e;
-    });
-  },
-
-  pins : function(tree){
-    var image;
-    if(tree.status == 'diseased'){
-      image = '../static/forest_black.png'
-    }else if(tree.status == 'to be cut'){
-      image = '../static/forest_purple.png'
-    }else if(tree.status == 'cut down'){
-      image = '../static/forest_red.png'
-    }else{
-      image = '../static/forest_green.png'
-    }
-
-    var id, sp, ci, st, la, lo;
-    id = tree.id;
-    sp = tree.species;
-    ci = tree.city;
-    st = tree.status;
-    la = tree.latitude;
-    lo = tree.longitude;
-    
-    var contentString = '<table class="mapWindow">'  +
-    '<tr>' +
-    '<td>ID</td>' +
-    '<td>'+id+'</td>' +
-    '</tr>' +
-    '<tr>'+
-    '<td>Species</td>'+
-    '<td>' + sp + '</td>' +
-    '</tr>' +
-    '<tr>' +
-    '<td>City</td>' +
-    '<td>' + ci + '</td>' +
-    '</tr>' +
-    '<tr>' +
-    '<td>Status</td>' +
-    '<td>' + st + '</td>' +
-    '</tr>' +
-    '<tr>' +
-    '<td>Longitude</td>' +
-    '<td>' + lo + '</td>' +
-    '</tr>' +
-    '<tr>' +
-    '<td>Latitude</td>' +
-    '<td>' + '      '+la + '</td>' +
-    '</tr>' +
-    '</table>'+
-    '<button>BUTT</button>'
-
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString
-    });
-
-
-    const position = new google.maps.LatLng(tree.latitude, tree.longitude);
-    const marker = new google.maps.Marker({
-      position,
-      map: this.map,
-      icon: image,
-    });
-
-    marker.addListener('click', function() {
-      infowindow.open(this.map, marker);
-    });
-
-    this.markers.push(marker)
-    this.map.fitBounds(this.bounds.extend(position))
-  },
-  emptyList : function() {
-    this.ids = [];
-  },
-  printThis: function(){
-    console.log("this is for template change")
-    for(var k = 0; k<this.markers.length; k++){
-      this.markers[k].setMap(null);
-    }
-
-    for(var i = 0; i<this.trees.length; i++){
-      if(this.ids.includes(this.trees[i].city) || this.ids.includes(this.trees[i].species) || this.ids.includes(this.trees[i].status)){
-        this.pins(this.trees[i]);
-      }
-    }
-  },
-  listTrees: function(){
-    this.filterTrees = [];
-    this.trees.forEach((tree) => {
-      if(this.ids.includes(tree.city) || this.ids.includes(tree.species) || this.ids.includes(tree.status)){
-        this.filterTrees.push(tree);
-      }
-    });
-  },
-  clear: function(){
-    this.filterTrees = [];
-    this.ids = [];
-  },
-  testRequest: function (){
-    console.log("outide axios");
-    AXIOS.get(`/trees`)
-    .then(response => {
-      console.log("inside axios");
-      // JSON responses are automatically parsed.
-      this.requestTrees = response.data;
-    })
-    .catch(e => {
-      this.listTreesError = e;
-    });
-  }
-},
-
-computed: {
-  cities () {
-    return [...new Set(this.trees.map(p => p.city))]
-  },
-  speciess (){
-    return [...new Set(this.trees.map(p => p.species))]
-  },
-  statuses (){
-    return [...new Set(this.trees.map(p => p.status))]
-  }
-},
-watch: {
-  ids : function(val){
-    this.printThis();
-    this.listTrees();
-  }
 }
 //...
 }
