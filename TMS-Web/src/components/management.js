@@ -760,7 +760,6 @@ methods: {
       map: this.map,
       icon: image,
     });
-
     this.markers.push(marker)
     this.map.fitBounds(this.bounds.extend(position))
   });
