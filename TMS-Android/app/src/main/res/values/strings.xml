@@ -32,4 +32,7 @@
     <string name="enter_date">Date Planted:</string>
     <string name="date_planted">01-01-2010</string>
     <string name="select_tree_status">Select Tree Status</string>
+    <string name="refresh_lists">Refresh Lists</string>
+    <string name="select_landuse">Select LandUse</string>
+    <string name="enter_description">Enter Description</string>
 </resources>

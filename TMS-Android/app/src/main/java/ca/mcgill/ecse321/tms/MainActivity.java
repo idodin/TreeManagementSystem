@@ -26,27 +26,52 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.entity.mime.Header;
+import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    //Error
     private String error = null;
+
+    //Navigation Pane
     private DrawerLayout mDrawerLayout;
+
+    // Dialog Box
     private Dialog myDialog;
 
+    //Logged in User
+    private String username;
+
+    // Spinner Lists
     private List<String> speciesNames = new ArrayList<>();
     private ArrayAdapter<String> speciesAdapter;
     private List<String> municipalityNames = new ArrayList<>();
     private ArrayAdapter<String> municipalityAdapter;
+    private List<String> statusNames = new ArrayList<>();
+    private ArrayAdapter<String> statusAdapter;
+    private List<String> landuseNames = new ArrayList<>();
+    private ArrayAdapter<String> landuseAdapter;
+
+    //Map
+    private GoogleMap myMap;
+
+    // Marker list
+    private List<MarkerOptions> markers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +85,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        refreshErrorMessage();
 
-        Spinner speciesSpinner = (Spinner) findViewById(R.id.species_spinner);
-        Spinner municipalitySpinner = (Spinner) findViewById(R.id.municipality_spinner);
-        Spinner locationSpinner = (Spinner) findViewById(R.id.location_spinner);
-        Spinner statusSpinner = (Spinner) findViewById(R.id.status_spinner);
-
-
-
+        // Set-up Navigation Drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        //TODO Set Header Text
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.header_text)).setText("Welcome, user!");
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -84,8 +104,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         ConstraintLayout mapLayout = findViewById(R.id.content_map);
                         ConstraintLayout homeLayout = findViewById(R.id.content_home);
                         ConstraintLayout listLayout = findViewById(R.id.content_list_tree);
+                        // Select visible content
                         switch (menuItem.getItemId()){
                             case  R.id.map :
+                                        generateMarkers();
                                         mapLayout.setVisibility(View.VISIBLE);
                                         homeLayout.setVisibility(View.GONE);
                                         listLayout.setVisibility(View.GONE);
@@ -112,15 +134,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
 
         navigationView.getMenu().getItem(0).setChecked(true);
+
     }
 
-
-    //TODO onMapClick should trigger pop up menu
-    // Popup menu should allow user to issue http request
-    // marker should only be added on http request success
     @Override
     public void onMapReady(final GoogleMap googleMap){
+        myMap = googleMap;
+        generateMarkers();
         LatLng sydney = new LatLng(-33.852, 151.211);
+        
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon)));
         googleMap.addMarker(new MarkerOptions().position(sydney)
@@ -131,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple)));
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconblack)));
+
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -138,12 +161,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onMapClick(LatLng point) {
 
-                callLoginDialog();
+                callRegisterDialog(point.latitude, point.latitude);
 
-                MarkerOptions marker = new MarkerOptions().position(
-                        new LatLng(point.latitude, point.longitude)).title("New Marker");
-
-                googleMap.addMarker(marker);
+                setSpinners();
 
                 System.out.println(point.latitude+"---"+ point.longitude);
             }
@@ -151,15 +171,97 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public void addParticipant(View v) {
+    private void setSpinners(){
+        // Add adapters to spinner lists and refresh spinner content
+        Spinner speciesSpinner = (Spinner) myDialog.findViewById(R.id.species_spinner);
+        Spinner municipalitySpinner = (Spinner) myDialog.findViewById(R.id.municipality_spinner);
+        Spinner statusSpinner = (Spinner) myDialog.findViewById(R.id.status_spinner);
+        Spinner landuseSpinner = (Spinner) myDialog.findViewById(R.id.landuse_spinner);
+
+        speciesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, speciesNames);
+        speciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        speciesSpinner.setAdapter(speciesAdapter);
+
+        municipalityAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, municipalityNames);
+        municipalityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        municipalitySpinner.setAdapter(municipalityAdapter);
+
+        statusAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, statusNames);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        statusSpinner.setAdapter(statusAdapter);
+
+        landuseAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, landuseNames);
+        landuseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        landuseSpinner.setAdapter(landuseAdapter);
+
+        // Get initial content for spinners
+        refreshLists(myDialog.getCurrentFocus());
+    }
+
+
+    public void plantTree(View v, double lat, double longt) {
+
+        final double latitude = lat;
+        final double longitude = longt;
+
         error = "";
-        final TextView tv = (TextView) findViewById(R.id.password);
-        HttpUtils.post("participants/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+        TextView tv = (TextView) myDialog.findViewById(R.id.edit_height);
+        String height = tv.getText().toString();
+
+        tv = (TextView) myDialog.findViewById(R.id.edit_diameter);
+        String diameter = tv.getText().toString();
+
+        tv = (TextView) myDialog.findViewById(R.id.edit_description);
+        String description = tv.getText().toString();
+
+        tv = (TextView) myDialog.findViewById(R.id.plant_date);
+        String text = tv.getText().toString();
+        String comps[] = text.split("-");
+
+        int year = Integer.parseInt(comps[2]);
+        int month = Integer.parseInt(comps[1]);
+        int day = Integer.parseInt(comps[0]);
+
+        Spinner speciesSpinner = (Spinner) myDialog.findViewById(R.id.species_spinner);
+        Spinner municipalitySpinner = (Spinner) myDialog.findViewById(R.id.municipality_spinner);
+        Spinner statusSpinner = (Spinner) myDialog.findViewById(R.id.status_spinner);
+        Spinner landuseSpinner = (Spinner) myDialog.findViewById(R.id.landuse_spinner);
+
+        final String speciesText = speciesSpinner.getSelectedItem().toString();
+        final String municipalityText = municipalitySpinner.getSelectedItem().toString();
+        final String statusText = statusSpinner.getSelectedItem().toString();
+        final String landuseText = landuseSpinner.getSelectedItem().toString();
+
+        RequestParams rp = new RequestParams();
+
+        rp.add("height", speciesText);
+        rp.add("event", municipalityText);
+        NumberFormat formatter = new DecimalFormat("00");
+        rp.add("date", year + "-" + formatter.format(month) + "-" + formatter.format(day));
+        rp.add("x", Double.toString(longt));
+        rp.add("y", Double.toString(lat));
+        rp.add("description", description);
+        rp.add("location", landuseText);
+        rp.add("status", statusText);
+        rp.add("species", speciesText);
+        rp.add("municipality", municipalityText);
+        rp.add("loggedUser", username);
+
+        HttpUtils.post("trees/", rp, new JsonHttpResponseHandler() {
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 refreshErrorMessage();
-                tv.setText("");
+                if(statusCode==200){
+                    MarkerOptions marker = new MarkerOptions().position(
+                            new LatLng(latitude, longitude)).title(username+"'s " + speciesText);
+
+                    myDialog.dismiss();
+                    myMap.addMarker(marker);
+                }
             }
 
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 try {
                     error += errorResponse.get("message").toString();
@@ -167,8 +269,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     error += e.getMessage();
                 }
                 refreshErrorMessage();
+                ((TextView) myDialog.findViewById(R.id.error_message_dialog)).setText("error");
+                myDialog.findViewById(R.id.error_message_dialog).setVisibility(View.VISIBLE);
             }
         });
+
+        // Set back the spinners to the initial state after posting the request
+        speciesSpinner.setSelection(0);
+        municipalitySpinner.setSelection(0);
+        statusSpinner.setSelection(0);
+        landuseSpinner.setSelection(0);
+
+        refreshErrorMessage();
+
     }
 
     @Override
@@ -181,17 +294,54 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
+    //TODO set icons based on status
+    private void generateMarkers() {
+
+        HttpUtils.get("trees", new RequestParams(), new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                markers.clear();
+                for( int i = 0; i < response.length(); i++){
+                    try {
+                        int x = response.getJSONObject(i).getInt("x");
+                        int y = response.getJSONObject(i).getInt("y");
+
+                        MarkerOptions marker = new MarkerOptions().position(
+                                new LatLng(x, y)).title("New Marker");
+                        markers.add(marker);
+
+                        myMap.addMarker(marker);
+                    } catch (Exception e) {
+                        error += e.getMessage();
+                    }
+                    refreshErrorMessage();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+                refreshErrorMessage();
+            }
+        });
+
+    }
 
     private void refreshErrorMessage() {
 //        // set the error message
-//        TextView tvError = (TextView) findViewById(R.id.password);
-//        tvError.setText(error);
-//
-//        if (error == null || error.length() == 0) {
-//            tvError.setVisibility(View.GONE);
-//        } else {
-//            tvError.setVisibility(View.VISIBLE);
-//        }
+        TextView tvError = (TextView) myDialog.findViewById(R.id.error_message_dialog);
+        tvError.setText(error);
+
+        if (error == null || error.length() == 0) {
+            tvError.setVisibility(View.GONE);
+        } else {
+            tvError.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -202,8 +352,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    private void callLoginDialog()
+    private void callRegisterDialog(double lat, double longt)
     {
+        final double latitude = lat;
+        final double longitude = longt;
         myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.plant_dialog);
         myDialog.setCancelable(false);
@@ -218,6 +370,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         myDialog.getWindow().setAttributes(lp);
 
         Button register = (Button) myDialog.findViewById(R.id.plant_tree);
+        Button refreshLists = (Button) myDialog.findViewById(R.id.refresh_list);
 
         EditText emailaddr = (EditText) myDialog.findViewById(R.id.email);
         EditText password = (EditText) myDialog.findViewById(R.id.password);
@@ -229,10 +382,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v)
             {
-                //your register calculation goes here
+                plantTree(v, latitude , longitude);
+
             }
         });
-
 
     }
 
@@ -273,6 +426,48 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         rtn.putInt("year", year);
 
         return rtn;
+    }
+
+    public void refreshLists(View view) {
+        refreshList(speciesAdapter ,speciesNames, "species");
+        refreshList(municipalityAdapter, municipalityNames, "municipalities");
+        refreshList(statusAdapter, statusNames, "statuses");
+        refreshList(landuseAdapter, landuseNames, "landuse");
+    }
+
+
+
+    private void refreshList(final ArrayAdapter<String> adapter, final List<String> names, String restFunctionName) {
+        names.add("Please select...");
+        adapter.notifyDataSetChanged();
+
+        HttpUtils.get(restFunctionName, new RequestParams(), new JsonHttpResponseHandler() {
+
+
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                names.clear();
+                names.add("Please select...");
+                for( int i = 0; i < response.length(); i++){
+                    try {
+                        names.add(response.getJSONObject(i).getString("name"));
+                    } catch (Exception e) {
+                        error += e.getMessage();
+                    }
+                    refreshErrorMessage();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+                refreshErrorMessage();
+            }
+        });
     }
 
 }
