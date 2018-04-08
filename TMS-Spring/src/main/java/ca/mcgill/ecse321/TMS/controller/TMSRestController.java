@@ -102,7 +102,7 @@ public class TMSRestController {
 //			testSpecies = treePLE.getSpecies(0);
 //		}
 		if(treePLE.getUsers().size()==0) {
-			testUser = treePLE.addUser("Imad");
+			testUser = treePLE.addUser("Imad", "ecse321");
 		}
 		else {
 			testUser = treePLE.getUser(0);
@@ -151,6 +151,25 @@ public class TMSRestController {
 		return convertToDto(service.createSpecies(name, carbonConsumption, oxygenProduction));
 	}
 	
+	@PostMapping(value = { "/users/{name}", "/users/{name}/" })
+	public UserDto createUser(
+			@PathVariable("name") String name,
+			@RequestParam String password,
+			@RequestParam String inputToken) throws InvalidInputException {
+		String token="123";
+		if(token.equals(inputToken)) {
+			return convertToDto(service.register(name, password, true));
+		}
+		else {
+			return convertToDto(service.register(name, password, false));
+		}
+	}
+	@GetMapping(value = { "/user/{name}", "/user/{name}/" })
+	public UserDto login(
+			@PathVariable("name") String name,
+			@RequestParam String password) throws InvalidInputException {
+		return convertToDto(service.login(name, password));
+	}
 	@GetMapping(value = { "/species", "/species/" })
 	public List<SpeciesDto> findAllSpecies() {
 		List<SpeciesDto> species = Lists.newArrayList();

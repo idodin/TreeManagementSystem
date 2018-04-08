@@ -472,9 +472,9 @@ public class TreePLE
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public User addUser(String aUsername)
+  public User addUser(String aUsername, String aPassword)
   {
-    return new User(aUsername, this);
+    return new User(aUsername, aPassword, this);
   }
 
   public boolean addUser(User aUser)

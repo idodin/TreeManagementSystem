@@ -68,6 +68,7 @@ class Species {
 
 class User {
   unique String username;
+  String password;
   enum UserType {scientist, local, ubranDecisionMaker}
   lazy UserType userType;
 }

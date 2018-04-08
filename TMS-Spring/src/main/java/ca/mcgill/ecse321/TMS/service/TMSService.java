@@ -17,6 +17,7 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+import ca.mcgill.ecse321.TMS.model.User.UserType;
 import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
 
@@ -283,7 +284,43 @@ public class TMSService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	public User login(String username, String password) throws InvalidInputException{
+		if( ("".equals(username.trim())) || (password.trim()=="") ) {
+			throw new InvalidInputException("Please enter a username and password");
+		}
+		List<User> users= tp.getUsers();
+		for(User user: users) {
+			if(username.equals(user.getUsername())) {
+				if(password.equals(user.getPassword())){
+					return user;
+				}
+				else {
+					throw new InvalidInputException("Please re-enter your password");
+				}
+			}
+		}
+		throw new InvalidInputException("username not found");
+	}
+	
+	public User register(String username, String password, Boolean isScientist) throws InvalidInputException{
+		if( (username.trim()=="") || (password.trim()=="") ) {
+			throw new InvalidInputException("Please enter a username and password");
+		}
+		List<User> users= tp.getUsers();
+		for(User user: users) {
+			if(username.equals(user.getUsername())) {
+				throw new InvalidInputException("username already exists, please try another one");
+			}
+		}
+		User newUser=tp.addUser(username, password);
+		if(isScientist) {
+			newUser.setUserType(UserType.Scientist);
+		}
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return newUser;
+	}
+	
 	public void loadFile(File input) throws InvalidInputException{
 		// TODO Auto-generated method stub
 		
