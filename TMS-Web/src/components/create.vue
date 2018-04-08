@@ -30,10 +30,10 @@
           <br /><br />
           <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, locationType, treeStatus, treeSpecies, treeMunicipality)">add tree</b-button>
           <b-button @click="findAllTrees()">getTrees</b-button>
-          <b-button @click=test()>transmit</b-button>
+          <b-button @click=createForecast(treeStatus)>forecast</b-button>
          
-          <!-- <h5>{{ species }}</h5> -->
-           
+
+          <h5>{{ forecastNum }}</h5>
     </div>
     <div v-if="treeSpecies === 'other'" id="createBox">
     	<input type="text" v-model="speciesName" placeholder="Name">

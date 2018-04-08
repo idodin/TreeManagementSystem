@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.TMS.service;
 
 import java.io.File;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -32,10 +33,10 @@ public class TMSService {
 	}
 	
 	/////////////////////	TREES  /////////////////////
-	public Tree createTree(int aHeight, int aDiameter,
+	public Tree createTree(double aHeight, double aDiameter,
 			Date aDatePlanted, TreeStatus aTreeStatus,
 			Species aSpecies, User aLocal, Municipality aMunicipality,
-			int x, int y, String description, LocationType locationType) throws InvalidInputException{
+			double x, double y, String description, LocationType locationType) throws InvalidInputException{
 		List<Tree> trees= tp.getTrees();
 		for(Tree aTree: trees) {
 			if( (x==aTree.getTreeLocation().getX()) && (y==aTree.getTreeLocation().getY()) ) {
@@ -58,6 +59,27 @@ public class TMSService {
 	
 	public List<Tree> findAllTrees(){
 		return tp.getTrees();
+	}
+	
+	public List<Tree> findTreesById(Integer[] treeIds) throws InvalidInputException{
+		List<Tree> trees = new ArrayList<Tree>();
+		boolean wasAdded = false;
+		for(Integer i: treeIds) {
+			for (Tree t: tp.getTrees()) {
+				if (t.getId() == i) {
+					trees.add(t);
+					wasAdded = true;
+				}
+			}
+			if(wasAdded) wasAdded = false;
+			else throw new InvalidInputException("One or more trees do not exist!");
+		}
+		return trees;
+	}
+	
+	public void updateTree(Tree tree, int i, int j, Date newDatePlanted, TreeStatus newStatus, Species newSpecies,
+			User newUser, Municipality newMunicipality, int k, int l, String string, LocationType newLocationType) throws InvalidInputException{
+		// TODO Auto-generated method stub
 	}
 	
 	
@@ -100,89 +122,88 @@ public class TMSService {
 		return null;
 	}
 	
-
-	/////////////////////	OTHER  /////////////////////
 	
-	public String checkTreeInputException(int aHeight, int aDiameter, Date aDatePlanted,
-			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, int x, int y,
+	/////////////////////	STATUS  /////////////////////
+	public List<String> getTreeStatuses() {
+		Status[] statuses = TreeStatus.Status.values();
+		List<String> st = new ArrayList<String>();
+		for (Status s: statuses) {
+			st.add(s.toString());
+		}
+		return st;
+	}
+
+	
+	/////////////////////	ERROR HANDLING  /////////////////////
+	public String checkTreeInputException(double aHeight, double aDiameter, Date aDatePlanted,
+			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, double x, double y,
 			String description, LocationType locationType, Date aDateAdded) throws InvalidInputException {
+		
 		String errormsg = "";
 		Boolean errorthrown = false;
-		
-
-		if (aHeight < 0 || aDiameter < 0 || x < 0 || y < 0) {
-			errormsg = "Cannot pass negative integer! ";
+		if (aHeight < 0 || aDiameter < 0) {
+			errormsg = "Height and diameter cannot be negative! ";
 			errorthrown = true;
 		}
-		
+		if ((x < -180 || x > 180) || (y < -180 || y > 180)) {
+			errormsg += "Invalid coordinates! ";
+			errorthrown = true;
+		}
 		if (description == null || description.trim().length()==0) {
 			description = "";
 		}
-		
 		if (aDatePlanted.after(aDateAdded)) {
-			errormsg = errormsg + "Cannot plant tree in the future! ";
+			errormsg += "Cannot plant tree in the future! ";
 			errorthrown = true;
 		}
-		
 		if (aTreeStatus == null) {
-			errormsg = errormsg + "Status needs to be selected for registration! ";
+			errormsg += "Status needs to be selected for registration! ";
 			errorthrown = true;
 		}
-		
 		if (aSpecies == null) {
-			errormsg = errormsg + "Species needs to be selected for registration! ";
+			errormsg += "Species needs to be selected for registration! ";
 			errorthrown = true;
 		}
-		
 		if (aLocal == null) {
-			errormsg = errormsg + "User needs to be logged in for registration! ";
+			errormsg += "User needs to be logged in for registration! ";
 			errorthrown = true;
 		}
-		
 		if (aMunicipality == null) {
-			errormsg = errormsg + "Municipality needs to be selected for registration! ";
+			errormsg += "Municipality needs to be selected for registration! ";
 			errorthrown = true;
 		}
-		
 		if(errorthrown) {
 			errormsg = errormsg.trim();
 			throw new InvalidInputException(errormsg);
 		}
-		
 		if (tp.indexOfStatus(aTreeStatus) == -1 ){
 			errormsg = errormsg + "Status must exist! ";
 			errorthrown = true;
 		}
-		
 		if (tp.indexOfSpecies(aSpecies) == -1) {
 			errormsg = errormsg + "Species must exist! ";
 			errorthrown = true;
 		}
-		
 		if (tp.indexOfUser(aLocal) == -1) {
 			errormsg = errormsg + "User must be registered! ";
 			errorthrown = true;
 		}
-		
 		if (tp.indexOfMunicipality(aMunicipality) == -1) {
 			errormsg = errormsg + "Municipality must exist! ";
 			errorthrown = true;
 		}
-		
 		if(locationType instanceof Park) {
 			if(tp.indexOfPark((Park)locationType)==-1){
 				errormsg = errormsg + "Park must exist! ";
 				errorthrown = true;
 			}
 		}
-		
 		if(locationType instanceof Street) {
 			if(tp.indexOfStreet((Street)locationType) == -1) {
 				errormsg = errormsg + "Street must exist! ";
 				errorthrown = true;
 			}
 		}
-		
 		if(errorthrown) {
 			errormsg = errormsg.trim();
 			throw new InvalidInputException(errormsg);
@@ -210,7 +231,7 @@ public class TMSService {
 		return total;
 	}
 	
-	public int calculateCarbonConsumption(List<Tree> treeList) throws InvalidInputException {
+	public int calcCarbonConsump(List<Tree> treeList) throws InvalidInputException {
 		int total=0;
 		if(treeList.size()==0) {
 			throw new InvalidInputException("Please enter a list of trees");
@@ -231,8 +252,52 @@ public class TMSService {
 		return total;
 	}
 	
+	public int carbonForecast(List<Tree> treeList, String strStatus) throws InvalidInputException{
+		if(strStatus==null) {
+			throw new InvalidInputException("String cannot be null");
+		}
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		double forecast=0;
+		int predicted=0;
+		int current=0;
+		Status status;
+		if("diseased".equals(strStatus.toLowerCase())) {status=Status.Diseased;}
+		else if("cut".equals(strStatus.toLowerCase())) {status=Status.Cut;}
+		else if("healthy".equals(strStatus.toLowerCase())) {status=Status.Healthy;}
+		else if("tobecut".equals(strStatus.toLowerCase())) {status=Status.Healthy;}
+		else {
+			throw new InvalidInputException("Please enter a valid tree status");
+		}
+		
+		for(Tree tree: treeList) {
+			if(tree==null) {
+				throw new InvalidInputException("Cannot have null entry for tree in list");
+			}
+			if(status!=Status.Cut) {
+				if(status==Status.Diseased) {
+					int index=tree.getSpecies().getCarbonConsumption();
+					predicted+=index/2;
+				}
+				else {
+					int index=tree.getSpecies().getCarbonConsumption();
+					predicted+=index;
+				}
+			}	
+		}
+		current=calcCarbonConsump(treeList);
+		forecast=((predicted-current)/current)*100;
+		
+		
+		return (int)forecast;
+	}
+	
 	public int bioIndexCalculator(List<Tree> treeList) throws InvalidInputException{
-		int index = 0;
+		//int index = 0;
 		if(treeList == null) {
 			throw new InvalidInputException("List cannot be null");
 		}
@@ -249,7 +314,7 @@ public class TMSService {
 	}
 	
 	public int bioForecast(List<Tree> treeList) throws InvalidInputException{
-		int forecast = 0;
+		//int forecast = 0;
 		if(treeList == null) {
 			throw new InvalidInputException("List cannot be null");
 		}
@@ -365,8 +430,8 @@ public class TMSService {
 				}
 			}
 		}
-		System.out.println("in service  " +trees);
 		return trees;
 	}
+
 
 }

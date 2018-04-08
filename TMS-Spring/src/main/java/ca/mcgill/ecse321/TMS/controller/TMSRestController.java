@@ -10,20 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.mcgill.ecse321.TMS.dto.LocationTypeDto;
-
 import com.google.common.collect.Lists;
-import com.thoughtworks.xstream.XStream;
 
+import ca.mcgill.ecse321.TMS.dto.LocationTypeDto;
 import ca.mcgill.ecse321.TMS.dto.MunicipalityDto;
 import ca.mcgill.ecse321.TMS.dto.SpeciesDto;
 import ca.mcgill.ecse321.TMS.dto.TreeDto;
-
 import ca.mcgill.ecse321.TMS.dto.TreeLocationDto;
 import ca.mcgill.ecse321.TMS.dto.TreeStatusDto;
 import ca.mcgill.ecse321.TMS.dto.UserDto;
@@ -43,9 +40,6 @@ import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.model.UserRole;
-import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
-import ca.mcgill.ecse321.TMS.model.TreeStatus;
-import ca.mcgill.ecse321.TMS.model.User;
 
 
 import ca.mcgill.ecse321.TMS.service.InvalidInputException;
@@ -77,24 +71,21 @@ public class TMSRestController {
 	//deleting a tree
 	//update a tree, i.e. information or mark status change
 	//if local then can only mark his tree as cut down
-	// 
-	
-	
-	
-	
-	
-	
-	
-	
+	// list of tree, change of status, user	= change of status
+	// forecast
+	//what are the measurements in? cm m ft
+	//change status to enum in tree
+
 	
 	///////////////	HTTP REQUESTS ///////////////
+	// TREES 
 	@PostMapping(value = {"/trees/"})
 	public TreeDto createTree(
-			@RequestParam int height,
-			@RequestParam int diameter, 
+			@RequestParam double height,
+			@RequestParam double diameter, 
 			@RequestParam Date datePlanted, 
-			@RequestParam int x,
-			@RequestParam int y, 
+			@RequestParam double x,
+			@RequestParam double y, 
 			@RequestParam String description,
 			@RequestParam String location,
 			@RequestParam String status,
@@ -116,6 +107,9 @@ public class TMSRestController {
 			break;
 		case "cut": 
 			aStatus.setStatus(Status.Cut);
+			break;
+		case "tobecut": 
+			aStatus.setStatus(Status.ToBeCut);
 			break;
 		default:
 			treePLE.removeStatus(aStatus);
@@ -186,6 +180,7 @@ public class TMSRestController {
 		return treeDto;
 	}
 	
+	// SPECIES 
 	@PostMapping(value = { "/species/{name}", "/species/{name}/" })
 	public SpeciesDto createSpecies(
 			@PathVariable("name") String name,
@@ -194,6 +189,23 @@ public class TMSRestController {
 		return convertToDto(service.createSpecies(name, carbonConsumption, oxygenProduction));
 	}
 	
+	@GetMapping(value = { "/species", "/species/" })
+	public List<SpeciesDto> findAllSpecies() {
+		List<SpeciesDto> species = Lists.newArrayList();
+		for (Species sp : service.findAllSpecies()) {
+			species.add(convertToDto(sp));
+		}
+		return species;
+	}
+	
+	// TREE STATUS
+	@GetMapping(value = {"/status", "/status/"})
+	public List<String> getAllTreeStatuses() {
+		return service.getTreeStatuses();
+	}
+	
+	
+	// USERS 
 	@PostMapping(value = { "/users/{name}", "/users/{name}/" })
 	public UserDto createUser(
 			@PathVariable("name") String name,
@@ -207,21 +219,16 @@ public class TMSRestController {
 			return convertToDto(service.register(name, password, false));
 		}
 	}
+	
 	@GetMapping(value = { "/user/{name}", "/user/{name}/" })
 	public UserDto login(
 			@PathVariable("name") String name,
 			@RequestParam String password) throws InvalidInputException {
 		return convertToDto(service.login(name, password));
 	}
-	@GetMapping(value = { "/species", "/species/" })
-	public List<SpeciesDto> findAllSpecies() {
-		List<SpeciesDto> species = Lists.newArrayList();
-		for (Species sp : service.findAllSpecies()) {
-			species.add(convertToDto(sp));
-		}
-		return species;
-	}
 	
+	
+	// MUNICIPALITIES 
 	@GetMapping(value = { "/municipalities", "/municipalities/" })
 	public List<MunicipalityDto> findAllMunicipalities() {
 		List<MunicipalityDto> municipalities = Lists.newArrayList();
@@ -239,7 +246,16 @@ public class TMSRestController {
 	}
 	
 	
-	
+
+	// FORECASTS 
+	@GetMapping(value = {"/forecasts/"})
+	public int createForecast(
+			@RequestParam Integer[] treeIds,
+			@RequestParam String status) throws InvalidInputException {
+		List<Tree> trees = service.findTreesById(treeIds);
+		int yes = service.carbonForecast(trees, "healthy");
+		return yes;
+	}
 	
 	///////////////	DTO CONVERSION METHODS ///////////////
 	private MunicipalityDto convertToDto(Municipality m) {

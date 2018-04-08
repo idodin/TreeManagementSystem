@@ -43,18 +43,20 @@ export default {
         { value: null, text: 'Status', disabled: true },
         { value: 'Healthy', text: 'Healthy' },
         { value: 'Cut', text: 'Cut' },
-        { value: 'Diseased', text: 'Diseased' }
+        { value: 'Diseased', text: 'Diseased' },
+        { value: 'toBeCut', text: 'To Be Cut' }
       ],
       speciesName: '',
       speciesCarbon: '',
       speciesOxygen: '',
       municipalityName: '',
-      municipalityId: ''
+      municipalityId: '',
+      forecastNum: [],
+      treeIds: ''
     }
   },
 
   created: function () {
-	  //console.log(currUser)
 	  AXIOS.get('/species/').then(response => {
 		  this.species = response.data
 		  this.speciesSelection.push({ value: null, text: 'Species', disabled: true },
@@ -144,9 +146,24 @@ export default {
 	  createMunicipality: function(name, id) {
 		  AXIOS.post('/municipalities/' + name + '?&id=' + id, {}, {})
 		  .then(response => {
-			  this.municipalities.push(response.data)
+			  var m = response.data
+			  this.municipalities.push(m)
+			  this.municipalitiesSelection.push({value: m.name, text: m.name})
 			  this.municipalityName = ''
 			  this.municipalityId = ''
+		  }).catch(e => {
+			  var errorMsg = e.response.data.message
+	          console.log(errorMsg)
+	          this.errorMessage = errorMsg
+		  })
+	  },
+	  createForecast: function(statusChange) {
+		  for (var i = 0; i< this.trees.length; i++) {
+			  this.treeIds += '&treeIds=' + this.trees[i].id
+		  }
+		  console.log(this.treeIds)
+		  AXIOS.get('/forecasts/?' + this.treeIds + '&status=' + statusChange, {}, {}).then(response => {
+			  this.forecastNum = response.data
 		  }).catch(e => {
 			  var errorMsg = e.response.data.message
 	          console.log(errorMsg)
