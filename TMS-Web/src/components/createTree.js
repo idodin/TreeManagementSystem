@@ -126,7 +126,9 @@ export default {
 	  createSpecies: function(speciesName, carbonCon, oxygenProd) {
 		  AXIOS.post('/species/' + speciesName + '?&carbonConsumption=' + carbonCon + '&oxygenProduction=' + oxygenProd, {}, {})
 		  .then(response => {
-			  this.species.push(response.data)
+			  var sp = response.data
+			  this.species.push(sp)
+			  this.speciesSelection.push({value: sp.name, text: sp.name})
 			  this.speciesName = ''
 			  this.speciesCarbon = ''
 			  this.speciesOxygen = ''
