@@ -13,9 +13,12 @@ export default {
   nameNew: 'tms',
   data () {
     return {
+      chartData: [["Jan", 4], ["Feb", 2], ["Mar", 10], ["Apr", 5], ["May", 3]],
       user: '',
       ne : '',
       sw : '',
+      stats: [],
+      citiesStats: [],
       userType: '',
       rectBounds: {
         north: 45.695066,
@@ -73,7 +76,7 @@ export default {
       id: '4',
       species: 'fn',
       city: 'oman',
-      status: 'to be cut',
+      status: 'to_be_cut',
       latitude: 45.695066,
       longitude: -73.878198
       //lastone
@@ -81,7 +84,7 @@ export default {
       id: '5',
       species: 'fm',
       city: 'toronto',
-      status: 'cut down',
+      status: 'cut_down',
       latitude: 45.402986,
       longitude: -73.586569
     }, {
@@ -94,8 +97,8 @@ export default {
     }, {
       id: '7',
       species: 'fx',
-      city: 'hamra',
-      status: 'to be cut',
+      city: 'montreal',
+      status: 'to_be_cut',
       latitude: 45.695066,
       longitude: -73.578198
     }],
@@ -147,10 +150,10 @@ methods: {
   pins : function(tree){
     var image;
     if(tree.status == 'diseased'){
-      image = '../static/forest_black.png'
-    }else if(tree.status == 'to be cut'){
+      image = '../static/forest_yellow.png'
+    }else if(tree.status == 'to_be_cut'){
       image = '../static/forest_purple.png'
-    }else if(tree.status == 'cut down'){
+    }else if(tree.status == 'cut_down'){
       image = '../static/forest_red.png'
     }else{
       image = '../static/forest_green.png'
@@ -251,7 +254,34 @@ methods: {
       }
 
     });
-  }
+  },
+  updateStats : function(){
+      var healthy = 0;
+      var diseased = 0;
+      var to_be_cut = 0;
+      var cut_down = 0;
+      this.filterTrees.forEach((tree) => {
+        if(tree.status == 'healthy'){healthy ++}
+        if(tree.status == 'diseased'){diseased ++}
+        if(tree.status == 'to_be_cut'){to_be_cut ++}
+        if(tree.status == 'cut_down'){cut_down ++}
+      });
+      this.stats = [["healthy", healthy], ["diseased", diseased], ["to_be_cut", to_be_cut], ["cut_down", cut_down]]
+    },
+    updateCities : function(){
+      var toronto = 0;
+      var montreal = 0;
+      var vanc = 0;
+      var oman = 0;
+      this.filterTrees.forEach((tree) => {
+        if(tree.city == 'toronto'){toronto ++}
+        if(tree.city == 'montreal'){montreal ++}
+        if(tree.city == 'vanc'){vanc ++}
+        if(tree.city == 'oman'){oman ++}
+      });
+      this.citiesStats = [["toronto", toronto], ["montreal", montreal], ["vanc", vanc], ["oman", oman]]
+
+    }
 },
 
 computed: {
@@ -269,13 +299,14 @@ watch: {
   ids : function(val){
     this.printThis();
     this.listTrees();
-  },
-  rectangle : function(val){
-    console.log("testing watch")
+    this.updateStats();
+    this.updateCities();
   }
 },
 mounted: function () {
   this.filterTrees = this.trees;
+  this.updateStats();
+  this.updateCities();
   this.newIDs = this.ids;
   this.bounds = new google.maps.LatLngBounds();
   const element = document.getElementById(this.mapName)
@@ -560,9 +591,9 @@ mounted: function () {
     var image;
     if(tree.status == 'diseased'){
       image = '../static/forest_yello.png'
-    }else if(tree.status == 'to be cut'){
+    }else if(tree.status == 'to_be_cut'){
       image = '../static/forest_purple.png'
-    }else if(tree.status == 'cut down'){
+    }else if(tree.status == 'cut_down'){
       image = '../static/forest_red.png'
     }else{
       image = '../static/forest_green.png'

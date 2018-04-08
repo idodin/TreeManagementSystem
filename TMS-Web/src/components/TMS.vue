@@ -9,10 +9,21 @@
     </div>
     <br />
     <br />
-    <button style="float:left"@click="clear()">clear</button>
-    <button style="float:left"@click="testRequest()">testTrees</button>
-    <div style="display:inline">
+    <div id="charts">
+      <b-card id="card1">
+        <h6>data charts</h6>
+        <b-tabs>
+          <b-tab title="Status" active>
+            <pie-chart width="500px" height="250px":donut="true" :data="stats" :colors="['#2db563', '#a72cb5', '#ede438', '#d62f2f']"></pie-chart>
+          </b-tab>
+          <b-tab title="City">
+            <pie-chart width="500px" height="250px":donut="true" :data="citiesStats"></pie-chart>
+          </b-tab>
+
+        </b-tabs>
+      </b-card>
       <b-card id="card">
+        <h6>filters</h6>
         <b-tabs>
           <b-tab title="City" active>
             <div id="stack">
@@ -40,10 +51,15 @@
           </b-tab>
         </b-tabs>
       </b-card>
+  </div>
+<br /> <br />
+
+    <div style="display:inline">
+
       <br />
       <div id="list">
 
-          <b-table striped hover :items="filterTrees" :fields="fields"></b-table>
+        <b-table striped hover :items="filterTrees" :fields="fields"></b-table>
 
         <!-- <table>
 
@@ -58,9 +74,9 @@
 </div>
 <br />
 </div>
-<button @click="forecasteTrees()">forecaste trees</button>
-<h5>{{rectTrees}}</h5>
+
 <div class="google-map" v-bind:id="mapName"></div>
+<button @click="forecasteTrees()">forecaste trees</button>
 </div>
 </template>
 
@@ -79,15 +95,33 @@
 
 }
 
-#list{
-  margin: auto;
+#charts{
+  display: inline-block;
+
+
+}
+
+#statusChart{
+  padding-top: 20px;
+  padding-bottom: 20px;
   float: left;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 700px;
+  background: #f7f9fc;
+  border-radius: 0.5em;
+}
+
+#citiesChart{
+  float: right;
+  /*margin-right: 50px;*/
+}
+#list{
+  float: left;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 860px;
   height: 215px;
   background: #f7f9fc;
   border-radius: 0.5em;
-  margin-left: 132px;
+  margin-left: 208px;
   margin-bottom: 30px;
   overflow-y: auto;
   overflow-x: auto;
@@ -96,19 +130,29 @@
 #card{
   float: right;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 280px;
-  height: 217px;
+  width: 300px;
+  height: 360px;
   background: #f7f9fc;
   border-radius: 0.5em;
-  margin-right: 132px;
+  margin-right: 32px;
+  margin-left: 30px;
   margin-top: 24px;
   overflow-y: auto;
 }
 
+#card1{
+  float: left;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 530px;
+  height: 360px;
+  background: #f7f9fc;
+  border-radius: 0.5em;
+  margin-left: 50px;
+  margin-top: 24px;
+}
+
 #stack{
-  height: 130px;
-  overflow-y: auto;
-  margin-top: 10px;
+  margin-top: 40px;
 }
 
 ::-webkit-scrollbar {
@@ -127,11 +171,11 @@ h2{
   color: white;
 }
 .google-map {
-  width: 1020px;
+  width: 860px;
   height: 430px;
   margin: auto;
   background: gray;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 ul {
