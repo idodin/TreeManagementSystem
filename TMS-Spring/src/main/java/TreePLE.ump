@@ -8,30 +8,43 @@ class TreePLE {
   1 <@>- * Park parks;
   1 <@>- * Street streets;
   1 <@>- * TreeStatus statuses;
+  
+   public void reinitialize() {
+    Tree.reinitializeAutouniqueID(this.getTrees());
+  }
 }
 
 class Tree {
   autounique id;
-  int height;
-  int diameter; 
+  double height;
+  double diameter; 
   Date datePlanted;
   Date dateAdded;
   * -- 1 TreeStatus treeStatus;
   * -- 1 Species species;
   * -- 1 User local;
   * -- 1 Municipality municipality;
+  
+  public static void reinitializeAutouniqueID(List<Tree> trees) {
+   nextId = 0; 
+   for (Tree t : trees) {
+     if (t.getId() > nextId) {
+       nextId = t.getId();
+     }
+   }
+   nextId++;
+  }
 }
 
 class TreeStatus{
-  enum Status {healthy, diseased, cut}
+  enum Status {healthy, diseased, cut, toBeCut}
   lazy Status status;
-  lazy boolean toBeCut;
 }
 
 
 associationClass TreeLocation{
-  int x;
-  int y;
+  double x;
+  double y;
   String description;
   0..1 Tree;
   * LocationType;
