@@ -4,10 +4,11 @@
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
       <a href="#about">Forecast</a>
       <a href="/#/app">Visualizer</a>
-      <a href="/#/create/" >Create</a>
+      <a href="/#/create">Create</a>
       <a class="active" href="/#/home">Home</a>
     </div>
     <br /><br /><br />
+
     <h3>Someone's sitting in the shade today because...</h3>
     <h3>TreePLE kept the trees alive ♧</h3>
     <br /><br /><br />
@@ -23,18 +24,20 @@
         <input type="text" v-model="username" placeholder="Username">
         <input type="password" v-model="password" placeholder="Password">
         <br /> <br />
-        <button id="regButton" @click="login(username, password)">login</button>
+        <button id="regButton">login</button>
       </div>
 
       <div id="register" class="tabcontent">
         <input type="text" v-model="username" placeholder="Username">
         <input type="password" v-model="password" placeholder="Password">
-        <input type="text" v-model="inputToken" placeholder="Token">
-        <br />
-        (if scientist)
         <br /> <br />
-       
-        <button id="regButton" @click="createUser(username, password, inputToken)">register</button>
+        <b-form-checkbox id="checkbox1"
+                     v-model="isScientist"
+                     value="scientist"
+                     unchecked-value="not_scientist">
+      scientist
+    </b-form-checkbox>
+        <button id="regButton">register</button>
       </div>
     </div>
     <div id="trees">
@@ -54,7 +57,7 @@
   </div>
 </template>
 
-<script src="./homePage.js"></script>
+<script src="./hello.js"></script>
 
 <style scoped>
 #hello {

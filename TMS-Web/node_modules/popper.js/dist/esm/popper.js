@@ -1,6 +1,6 @@
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.14.3
+ * @version 1.14.2
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -885,6 +885,27 @@ function runModifiers(modifiers, data, ends) {
 }
 
 /**
+ * Get the prefixed supported property name
+ * @method
+ * @memberof Popper.Utils
+ * @argument {String} property (camelCase)
+ * @returns {String} prefixed property (camelCase or PascalCase, depending on the vendor prefix)
+ */
+function getSupportedPropertyName(property) {
+  var prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
+  var upperProp = property.charAt(0).toUpperCase() + property.slice(1);
+
+  for (var i = 0; i < prefixes.length; i++) {
+    var prefix = prefixes[i];
+    var toCheck = prefix ? '' + prefix + upperProp : property;
+    if (typeof document.body.style[toCheck] !== 'undefined') {
+      return toCheck;
+    }
+  }
+  return null;
+}
+
+/**
  * Updates the position of the popper, computing the new offsets and applying
  * the new style.<br />
  * Prefer `scheduleUpdate` over `update` because of performance reasons.
@@ -906,6 +927,14 @@ function update() {
     offsets: {}
   };
 
+  // NOTE: DOM access here
+  // resets the popper's position so that the document size can be calculated excluding
+  // the size of the popper element itself
+  var popperStyles = this.popper.style;
+  popperStyles.top = '';
+  popperStyles.left = '';
+  popperStyles[getSupportedPropertyName('transform')] = '';
+
   // compute reference element offsets
   data.offsets.reference = getReferenceOffsets(this.state, this.popper, this.reference, this.options.positionFixed);
 
@@ -921,7 +950,6 @@ function update() {
 
   // compute the popper offsets
   data.offsets.popper = getPopperOffsets(this.popper, data.offsets.reference, data.placement);
-
   data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
 
   // run the modifiers
@@ -949,27 +977,6 @@ function isModifierEnabled(modifiers, modifierName) {
         enabled = _ref.enabled;
     return enabled && name === modifierName;
   });
-}
-
-/**
- * Get the prefixed supported property name
- * @method
- * @memberof Popper.Utils
- * @argument {String} property (camelCase)
- * @returns {String} prefixed property (camelCase or PascalCase, depending on the vendor prefix)
- */
-function getSupportedPropertyName(property) {
-  var prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
-  var upperProp = property.charAt(0).toUpperCase() + property.slice(1);
-
-  for (var i = 0; i < prefixes.length; i++) {
-    var prefix = prefixes[i];
-    var toCheck = prefix ? '' + prefix + upperProp : property;
-    if (typeof document.body.style[toCheck] !== 'undefined') {
-      return toCheck;
-    }
-  }
-  return null;
 }
 
 /**
@@ -1789,27 +1796,7 @@ function preventOverflow(data, options) {
     boundariesElement = getOffsetParent(boundariesElement);
   }
 
-  // NOTE: DOM access here
-  // resets the popper's position so that the document size can be calculated excluding
-  // the size of the popper element itself
-  var transformProp = getSupportedPropertyName('transform');
-  var popperStyles = data.instance.popper.style; // assignment to help minification
-  var top = popperStyles.top,
-      left = popperStyles.left,
-      transform = popperStyles[transformProp];
-
-  popperStyles.top = '';
-  popperStyles.left = '';
-  popperStyles[transformProp] = '';
-
   var boundaries = getBoundaries(data.instance.popper, data.instance.reference, options.padding, boundariesElement, data.positionFixed);
-
-  // NOTE: DOM access here
-  // restores the original style properties after the offsets have been computed
-  popperStyles.top = top;
-  popperStyles.left = left;
-  popperStyles[transformProp] = transform;
-
   options.boundaries = boundaries;
 
   var order = options.priority;
