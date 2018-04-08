@@ -34,7 +34,7 @@
           <b-button @click=test()>transmit</b-button>
          
           <!-- <h5>{{ species }}</h5> -->
-          <!-- <h5>{{ trees }}</h5>  -->
+          <h5>{{ trees }}</h5>
     </div>
     <div v-if="treeSpecies === 'other'" id="createBox">
     	<input type="text" v-model="speciesName" placeholder="Name">
