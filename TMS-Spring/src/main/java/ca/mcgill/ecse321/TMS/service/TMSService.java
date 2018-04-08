@@ -40,7 +40,7 @@ public class TMSService {
 		description = checkTreeInputException(aHeight, aDiameter, aDatePlanted, aTreeStatus, aSpecies, aLocal,
 				aMunicipality, x, y, description, locationType, aDateAdded);
 		Tree tree = tp.addTree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality);
-		TreeLocation location = new TreeLocation(x, y, description, tree, locationType);
+		new TreeLocation(x, y, description, tree, locationType);
 		PersistenceXStream.saveToXMLwithXStream(tp);
 		return tree;
 	}
@@ -62,9 +62,17 @@ public class TMSService {
 	}
 	
 	public Species createSpecies(String name, int carbonConsumption, int oxygenProduction) {
-		Species sp = new Species(name, carbonConsumption, oxygenProduction, tp);
+		Species sp = new Species(name.toLowerCase(), carbonConsumption, oxygenProduction, tp);
 		PersistenceXStream.saveToXMLwithXStream(tp);
 		return sp;
+	}
+	
+	public Species getSpeciesByName(String name) {
+		List<Species> species = tp.getSpecies();
+		for (Species sp: species) {
+			if (sp.getName().equals(name)) return sp;
+		}
+		return null;
 	}
 	
 	
@@ -74,12 +82,22 @@ public class TMSService {
 	}
 	
 	public Municipality createMunicipality(String name, int id) {
-		return new Municipality(id, name, tp);
+		Municipality m = new Municipality(id, name, tp);
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return m;
+	}
+	
+	public Municipality getMunicipalityByName(String name) {
+		List<Municipality> municipalities = tp.getMunicipalities();
+		for (Municipality m: municipalities) {
+			if (m.getName().equals(name)) return m;
+		}
+		return null;
 	}
 	
 
-
-
+	/////////////////////	OTHER  /////////////////////
+	
 	public String checkTreeInputException(int aHeight, int aDiameter, Date aDatePlanted,
 			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, int x, int y,
 			String description, LocationType locationType, Date aDateAdded) throws InvalidInputException {

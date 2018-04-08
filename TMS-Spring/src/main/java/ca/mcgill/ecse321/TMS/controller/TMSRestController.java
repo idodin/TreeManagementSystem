@@ -30,6 +30,7 @@ import ca.mcgill.ecse321.TMS.dto.UserDto;
 import ca.mcgill.ecse321.TMS.model.Local;
 
 import ca.mcgill.ecse321.TMS.model.LocationType;
+import ca.mcgill.ecse321.TMS.model.LocationType.LandUseType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Specialist;
 import ca.mcgill.ecse321.TMS.model.Species;
@@ -39,6 +40,7 @@ import ca.mcgill.ecse321.TMS.model.TreePLE;
 
 
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
+import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.model.User;
 import ca.mcgill.ecse321.TMS.model.UserRole;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
@@ -67,12 +69,25 @@ public class TMSRestController {
 		return "TreePLE application root. Use the REST API to manage trees.\n";
 	}
 
+	///////////////	TO DO LIST ///////////////
+	// Create municipality, if time select municipalities in specific area
+	// How can we pass coordinates?
+	
+	//tree id are all 1 for me, something with persistence
+	//deleting a tree
+	//update a tree, i.e. information or mark status change
+	//if local then can only mark his tree as cut down
+	// 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	///////////////	HTTP REQUESTS ///////////////
-
-//	@PostMapping(value = {"trees/"})
-//	public TreeDto updateTree(
-//			@RequestPara)
-	// temporary
 	@PostMapping(value = {"/trees/"})
 	public TreeDto createTree(@RequestParam int height,
 			@RequestParam int diameter, 
@@ -80,49 +95,53 @@ public class TMSRestController {
 			@RequestParam int x,
 			@RequestParam int y, 
 			@RequestParam String description,
-			@RequestParam Species species,
-			@RequestParam Municipality municipality) throws InvalidInputException {	
+			@RequestParam String location,
+			@RequestParam String status,
+			@RequestParam String species,
+			@RequestParam String municipality) throws InvalidInputException {	
+		Species aSpecies = service.getSpeciesByName(species);
+		if (aSpecies == null) throw new InvalidInputException("Could not find species");
+		Municipality aMunicipality = service.getMunicipalityByName(municipality);
+		if (aMunicipality == null) throw new InvalidInputException("Could not find municipality");
 		
-		TreeStatus testStatus;
-		//Species testSpecies = (Species) PersistenceXStream.xstream.fromXML(species);
+		TreeStatus aStatus = new TreeStatus(treePLE); 
+		switch(status.toLowerCase()) {
+		case "healthy": 
+			aStatus.setStatus(Status.Healthy);
+			break;
+		case "diseased":
+			aStatus.setStatus(Status.Diseased);
+			break;
+		case "cut": 
+			aStatus.setStatus(Status.Cut);
+			break;
+		default:
+			treePLE.removeStatus(aStatus);
+			throw new InvalidInputException("Must select status");
+		}
+		LocationType aLocationType = new LocationType(); 
+		switch(location.toLowerCase()) {
+		case "residential": 
+			aLocationType.setLandUseType(LandUseType.Residential);
+			break;
+		case "institutional":
+			aLocationType.setLandUseType(LandUseType.Institutional);
+			break;
+		case "municipal": 
+			aLocationType.setLandUseType(LandUseType.Municipal);
+			break;
+		default:
+			throw new InvalidInputException("Must select location type");
+		}
 		User testUser;
-		//Municipality testMunicipality;
-		LocationType testType;
-		
-		if(treePLE.getStatuses().size()==0) {
-			testStatus = treePLE.addStatus();
-		}
-		else {
-			testStatus = treePLE.getStatus(0);
-		}
-//		if(treePLE.getSpecies().size()==0) {
-//			testSpecies = treePLE.addSpecies("Test", 11, 12);
-//		}
-//		else {
-//			testSpecies = treePLE.getSpecies(0);
-//		}
 		if(treePLE.getUsers().size()==0) {
 			testUser = treePLE.addUser("Imad");
 		}
 		else {
 			testUser = treePLE.getUser(0);
 		}
-//		if(treePLE.getMunicipalities().size()==0) {
-//			testMunicipality = treePLE.addMunicipality(1, "McGill");
-//		}
-//		else {
-//			testMunicipality = treePLE.getMunicipality(0);
-//		}
-		if(treePLE.getParks().size()==0) {
-			testType = treePLE.addPark(1, "Mont Royal");
-		}
-		else {
-			testType = treePLE.getPark(0);
-		}
-		
-		Tree tree = service.createTree(height, diameter, datePlanted, testStatus, species, testUser, municipality, x, y, description, testType);
+		Tree tree = service.createTree(height, diameter, datePlanted, aStatus, aSpecies, testUser, aMunicipality, x, y, description, aLocationType);
 		System.out.println(tree.getId());
-		
 		return convertToDto(tree);
 	}
 
@@ -177,14 +196,6 @@ public class TMSRestController {
 	}
 	
 	
-	
-	
-	
-	
-	//need a method to update the tree location and updates for the rest 
-
-
-
 	///////////////	DTO CONVERSION METHODS ///////////////
 	private MunicipalityDto convertToDto(Municipality m) {
 		return modelMapper.map(m, MunicipalityDto.class);
@@ -233,6 +244,4 @@ public class TMSRestController {
 		return treeDto;
 	}
 
-	
-	
 }
