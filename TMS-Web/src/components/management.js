@@ -751,6 +751,7 @@ methods: {
     '</table>'+
     '<button>BUTT</button>'
 
+<<<<<<< HEAD
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
@@ -762,6 +763,8 @@ methods: {
       icon: image,
     });
 
+=======
+>>>>>>> parent of c29ac699... Update background
 =======
 >>>>>>> parent of c29ac699... Update background
     this.markers.push(marker)
