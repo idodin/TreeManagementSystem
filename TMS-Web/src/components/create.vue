@@ -69,6 +69,7 @@
 #hello {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: black;
+  background: #f4f9f4;
   position: absolute; /*position: fixed;*/
   top: 0;
   left: 0;

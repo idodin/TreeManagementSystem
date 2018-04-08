@@ -1,7 +1,6 @@
 import axios from 'axios'
 var config = require('../../config')
-window.map = null;
-window.rLocation = 'dsfsdf';
+
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
 var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
 
@@ -14,9 +13,8 @@ export default {
   nameNew: 'tms',
   data () {
     return {
+      chartData: [["Jan", 4], ["Feb", 2], ["Mar", 10], ["Apr", 5], ["May", 3]],
       user: '',
-      forecastSelect: null,
-      updateSelect: null,
       ne : '',
       sw : '',
       stats: [],
@@ -33,12 +31,6 @@ export default {
       newLat: '',
       treeID: 'oldONe',
       ids: [],
-      statusForecast: [
-        { value: null, text: 'Status', disabled: true },
-        { value: 'Healthy', text: 'Healthy' },
-        { value: 'Cut', text: 'Cut' },
-        { value: 'Diseased', text: 'Diseased' }
-      ],
       fields:[{
         key: 'id',
         sortable: true
@@ -122,10 +114,11 @@ export default {
       latitude: 45.498233,
       longitude: -73.584037
     }],
+    map: null,
+    rectangle: '',
     filterTrees: [],
     bounds: null,
     markers: [],
-    rectangle: '',
     rectTrees: []
   }
 },
@@ -589,6 +582,11 @@ mounted: function () {
   });
   this.rectangle.setMap(this.map);
 
+  this.rectangle.addListener('bounds_changed', function() {
+
+  });
+
+
   this.filterTrees.forEach((tree) => {
     var image;
     if(tree.status == 'diseased'){
@@ -658,6 +656,7 @@ mounted: function () {
 
 created: function () {
 
+<<<<<<< HEAD
   AXIOS.get(`/trees`)
   .then(response => {
     // JSON responses are automatically parsed.
@@ -763,6 +762,8 @@ methods: {
       icon: image,
     });
 
+=======
+>>>>>>> parent of c29ac699... Update background
     this.markers.push(marker)
     this.map.fitBounds(this.bounds.extend(position))
   });

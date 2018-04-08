@@ -51,50 +51,33 @@
           </b-tab>
         </b-tabs>
       </b-card>
-    </div>
-    <br /> <br />
+  </div>
+<br /> <br />
 
     <div style="display:inline">
+
       <br />
       <div id="list">
+
         <b-table striped hover :items="filterTrees" :fields="fields"></b-table>
-      </div>
-      <br />
-    </div>
 
-    <div class="google-map" v-bind:id="mapName"></div>
-    <div id="forecast">
-      <b-card id="cardForecast">
-        <h3>forecasts</h3>
-        <span>What if the selected trees were</span>
-        <b-form-select style="width:120px; margin-top:17px;" id="typeMenu" v-model="forecastSelect" :options="statusForecast" class="mb-3"/>
-        <b-tabs>
-          <b-tab title="carbon consumption" active>
-            <br />
-            <h5> If the selected trees were {{forecastSelect}}</h5>
-          </b-tab>
-          <b-tab title="oxygen production">
-            <br />
-            <h5> ALDHJS KLASD </h5>
-          </b-tab>
-          <b-tab title="biodiverstiy index">
-            <br />
-            <h5> ALDHJS KLASD </h5>
-          </b-tab>
-        </b-tabs>
-      </b-card>
-    </div>
-    <br />
+        <!-- <table>
 
-    <div id="updateTrees">
-      <br />
-      <h3>update the status of selected trees</h3>
-      <span>change the status of the selected trees to: </span>
-      <b-form-select style="width:120px; margin-top:17px;" id="typeMenu" v-model="updateSelect" :options="statusForecast" class="mb-3"/>
-      <br />
-      <button id="updateButton">register</button>
-    </div>
-  </div>
+        <tr v-for="tree in trees">
+        <template v-if="ids.includes(tree.city)">
+        <td>{{ tree.id }}</td>
+        <td>{{ tree.species }}</td>
+        <td>{{ tree.city }}</td>
+      </template>
+    </tr>
+  </table> -->
+</div>
+<br />
+</div>
+
+<div class="google-map" v-bind:id="mapName"></div>
+<button @click="forecasteTrees()">forecaste trees</button>
+</div>
 </template>
 
 <script src="./management.js"></script>
@@ -103,43 +86,19 @@
 #treemanagement {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: black;
+  background: #f4f9f4;
   position: absolute; /*position: fixed;*/
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
 
-#forecast{
-  display: inline-block;
-  width: 860px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border-radius: 0.5em;
-  background: #f7f9fc;
-}
-
-#cardForecast{
-  background: #f7f9fc;
-  height: 300px;
-}
-
-#updateTrees{
-  display: inline-block;
-  width: 860px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border-radius: 0.5em;
-  background: #f7f9fc;
-  margin-top: 30px;
-  margin-bottom: 50px;
 }
 
 #charts{
   display: inline-block;
-}
 
-#stackForecast{
-  float: right;
-  margin-top: 20px;
+
 }
 
 #statusChart{
@@ -196,17 +155,6 @@
   margin-top: 40px;
 }
 
-#typeMenu{
-  margin-top: 13px;
-  box-sizing: border-box;
-  width: 140px;
-  height: 40px;
-  border: 0.15em solid #808080;
-  border-radius: 0.5em;
-  text-align: center;
-  color: grey;
-}
-
 ::-webkit-scrollbar {
   width: 0px;  /* remove scrollbar space */
   background: transparent;  /* optional: just make scrollbar invisible */
@@ -217,24 +165,6 @@
 }
 #oneButs{
   background: #4f4f4f;
-}
-
-#updateButton{
-  box-sizing: border-box;
-	padding: 1em;
-	border: 10px solid #0c0c0c;
-	border-radius: 0.5em;
-  background-color: #4d564d;
-  color: white;
-  border: 10px;
-  outline: 20px;
-  cursor: pointer;
-  margin-right: 30px;
-  transition: 0.3s;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-bottom: 30px;
-  margin-top: 10px;
-  width: 120px;
 }
 
 h2{
@@ -322,7 +252,5 @@ li {
   color: #f1f1f1;
   font-weight: bold;
 }
-
-
 
 </style>
