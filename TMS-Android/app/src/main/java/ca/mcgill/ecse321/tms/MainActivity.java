@@ -24,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -140,17 +141,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         myMap = googleMap;
         generateMarkers();
         LatLng sydney = new LatLng(-33.852, 151.211);
-        
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon)));
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred)));
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow)));
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple)));
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconblack)));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
@@ -304,10 +294,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     try {
                         int x = response.getJSONObject(i).getJSONObject("location").getInt("x");
                         int y = response.getJSONObject(i).getJSONObject("location").getInt("y");
+                        String status = response.getJSONObject(i).getJSONObject("status").getString("status");
+                        String species = response.getJSONObject(i).getJSONObject("species").getString("name");
 
                         MarkerOptions marker = new MarkerOptions().position(
-                                new LatLng(y, x)).title("New Marker");
+                                new LatLng(y, x)).title(username +"'s " + species);
                         markers.add(marker);
+
+                        switch(status){
+                            case "cut_down":
+                                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred));
+                                            break;
+                            case "to_be_cut_down":
+                                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow));
+                                            break;
+                            case "diseased":
+                                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple));
+                                            break;
+
+                            default:
+                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon));
+                                break;
+                        }
 
                         myMap.addMarker(marker);
                     } catch (Exception e) {
