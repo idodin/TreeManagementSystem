@@ -1,5 +1,4 @@
 <template>
-
   <div id="hello">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>

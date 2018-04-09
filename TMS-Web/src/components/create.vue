@@ -13,12 +13,12 @@
     <br /><br /><br />
     <h3>Add a Tree ♧ </h3>
     <br /><br />
-
+<h5>{{ trees }}</h5>
     <div id="create">
           <input type="number" v-model="treeHeight" placeholder="Height">
           <input type="number" v-model="treeDiameter" placeholder="Diameter">
-          <input type="number" v-model="xCoord" placeholder="longitude">
-          <input type="number" v-model="yCoord" placeholder="latitude">
+          <input type="text" v-model="xCoord" placeholder="longitude">
+          <input type="text" v-model="yCoord" placeholder="latitude">
           <input type="text" v-model="description" placeholder="description"></br>
 
 		  <b-form-select id="typeMenu" type="text" v-model="treeSpecies" :options="speciesSelection" class="mb-3"/>
@@ -32,7 +32,7 @@
           <b-button @click=createForecast(treeStatus)>forecast</b-button>
 
 
-          <h5>{{ forecastNum }}</h5>
+          
     </div>
     <div v-if="treeSpecies === 'other'" id="createBox">
     	<input type="text" v-model="speciesName" placeholder="Name">

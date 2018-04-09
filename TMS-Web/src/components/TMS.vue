@@ -9,6 +9,7 @@
     </div>
     <br />
     <br />
+    <button @click="listTrees()">ListTrees</button>
     <div id="charts">
       <b-card id="card1">
         <h6>data charts</h6>
@@ -63,6 +64,10 @@
     </div>
 
     <div class="google-map" v-bind:id="mapName"></div>
+    <button @click="forecasteTrees()">Show trees</button>
+    <p>
+    {{rectTrees}}
+    </p>
     <div id="forecast">
       <b-card id="cardForecast">
         <h3>forecasts</h3>
@@ -72,10 +77,14 @@
           <b-tab title="carbon consumption" active>
             <br />
             <h5> If the selected trees were {{forecastSelect}}</h5>
+             <button id="regButton" @click="createCarbonForecast(forecastSelect)">generate</button>
+             <h5>forecast is {{forecastNum}} %</h5>
           </b-tab>
           <b-tab title="oxygen production">
             <br />
-            <h5> ALDHJS KLASD </h5>
+            <h5> If the selected trees were {{forecastSelect}}</h5>
+             <button id="regButton" @click="createOxygenForecast(forecastSelect)">generate</button>
+             <h5>forecast is {{forecastNum}} %</h5>
           </b-tab>
           <b-tab title="biodiverstiy index">
             <br />

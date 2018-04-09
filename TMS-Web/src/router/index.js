@@ -15,7 +15,7 @@ export default new Router({
       component: Hello
     },
     {
-      path: '/powerrangers',
+      path: '/app',
       name: 'TMS',
       component: TMS
     },

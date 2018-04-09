@@ -5,8 +5,8 @@ module.exports = {
   build: {
     env: require('./prod.env'),
     port: 8087,
-    host:  '132.206.4.78', // set the real address of frontend VM
-    backendHost: '132.206.4.78', // set it to real address of backend VM
+    host:  '127.0.0.1', // set the real address of frontend VM
+    backendHost: '127.0.0.1', // set it to real address of backend VM
     backendPort: 8080,
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
