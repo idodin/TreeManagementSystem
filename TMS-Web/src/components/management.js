@@ -141,6 +141,27 @@ created: function () {
   });
 },
 methods: {
+  updateTrees: function(rectTrees, status) {
+			  console.log("updateTree called")
+			  var treeIDs= [1,2,3,4];
+			  status = "HEALTHY";
+//				  rectTrees.forEach((tree) =>{
+//					  treeIDs.push(tree.id);
+//				  });
+
+			  AXIOS.post('/updateTrees/?treeIDs=' + treeIDs + '&status='+ status, {}, {})
+			  .then(response => {
+				  //this.findAllTrees();
+				  this.trees= response.data;
+		          this.errorMessage = ''
+		        console.log("came in therehr")
+			  }).catch(e => {
+				  var errorMsg = e.response.data.message
+		          console.log(errorMsg)
+		          this.errorMessage = errorMsg
+			  })
+
+	},
   findAllTrees: function(){
     console.log("yea i was here");
     AXIOS.get(`/trees`)

@@ -1,15 +1,19 @@
+
 <template>
   <div id="hello">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
+     <br />
+     <br />
+
       <a href="#about">Forecast</a>
       <a href="/#/app">Visualizer</a>
-      <a class="active" href="/#/create">Create</a>
+      <a class="active" href="/#/create/">Create</a>
       <a href="/#/home">Home</a>
     </div>
+    <h1 style="padding-top: 7px; padding-left: 15px; font-size: 15pt; float: left ">hello {{loggedUser}}</h1>
     <br /><br /><br />
-
-    <h3>add a tree ♧ </h3>
+    <h3>Add a Tree ♧ </h3>
     <br /><br />
 
     <div id="create">
@@ -18,16 +22,30 @@
           <input type="number" v-model="xCoord" placeholder="longitude">
           <input type="number" v-model="yCoord" placeholder="latitude">
           <input type="text" v-model="description" placeholder="description"></br>
-          <input type="text" v-model="treeSpecies" placeholder="Species">
-          <input type="text" v-model="municipality" placeholder="Municipality">
-          <b-form-select id="typeMenu" v-model="locationType" :options="locations" class="mb-3"/>
-          <b-form-select id="typeMenu" v-model="status" :options="stats" class="mb-3"/>
+
+		  <b-form-select id="typeMenu" type="text" v-model="treeSpecies" :options="speciesSelection" class="mb-3"/>
+		  <b-form-select id="typeMenu" v-model="treeMunicipality" :options="municipalitiesSelection" class="mb-3"/>
+          <b-form-select id="typeMenu" v-model="locationType" :options="locationsSelection" class="mb-3"/>
+          <b-form-select id="typeMenu" v-model="treeStatus" :options="statusSelection" class="mb-3"/>
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
+          <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, locationType, treeStatus, treeSpecies, treeMunicipality)">add tree</b-button>
+          <b-button @click="findAllTrees()">getTrees</b-button>
+          <b-button @click=createForecast(treeStatus)>forecast</b-button>
 
-          <b-button @click="createTree()">add tree</b-button>
 
-
+          <h5>{{ forecastNum }}</h5>
+    </div>
+    <div v-if="treeSpecies === 'other'" id="createBox">
+    	<input type="text" v-model="speciesName" placeholder="Name">
+    	<input type="number" v-model="speciesCarbon" placeholder="Carbon Consumption">
+    	<input type="number" v-model="speciesOxygen" placeholder="Oxygen Production">
+    	<b-button @click="createSpecies(speciesName, speciesCarbon, speciesOxygen)">Add Species</b-button>
+    </div>
+    <div v-if="treeMunicipality === 'other'" id="createBox">
+    	<input type="text" v-model="municipalityName" placeholder="Name">
+    	<input type="number" v-model="municipalityId" placeholder="Municipality ID">
+    	<b-button @click="createMunicipality(municipalityName, municipalityId)">Add Municipality</b-button>
     </div>
 
     <div id="trees">
@@ -43,7 +61,6 @@
       <img src="static/tree.png" alt="Mountain View" height="100px">
       <img src="static/tree.png" alt="Mountain View" height="100px">
     </div>
-
   </div>
 </template>
 
@@ -53,6 +70,7 @@
 #hello {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: black;
+  background: #f4f9f4;
   position: absolute; /*position: fixed;*/
   top: 0;
   left: 0;
@@ -124,12 +142,12 @@ li {
 input {
 	box-sizing: border-box;
 	width: 160px;
-  height: 40px;
+  	height: 40px;
 	/*padding: 1em;*/
 	border: 0.15em solid #808080;
 	border-radius: 0.5em;
 	text-align: center;
-  margin-top: 20px;
+  	margin-top: 20px;
 }
 .createTable{
   margin-left: 20px;
