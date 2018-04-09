@@ -302,18 +302,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 markers.clear();
                 for( int i = 0; i < response.length(); i++){
                     try {
-                        int x = response.getJSONObject(i).getInt("x");
-                        int y = response.getJSONObject(i).getInt("y");
+                        int x = response.getJSONObject(i).getJSONObject("location").getInt("x");
+                        int y = response.getJSONObject(i).getJSONObject("location").getInt("y");
 
                         MarkerOptions marker = new MarkerOptions().position(
-                                new LatLng(x, y)).title("New Marker");
+                                new LatLng(y, x)).title("New Marker");
                         markers.add(marker);
 
                         myMap.addMarker(marker);
                     } catch (Exception e) {
                         error += e.getMessage();
                     }
-                    refreshErrorMessage();
                 }
             }
 
@@ -328,6 +327,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+    }
+
+    public void generateMarkers(MenuItem menuItem){
+        generateMarkers();
     }
 
     private void refreshErrorMessage() {
@@ -397,9 +400,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public Dialog getMyDialog(){
-        return myDialog;
-    }
 
     public void setDate(int id, int d, int m, int y) {
         TextView tv = (TextView) myDialog.findViewById(id);

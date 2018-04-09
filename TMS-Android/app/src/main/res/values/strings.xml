@@ -35,4 +35,5 @@
     <string name="refresh_lists">Refresh Lists</string>
     <string name="select_landuse">Select LandUse</string>
     <string name="enter_description">Enter Description</string>
+    <string name="refresh_map">Refresh Map</string>
 </resources>

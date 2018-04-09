@@ -2,9 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ca.mcgill.ecse321.tms.MainActivity">
+
+    <item
+        android:id="@+id/refresh_top"
+        android:icon="@drawable/quantum_ic_refresh_white_24"
+        android:title="@string/refresh_map"
+        app:showAsAction="ifRoom"
+        android:onClick="generateMarkers"/>
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>
