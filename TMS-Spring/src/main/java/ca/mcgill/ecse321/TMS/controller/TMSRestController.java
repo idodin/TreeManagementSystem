@@ -85,8 +85,8 @@ public class TMSRestController {
 			@RequestParam double height,
 			@RequestParam double diameter, 
 			@RequestParam Date datePlanted, 
-			@RequestParam double x,
-			@RequestParam double y, 
+			@RequestParam String x,
+			@RequestParam String y, 
 			@RequestParam String description,
 			@RequestParam String location,
 			@RequestParam String status,
@@ -131,7 +131,7 @@ public class TMSRestController {
 			throw new InvalidInputException("Must select location type");
 		}
 		User user=service.getUserByName(loggedUser);
-		Tree tree = service.createTree(height, diameter, datePlanted, aStatus, aSpecies, user, aMunicipality, x, y, description, aLocationType);
+		Tree tree = service.createTree(height, diameter, datePlanted, aStatus, aSpecies, user, aMunicipality, Double.parseDouble(x), Double.parseDouble(y), description, aLocationType);
 		System.out.println(tree.getId());
 		return convertToDto(tree);
 	}
@@ -250,14 +250,22 @@ public class TMSRestController {
 
 	// FORECASTS 
 	@GetMapping(value = {"/forecasts/"})
-	public int createForecast(
-			@RequestParam Integer[] treeIds,
+	public int createCarbonForecast(
+			@RequestParam Integer[] treeIDs,
 			@RequestParam String status) throws InvalidInputException {
-		List<Tree> trees = service.findTreesById(treeIds);
-		int yes = service.carbonForecast(trees, "healthy");
-		return yes;
+		List<Tree> trees = service.findTreesById(treeIDs);
+		int result = service.carbonForecast(trees, status);
+		return result;
 	}
 	
+	@GetMapping(value = {"/oxygen/"})
+	public int createOxygenForecast(
+			@RequestParam Integer[] treeIDs,
+			@RequestParam String status) throws InvalidInputException {
+		List<Tree> trees = service.findTreesById(treeIDs);
+		int result = service.oxygenForecast(trees, status);
+		return result;
+	}
 	///////////////	DTO CONVERSION METHODS ///////////////
 	private MunicipalityDto convertToDto(Municipality m) {
 		return modelMapper.map(m, MunicipalityDto.class);
