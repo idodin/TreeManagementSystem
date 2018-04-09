@@ -39,7 +39,7 @@ public class Login extends Activity {
         RequestParams rp = new RequestParams();
         rp.add("password", password);
 
-        HttpUtils.post("user/"+username, rp, new JsonHttpResponseHandler(){
+        HttpUtils.get("user/"+username, rp, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 refreshErrorMessage();
@@ -69,9 +69,9 @@ public class Login extends Activity {
 
         RequestParams rp = new RequestParams();
         rp.add("password", password);
-        rp.add("inputToken", "");
+        rp.add("inputToken", "1");
 
-        HttpUtils.post("users/"+username, rp, new JsonHttpResponseHandler(){
+        HttpUtils.post("users/" + username, rp, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 refreshErrorMessage();
@@ -103,6 +103,7 @@ public class Login extends Activity {
         } else {
             tvError.setVisibility(View.VISIBLE);
         }
+        error="";
 
     }
 }

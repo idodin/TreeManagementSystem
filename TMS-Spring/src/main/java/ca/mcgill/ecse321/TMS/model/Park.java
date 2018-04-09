@@ -4,7 +4,7 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 
-// line 59 "../../../../../TreePLE.ump"
+// line 61 "../../../../../TreePLE.ump"
 public class Park extends LocationType
 {
 

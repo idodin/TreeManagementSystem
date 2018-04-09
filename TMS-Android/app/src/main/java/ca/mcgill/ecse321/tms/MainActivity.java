@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_functions);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-            .findFragmentById(R.id.map);
+                .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        //TODO Set Header Text
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.header_text)).setText("Welcome, user!");
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.header_text)).setText("Welcome, " + username + "!");
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -104,25 +103,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         ConstraintLayout homeLayout = findViewById(R.id.content_home);
                         ConstraintLayout listLayout = findViewById(R.id.content_list_tree);
                         // Select visible content
-                        switch (menuItem.getItemId()){
-                            case  R.id.map :
-                                        generateMarkers();
-                                        mapLayout.setVisibility(View.VISIBLE);
-                                        homeLayout.setVisibility(View.GONE);
-                                        listLayout.setVisibility(View.GONE);
-                                        break;
+                        switch (menuItem.getItemId()) {
+                            case R.id.map:
+                                generateMarkers();
+                                mapLayout.setVisibility(View.VISIBLE);
+                                homeLayout.setVisibility(View.GONE);
+                                listLayout.setVisibility(View.GONE);
+                                break;
                             case R.id.main_home:
-                                        mapLayout.setVisibility(View.GONE);
-                                        homeLayout.setVisibility(View.VISIBLE);
-                                        listLayout.setVisibility(View.GONE);
-                                        break;
+                                mapLayout.setVisibility(View.GONE);
+                                homeLayout.setVisibility(View.VISIBLE);
+                                listLayout.setVisibility(View.GONE);
+                                break;
                             case R.id.list_trees:
-                                        mapLayout.setVisibility(View.GONE);
-                                        homeLayout.setVisibility(View.GONE);
-                                        listLayout.setVisibility(View.VISIBLE);
-                                        break;
+                                mapLayout.setVisibility(View.GONE);
+                                homeLayout.setVisibility(View.GONE);
+                                listLayout.setVisibility(View.VISIBLE);
+                                break;
                             default:
-                                        break;
+                                break;
                         }
 
                         // Add code here to update the UI based on the item selected
@@ -137,29 +136,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(final GoogleMap googleMap){
+    public void onMapReady(final GoogleMap googleMap) {
         myMap = googleMap;
         generateMarkers();
-        LatLng sydney = new LatLng(-33.852, 151.211);
+        LatLng montreal = new LatLng(45.50202067177077, -73.5668932646513);
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(14.0f));
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng point) {
 
-                callRegisterDialog(point.latitude, point.latitude);
+                callRegisterDialog(point.longitude, point.latitude);
 
                 setSpinners();
 
-                System.out.println(point.latitude+"---"+ point.longitude);
+                System.out.println(point.latitude + "---" + point.longitude);
             }
         });
 
     }
 
-    private void setSpinners(){
+    private void setSpinners() {
         // Add adapters to spinner lists and refresh spinner content
         Spinner speciesSpinner = (Spinner) myDialog.findViewById(R.id.species_spinner);
         Spinner municipalitySpinner = (Spinner) myDialog.findViewById(R.id.municipality_spinner);
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    public void plantTree(View v, double lat, double longt) {
+    public void plantTree(View v, double longt, double lat) {
 
         final double latitude = lat;
         final double longitude = longt;
@@ -217,15 +217,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         final String speciesText = speciesSpinner.getSelectedItem().toString();
         final String municipalityText = municipalitySpinner.getSelectedItem().toString();
-        final String statusText = statusSpinner.getSelectedItem().toString();
-        final String landuseText = landuseSpinner.getSelectedItem().toString();
+        final String statusText = statusSpinner.getSelectedItem().toString().toLowerCase().replaceAll("\\s", "");
+        final String landuseText = landuseSpinner.getSelectedItem().toString().toLowerCase();
 
         RequestParams rp = new RequestParams();
 
-        rp.add("height", speciesText);
-        rp.add("event", municipalityText);
+        rp.add("height", height);
+        rp.add("diameter", diameter);
         NumberFormat formatter = new DecimalFormat("00");
-        rp.add("date", year + "-" + formatter.format(month) + "-" + formatter.format(day));
+        rp.add("datePlanted", year + "-" + formatter.format(month) + "-" + formatter.format(day));
         rp.add("x", Double.toString(longt));
         rp.add("y", Double.toString(lat));
         rp.add("description", description);
@@ -240,37 +240,49 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 refreshErrorMessage();
-                if(statusCode==200){
+                if (statusCode == 200) {
                     MarkerOptions marker = new MarkerOptions().position(
-                            new LatLng(latitude, longitude)).title(username+"'s " + speciesText);
+                            new LatLng(latitude, longitude)).title(username + "'s " + speciesText);
 
                     myDialog.dismiss();
+
+                    if (statusText.equals("cut")) {
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred));
+                    } else if (statusText.equals("tobecutdown")) {
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow));
+                    } else if (statusText.equals("diseased")) {
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple));
+                    } else {
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon));
+                    }
                     myMap.addMarker(marker);
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
-                refreshErrorMessage();
-                ((TextView) myDialog.findViewById(R.id.error_message_dialog)).setText("error");
-                myDialog.findViewById(R.id.error_message_dialog).setVisibility(View.VISIBLE);
-            }
-        });
 
-        // Set back the spinners to the initial state after posting the request
+        };
+
+        @Override
+        public void onFailure ( int statusCode, Header[] headers, Throwable throwable, JSONObject
+        errorResponse){
+            try {
+                error += errorResponse.get("message").toString();
+            } catch (JSONException e) {
+                //error += e.getMessage();
+            }
+            refreshErrorMessage();
+        }
+    });
+
+    // Set back the spinners to the initial state after posting the request
         speciesSpinner.setSelection(0);
         municipalitySpinner.setSelection(0);
         statusSpinner.setSelection(0);
         landuseSpinner.setSelection(0);
 
-        refreshErrorMessage();
+    refreshErrorMessage();
 
-    }
+}
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -290,27 +302,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 markers.clear();
-                for( int i = 0; i < response.length(); i++){
+                myMap.clear();
+                for (int i = 0; i < response.length(); i++) {
                     try {
-                        int x = response.getJSONObject(i).getJSONObject("location").getInt("x");
-                        int y = response.getJSONObject(i).getJSONObject("location").getInt("y");
+                        double x = response.getJSONObject(i).getJSONObject("location").getDouble("x");
+                        double y = response.getJSONObject(i).getJSONObject("location").getDouble("y");
                         String status = response.getJSONObject(i).getJSONObject("status").getString("status");
                         String species = response.getJSONObject(i).getJSONObject("species").getString("name");
+                        String user = response.getJSONObject(i).getJSONObject("user").getString("userName");
+
 
                         MarkerOptions marker = new MarkerOptions().position(
-                                new LatLng(y, x)).title(username +"'s " + species);
+                                new LatLng(y, x)).title(user + "'s " + species);
                         markers.add(marker);
 
-                        switch(status){
-                            case "cut_down":
-                                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred));
-                                            break;
-                            case "to_be_cut_down":
-                                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow));
-                                            break;
-                            case "diseased":
-                                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple));
-                                            break;
+                        switch (status) {
+                            case "Cut":
+                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred));
+                                break;
+                            case "ToBeCut":
+                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow));
+                                break;
+                            case "Diseased":
+                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple));
+                                break;
 
                             default:
                                 marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon));
@@ -337,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public void generateMarkers(MenuItem menuItem){
+    public void generateMarkers(MenuItem menuItem) {
         generateMarkers();
     }
 
@@ -361,8 +376,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    private void callRegisterDialog(double lat, double longt)
-    {
+    private void callRegisterDialog(double longt, double lat) {
         final double latitude = lat;
         final double longitude = longt;
         myDialog = new Dialog(this);
@@ -385,13 +399,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         EditText password = (EditText) myDialog.findViewById(R.id.password);
         myDialog.show();
 
-        register.setOnClickListener(new View.OnClickListener()
-        {
+        register.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v)
-            {
-                plantTree(v, latitude , longitude);
+            public void onClick(View v) {
+                plantTree(v, longitude, latitude);
 
             }
         });
@@ -428,22 +440,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         rtn.putInt("day", day);
-        rtn.putInt("month", month-1);
+        rtn.putInt("month", month - 1);
         rtn.putInt("year", year);
 
         return rtn;
     }
 
     public void refreshLists(View view) {
-        refreshList(speciesAdapter ,speciesNames, "species");
+        refreshList(speciesAdapter, speciesNames, "species");
         refreshList(municipalityAdapter, municipalityNames, "municipalities");
-        refreshList(statusAdapter, statusNames, "statuses");
-        refreshList(landuseAdapter, landuseNames, "landuse");
+        refreshListStatus(statusAdapter, statusNames, "status");
+        refreshListLandUse(landuseAdapter, landuseNames, "landuse");
     }
 
 
+    private void refreshListStatus(final ArrayAdapter<String> adapter, final List<String> names, String restFunctionName) {
+        names.clear();
+        names.add("Please select...");
+        names.add("Healthy");
+        names.add("Diseased");
+        names.add("Cut");
+        names.add("To Be Cut");
+        adapter.notifyDataSetChanged();
+    }
 
     private void refreshList(final ArrayAdapter<String> adapter, final List<String> names, String restFunctionName) {
+        names.clear();
         names.add("Please select...");
         adapter.notifyDataSetChanged();
 
@@ -451,9 +473,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                names.clear();
-                names.add("Please select...");
-                for( int i = 0; i < response.length(); i++){
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         names.add(response.getJSONObject(i).getString("name"));
                     } catch (Exception e) {
@@ -475,5 +495,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
+    private void refreshListLandUse(final ArrayAdapter<String> adapter, final List<String> names, String restFunctionName) {
+        names.clear();
+        names.add("Please select...");
+        names.add("Residential");
+        names.add("Municipal");
+        names.add("Institutional");
+        adapter.notifyDataSetChanged();
+    }
+
 
 }

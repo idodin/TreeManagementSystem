@@ -93,6 +93,9 @@ public class TMSRestController {
 			@RequestParam String species,
 			@RequestParam String municipality,
 			@RequestParam String loggedUser) throws InvalidInputException {	
+		
+		
+		
 		Species aSpecies = service.getSpeciesByName(species);
 		if (aSpecies == null) throw new InvalidInputException("Could not find species");
 		Municipality aMunicipality = service.getMunicipalityByName(municipality);
