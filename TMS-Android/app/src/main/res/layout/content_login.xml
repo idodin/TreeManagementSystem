@@ -12,12 +12,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/error_message_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:visibility="gone"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textSize="36sp"
             android:textStyle="bold"
-            app:fontFamily="sans-serif" />
+            app:fontFamily="sans-serif"
+            android:textColor="#000000"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -37,6 +45,8 @@
                 android:id="@+id/user_name"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textColorHint="#bbbbbb"
                 android:hint="@string/user_hint" />
 
             <EditText
@@ -44,17 +54,19 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:textColor="#000000"
+                android:textColorHint="#bbbbbb"
                 android:hint="@string/password"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:onClick="authenticate"
                     android:text="@string/register"/>
 
                 <Button

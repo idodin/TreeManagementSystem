@@ -26,9 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -45,6 +43,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    //Logged in User
+    public static String username = "";
+
     //Error
     private String error = null;
 
@@ -53,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // Dialog Box
     private Dialog myDialog;
-
-    //Logged in User
-    private String username;
 
     // Spinner Lists
     private List<String> speciesNames = new ArrayList<>();
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayAdapter<String> landuseAdapter;
 
     //Map
-    private GoogleMap myMap;
+    private static GoogleMap myMap;
 
     // Marker list
     private List<MarkerOptions> markers = new ArrayList<>();
