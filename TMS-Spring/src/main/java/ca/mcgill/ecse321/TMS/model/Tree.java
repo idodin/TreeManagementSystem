@@ -2,10 +2,10 @@
 /*This code was generated using the UMPLE 1.27.0.3728.d139ed893 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
+import java.util.*;
 import java.sql.Date;
-import java.util.List;
 
-// line 17 "../../../../../TreePLE.ump"
+// line 18 "../../../../../TreePLE.ump"
 public class Tree
 {
 
@@ -333,7 +333,7 @@ public class Tree
     }
   }
 
-  // line 29 "../../../../../TreePLE.ump"
+  // line 31 "../../../../../TreePLE.ump"
    public static  void reinitializeAutouniqueID(List<Tree> trees){
     nextId = 0; 
    for (Tree t : trees) {

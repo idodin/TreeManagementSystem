@@ -155,7 +155,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dip"
-                    android:background="@color/colorClean"
                     android:hint="@string/edit_height" />
 
             </LinearLayout>

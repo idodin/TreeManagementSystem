@@ -66,14 +66,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="authenticate"
+                    android:onClick="registerUser"
                     android:text="@string/register"/>
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/login"/>
+                    android:text="@string/login"
+                    android:onClick="authenticate"/>
 
             </LinearLayout>
 
