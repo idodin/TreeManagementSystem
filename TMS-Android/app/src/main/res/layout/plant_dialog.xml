@@ -1,0 +1,188 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="270dp"
+    android:layout_height="wrap_content"
+    android:background="#777777"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="559dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:orientation="vertical"
+                android:paddingBottom="20dip">
+
+                <TextView
+                    android:id="@+id/error_message_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/colorAccent"
+                    android:visibility="gone"
+                    />
+
+                <TextView
+                    android:id="@+id/label_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dip"
+                    android:gravity="center"
+                    android:text="@string/enter_height" />
+
+                <EditText
+                    android:id="@+id/edit_height"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:hint="@string/edit_height"
+                    android:inputType="numberDecimal" />
+
+                <TextView
+                    android:id="@+id/label_diameter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:text="@string/enter_diameter" />
+
+                <EditText
+                    android:id="@+id/edit_diameter"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:hint="@string/edit_diameter"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/label_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:text="@string/enter_date" />
+
+                <TextView
+                    android:id="@+id/plant_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:onClick="showDatePickerDialog"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/date_planted" />
+
+                <TextView
+                    android:id="@+id/label_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:text="@string/select_tree_status" />
+
+                <Spinner
+                    android:id="@+id/status_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dip" />
+
+                <TextView
+                    android:id="@+id/label_species"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:text="@string/select_species" />
+
+                <Spinner
+                    android:id="@+id/species_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dip" />
+
+                <TextView
+                    android:id="@+id/label_municipality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:text="@string/select_municipality" />
+
+                <Spinner
+                    android:id="@+id/municipality_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dip" />
+
+                <TextView
+                    android:id="@+id/label_landuse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:text="@string/select_landuse" />
+
+                <Spinner
+                    android:id="@+id/landuse_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dip" />
+
+                <TextView
+                    android:id="@+id/label_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:text="@string/enter_description" />
+
+                <EditText
+                    android:id="@+id/edit_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:background="@color/colorClean"
+                    android:hint="@string/edit_height" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/plant_tree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plant_tree" />
+
+            <Button
+                android:id="@+id/refresh_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh_lists"
+                android:onClick="refreshLists"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,4 +1,39 @@
 <resources>
     <string name="app_name">TMS-Android</string>
     <string name="action_settings">Settings</string>
+    <string name="newparticipant_hint">Who?</string>
+    <string name="newparticipant_button">Add Part</string>
+    <string name="launch_plant_tree">Report Planted Tree</string>
+    <string name="launch_cutdown_tree">Report Cut Down Tree</string>
+    <string name="launch_diseased_tree">Mark Diseased Tree</string>
+    <string name="launch_tobecutdown_tree">Mark Tree To Be Cut Down</string>
+    <string name="user_hint">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="home">Home</string>
+    <string name="map">Map</string>
+    <string name="list_trees">List Trees</string>
+    <string name="home_content">
+        Welcome to TreePLE.
+        The world\'s leading tree management system.
+        Thanks to users like you, professionals can keep track of the sustainability of different cities around the world.
+        And make sure to care for trees that need it!
+        Access the menu to start adding trees through our map, or see a list of added trees! :)
+    </string>
+    <string name="enter_height">Enter Height</string>
+    <string name="edit_height">Height</string>
+    <string name="enter_diameter">Enter Diameter</string>
+    <string name="edit_diameter">Edit Diameter</string>
+    <string name="select_species">Select Species</string>
+    <string name="select_municipality">Select Municipality</string>
+    <string name="select_location">Select Location</string>
+    <string name="plant_tree">Plant Tree</string>
+    <string name="enter_date">Date Planted:</string>
+    <string name="date_planted">01-01-2010</string>
+    <string name="select_tree_status">Select Tree Status</string>
+    <string name="refresh_lists">Refresh Lists</string>
+    <string name="select_landuse">Select LandUse</string>
+    <string name="enter_description">Enter Description</string>
+    <string name="refresh_map">Refresh Map</string>
 </resources>

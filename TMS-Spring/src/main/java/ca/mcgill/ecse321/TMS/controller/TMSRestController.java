@@ -39,6 +39,7 @@ import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.model.User;
+import ca.mcgill.ecse321.TMS.model.User.UserType;
 import ca.mcgill.ecse321.TMS.model.UserRole;
 
 
