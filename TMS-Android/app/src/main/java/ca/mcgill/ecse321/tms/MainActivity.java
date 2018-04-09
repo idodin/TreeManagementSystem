@@ -123,6 +123,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng sydney = new LatLng(-33.852, 151.211);
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon)));
+        googleMap.addMarker(new MarkerOptions().position(sydney)
+                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred)));
+        googleMap.addMarker(new MarkerOptions().position(sydney)
+                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow)));
+        googleMap.addMarker(new MarkerOptions().position(sydney)
+                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple)));
+        googleMap.addMarker(new MarkerOptions().position(sydney)
+                .title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconblack)));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
