@@ -10,6 +10,7 @@ public class UserDto {
 	
 	
 	private String username;
+	private String password;
 	private UserType userType;
 	//will have service method to convert class names to string list
 	private List<String> roles;
@@ -20,8 +21,9 @@ public class UserDto {
 		
 	}
 	
-	public UserDto(String username) {
+	public UserDto(String username, String password) {
 		this.username = username;
+		this.password= password;
 	}
 	public UserDto(String username, ArrayList<String> roles) {
 		this.username = username;
@@ -50,6 +52,14 @@ public class UserDto {
 
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 	
 	

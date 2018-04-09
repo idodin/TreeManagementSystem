@@ -58,6 +58,7 @@ public class PersistenceXStream {
         File file = new File(fileName);
         if (file.exists()) {
         	tp = (TreePLE) loadFromXMLwithXStream();
+        	tp.reinitialize();
         } else {
             try {
                 file.createNewFile();

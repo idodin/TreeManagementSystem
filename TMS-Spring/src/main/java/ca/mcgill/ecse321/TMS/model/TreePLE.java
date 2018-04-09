@@ -256,7 +256,7 @@ public class TreePLE
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality)
+  public Tree addTree(double aHeight, double aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality)
   {
     return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality, this);
   }
@@ -472,9 +472,9 @@ public class TreePLE
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public User addUser(String aUsername)
+  public User addUser(String aUsername, String aPassword)
   {
-    return new User(aUsername, this);
+    return new User(aUsername, aPassword, this);
   }
 
   public boolean addUser(User aUser)
@@ -806,6 +806,11 @@ public class TreePLE
       statuses.remove(aStatus);
     }
     
+  }
+
+  // line 13 "../../../../../TreePLE.ump"
+   public void reinitialize(){
+    Tree.reinitializeAutouniqueID(this.getTrees());
   }
 
 }
