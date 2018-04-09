@@ -28,6 +28,7 @@ import ca.mcgill.ecse321.TMS.dto.UserDto;
 import ca.mcgill.ecse321.TMS.model.Local;
 
 import ca.mcgill.ecse321.TMS.model.LocationType;
+import ca.mcgill.ecse321.TMS.model.LocationType.LandUseType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Specialist;
 import ca.mcgill.ecse321.TMS.model.Species;
@@ -38,6 +39,7 @@ import ca.mcgill.ecse321.TMS.model.TreePLE;
 
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+import ca.mcgill.ecse321.TMS.model.User.UserType;
 import ca.mcgill.ecse321.TMS.model.UserRole;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
@@ -74,9 +76,13 @@ public class TMSRestController {
 	
 	//For now we'll force the Tree to be registered to already created status, species, user, municipality and locationtype
 	@PostMapping(value = {"/trees/"})
-	public TreeDto createTree(@RequestParam int height,
-			@RequestParam int diameter, @RequestParam Date datePlanted, @RequestParam int x,
-			@RequestParam int y, @RequestParam String description) throws InvalidInputException {	
+	public TreeDto createTree(
+			@RequestParam int height,
+			@RequestParam int diameter, 
+			@RequestParam Date datePlanted, 
+			@RequestParam int x,
+			@RequestParam int y, 
+			@RequestParam String description) throws InvalidInputException {	
 		
 		TreeStatus testStatus;
 		Species testSpecies;
@@ -91,17 +97,19 @@ public class TMSRestController {
 			testStatus = treePLE.getStatus(0);
 		}
 		if(treePLE.getSpecies().size()==0) {
-			testSpecies = treePLE.addSpecies("Test", 11, 12);
+			testSpecies = treePLE.addSpecies("corn", 11, 12);
 		}
 		else {
 			testSpecies = treePLE.getSpecies(0);
 		}
 		if(treePLE.getUsers().size()==0) {
-			testUser = treePLE.addUser("Imad");
+			testUser = treePLE.addUser("Karim");
+			
 		}
 		else {
 			testUser = treePLE.getUser(0);
 		}
+		testUser.setUserType(UserType.Scientist);
 		if(treePLE.getMunicipalities().size()==0) {
 			testMunicipality = treePLE.addMunicipality(1, "McGill");
 		}
@@ -114,6 +122,7 @@ public class TMSRestController {
 		else {
 			testType = treePLE.getPark(0);
 		}
+		testType.setLandUseType(LandUseType.Residential);
 		
 		Tree tree = service.createTree(height, diameter, datePlanted, testStatus, testSpecies, testUser, testMunicipality, x, y, description, testType);
 		System.out.println(tree.getId());
