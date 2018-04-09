@@ -227,6 +227,7 @@ methods: {
       content: contentString
     });
 
+<<<<<<< HEAD
     const position = new google.maps.LatLng(tree.latitude, tree.longitude);
     const marker = new google.maps.Marker({
       position,
@@ -263,6 +264,48 @@ methods: {
     this.trees.forEach((tree) => {
       if(this.ids.includes(tree.city) || this.ids.includes(tree.species) || this.ids.includes(tree.status)){
         this.filterTrees.push(tree);
+=======
+  created: function () {
+
+	 //  AXIOS.get(`/trees`)
+	 // .then(response => {
+		// // JSON responses are automatically parsed.
+		// this.trees = response.data
+	 // })
+		// .catch(e => {
+		// 	this.listTreesError = e;
+		// });
+	 },
+	methods: {
+		findAllTrees: function(){
+      console.log("yea i was here");
+			AXIOS.get(`/trees`)
+			.then(response => {
+				// JSON responses are automatically parsed.
+				this.trees = response.data
+			})
+			.catch(e => {
+				this.listTreesError = e;
+			});
+		},
+
+    pins : function(lat, long){
+      const position = new google.maps.LatLng(lat, long);
+      const marker = new google.maps.Marker({
+        position,
+        map: this.map,
+      });
+      this.markers.push(marker)
+      this.map.fitBounds(this.bounds.extend(position))
+    },
+    emptyList : function() {
+      this.ids = [];
+    },
+    printThis: function(){
+      console.log("this is for template change")
+      for(var k = 0; k<this.markers.length; k++){
+        this.markers[k].setMap(null);
+>>>>>>> master
       }
     });
   },
