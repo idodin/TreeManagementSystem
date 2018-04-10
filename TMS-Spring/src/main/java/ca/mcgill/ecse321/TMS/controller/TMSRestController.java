@@ -269,6 +269,16 @@ public class TMSRestController {
 		int result = service.oxygenForecast(trees, status);
 		return result;
 	}
+	
+	@GetMapping(value = {"/biodiversity/"})
+	public int createBioForecast(
+			@RequestParam Integer[] treeIDs,
+			@RequestParam String status) throws InvalidInputException {
+		List<Tree> trees = service.findTreesById(treeIDs);
+		int result = service.bioForecast(trees, status);
+		return result;
+	}
+	
 	///////////////	DTO CONVERSION METHODS ///////////////
 	private MunicipalityDto convertToDto(Municipality m) {
 		return modelMapper.map(m, MunicipalityDto.class);

@@ -2,16 +2,16 @@
   <div id="hello">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
-      <a href="#about">Forecast</a>
-      <a href="/#/app">Visualizer</a>
-      <a href="/#/create/" >Create</a>
+      <a href="#about">Hello {{loggedUser}}</a>
+      <a href="/#/home">Visualizer</a>
+      <a href="/#/home/" >Create</a>
       <a class="active" href="/#/home">Home</a>
     </div>
     <br /><br /><br />
     <h3>Someone's sitting in the shade today because...</h3>
     <h3>TreePLE kept the trees alive ♧</h3>
     <br /><br /><br />
-
+	<span> {{errorMessage}} </span>
     <div id="login">
       <div class="tab">
         <button id="def" class="tablinks" @click="register($event, 'one')">Login</button>
@@ -29,27 +29,11 @@
       <div id="register" class="tabcontent">
         <input type="text" v-model="username" placeholder="Username">
         <input type="password" v-model="password" placeholder="Password">
-        <input type="text" v-model="inputToken" placeholder="Token">
-        <br />
-        (if scientist)
-        <br /> <br />
-
-        <button id="regButton" @click="createUser(username, password, inputToken)">register</button>
+        <input type="text" style="margin-left:-23px" v-model="inputToken" placeholder="Scientis's token">
+        <button id="regButton" style="margin-top:25px" @click="createUser(username, password, inputToken)">register</button>
       </div>
     </div>
-    <div id="trees">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-    </div>
+    
 
   </div>
 </template>
@@ -60,7 +44,6 @@
 #hello {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: black;
-  background: #f4f9f4;
   position: absolute; /*position: fixed;*/
   top: 0;
   left: 0;
@@ -111,7 +94,7 @@ li {
 }
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #4CAF50;
+    background-color: #6496e5;
     color: white;
 }
 /* Style the tab */

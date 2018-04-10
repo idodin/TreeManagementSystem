@@ -1,19 +1,19 @@
-
 <template>
-  <div id="hello">
+  <div id="hello" v-if="go==='true'">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
 
-      <a href="#about">Forecast</a>
+      <a href="#about">Hello {{loggedUser}}</a>
       <a href="/#/app">Visualizer</a>
       <a class="active" href="/#/create/">Create</a>
       <a href="/#/home">Home</a>
     </div>
-    <h1 style="padding-top: 7px; padding-left: 15px; font-size: 15pt; float: left ">hello {{loggedUser}}</h1>
+    <!-- <h1 style="padding-top: 7px; padding-left: 15px; font-size: 15pt; float: left ">hello {{loggedUser}}</h1> -->
     <br /><br /><br />
-    <h3>Add a Tree ♧ </h3>
-    <br /><br />
-<h5>{{ trees }}</h5>
+    <h3>add a tree ♧ </h3>
+    <br /><br /><br /><br />
+    <span> {{errorMessage}} </span>
+<!-- <h5>{{ trees }}</h5> -->
     <div id="create">
           <input type="number" v-model="treeHeight" placeholder="Height">
           <input type="number" v-model="treeDiameter" placeholder="Diameter">
@@ -28,8 +28,6 @@
           <input type="date" style="width:200px; height:40px; color:grey"v-model="datePlanted" placeholder="datePlanted">
           <br /><br />
           <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, locationType, treeStatus, treeSpecies, treeMunicipality)">add tree</b-button>
-          <b-button @click="findAllTrees()">getTrees</b-button>
-          <b-button @click=createForecast(treeStatus)>forecast</b-button>
 
 
           
@@ -46,19 +44,7 @@
     	<b-button @click="createMunicipality(municipalityName, municipalityId)">Add Municipality</b-button>
     </div>
 
-    <div id="trees">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-      <img src="static/tree.png" alt="Mountain View" height="100px">
-    </div>
+    
   </div>
 </template>
 
@@ -68,7 +54,6 @@
 #hello {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: black;
-  background: #f4f9f4;
   position: absolute; /*position: fixed;*/
   top: 0;
   left: 0;
@@ -119,7 +104,7 @@ li {
 }
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #4CAF50;
+    background-color: #6496e5;;
     color: white;
 }
 #trees{
