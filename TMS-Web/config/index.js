@@ -28,7 +28,7 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     port: 8087,
-    host:  'ecse321-9.ece.mcgill.ca',
+    host:  'localhost',
     backendHost: 'ecse321-9.ece.mcgill.ca', // set it to real address of backend VM
     backendPort: 8080,
     autoOpenBrowser: true,
