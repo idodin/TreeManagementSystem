@@ -5,7 +5,7 @@ package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 import java.sql.Date;
 
-// line 69 "../../../../../TreePLE.ump"
+// line 84 "../../../../../TreePLE.ump"
 public class User
 {
 
@@ -27,6 +27,7 @@ public class User
 
   //User Attributes
   private String username;
+  private String password;
   private UserType userType;
 
   //User Associations
@@ -38,8 +39,9 @@ public class User
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aUsername, TreePLE aTreePLE)
+  public User(String aUsername, String aPassword, TreePLE aTreePLE)
   {
+    password = aPassword;
     if (!setUsername(aUsername))
     {
       throw new RuntimeException("Cannot create due to duplicate username");
@@ -73,6 +75,14 @@ public class User
     return wasSet;
   }
 
+  public boolean setPassword(String aPassword)
+  {
+    boolean wasSet = false;
+    password = aPassword;
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setUserType(UserType aUserType)
   {
     boolean wasSet = false;
@@ -94,6 +104,11 @@ public class User
   public static boolean hasWithUsername(String aUsername)
   {
     return getWithUsername(aUsername) != null;
+  }
+
+  public String getPassword()
+  {
+    return password;
   }
 
   public UserType getUserType()
@@ -190,7 +205,7 @@ public class User
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, Municipality aMunicipality, TreePLE aTreePLE)
+  public Tree addTree(double aHeight, double aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, Municipality aMunicipality, TreePLE aTreePLE)
   {
     return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, this, aMunicipality, aTreePLE);
   }
@@ -371,7 +386,8 @@ public class User
   public String toString()
   {
     return super.toString() + "["+
-            "username" + ":" + getUsername()+ "]" + System.getProperties().getProperty("line.separator") +
+            "username" + ":" + getUsername()+ "," +
+            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "userType" + "=" + (getUserType() != null ? !getUserType().equals(this)  ? getUserType().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "treePLE = "+(getTreePLE()!=null?Integer.toHexString(System.identityHashCode(getTreePLE())):"null");
   }

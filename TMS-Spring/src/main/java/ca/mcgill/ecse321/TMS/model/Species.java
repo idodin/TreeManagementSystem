@@ -5,7 +5,7 @@ package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 import java.sql.Date;
 
-// line 63 "../../../../../TreePLE.ump"
+// line 78 "../../../../../TreePLE.ump"
 public class Species
 {
 
@@ -168,7 +168,7 @@ public class Species
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
+  public Tree addTree(double aHeight, double aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
     return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, this, aLocal, aMunicipality, aTreePLE);
   }

@@ -4,7 +4,7 @@
 package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 
-// line 41 "../../../../../TreePLE.ump"
+// line 56 "../../../../../TreePLE.ump"
 public class LocationType
 {
 
@@ -85,7 +85,7 @@ public class LocationType
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public TreeLocation addTreeLocation(int aX, int aY, String aDescription, Tree aTree)
+  public TreeLocation addTreeLocation(double aX, double aY, String aDescription, Tree aTree)
   {
     return new TreeLocation(aX, aY, aDescription, aTree, this);
   }

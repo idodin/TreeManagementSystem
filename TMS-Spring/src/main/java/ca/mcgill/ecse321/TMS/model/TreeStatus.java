@@ -5,7 +5,7 @@ package ca.mcgill.ecse321.TMS.model;
 import java.util.*;
 import java.sql.Date;
 
-// line 25 "../../../../../TreePLE.ump"
+// line 41 "../../../../../TreePLE.ump"
 public class TreeStatus
 {
 
@@ -13,7 +13,7 @@ public class TreeStatus
   // ENUMERATIONS
   //------------------------
 
-  public enum Status { Healthy, Diseased, Cut }
+  public enum Status { Healthy, Diseased, Cut, ToBeCut }
 
   //------------------------
   // MEMBER VARIABLES
@@ -21,7 +21,6 @@ public class TreeStatus
 
   //TreeStatus Attributes
   private Status status;
-  private boolean toBeCut;
 
   //TreeStatus Associations
   private TreePLE treePLE;
@@ -53,22 +52,9 @@ public class TreeStatus
     return wasSet;
   }
 
-  public boolean setToBeCut(boolean aToBeCut)
-  {
-    boolean wasSet = false;
-    toBeCut = aToBeCut;
-    wasSet = true;
-    return wasSet;
-  }
-
   public Status getStatus()
   {
     return status;
-  }
-
-  public boolean getToBeCut()
-  {
-    return toBeCut;
   }
 
   public TreePLE getTreePLE()
@@ -130,7 +116,7 @@ public class TreeStatus
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Tree addTree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
+  public Tree addTree(double aHeight, double aDiameter, Date aDatePlanted, Date aDateAdded, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
     return new Tree(aHeight, aDiameter, aDatePlanted, aDateAdded, this, aSpecies, aLocal, aMunicipality, aTreePLE);
   }
@@ -215,8 +201,7 @@ public class TreeStatus
 
   public String toString()
   {
-    return super.toString() + "["+
-            "toBeCut" + ":" + getToBeCut()+ "]" + System.getProperties().getProperty("line.separator") +
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "status" + "=" + (getStatus() != null ? !getStatus().equals(this)  ? getStatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "treePLE = "+(getTreePLE()!=null?Integer.toHexString(System.identityHashCode(getTreePLE())):"null");
   }

@@ -2,10 +2,9 @@ package ca.mcgill.ecse321.TMS.service;
 
 import java.io.File;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.sql.Date;
-import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
 
@@ -19,130 +18,192 @@ import ca.mcgill.ecse321.TMS.model.TreeLocation;
 import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
 import ca.mcgill.ecse321.TMS.model.User;
+import ca.mcgill.ecse321.TMS.model.User.UserType;
 import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
-import ca.mcgill.ecse321.TMS.dto.TreeDto;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
 
 
 @Service
 public class TMSService {
+	
 	private TreePLE tp;
 	
 	public TMSService(TreePLE tp) {
 		this.tp=tp;
 	}
 	
-	public Tree createTree(int aHeight, int aDiameter,
+	/////////////////////	TREES  /////////////////////
+	public Tree createTree(double aHeight, double aDiameter,
 			Date aDatePlanted, TreeStatus aTreeStatus,
 			Species aSpecies, User aLocal, Municipality aMunicipality,
-			int x, int y, String description, LocationType locationType) throws InvalidInputException{
-		
+			double x, double y, String description, LocationType locationType) throws InvalidInputException{
+		List<Tree> trees= tp.getTrees();
+		for(Tree aTree: trees) {
+			if( (x==aTree.getTreeLocation().getX()) && (y==aTree.getTreeLocation().getY()) ) {
+				throw new InvalidInputException("A tree already exists at the specified coordinates");			}
+		}
 		Date aDateAdded = new Date(Calendar.getInstance().getTime().getTime());
-		
 		description = checkTreeInputException(aHeight, aDiameter, aDatePlanted, aTreeStatus, aSpecies, aLocal,
 				aMunicipality, x, y, description, locationType, aDateAdded);
-		
-
 		Tree tree = tp.addTree(aHeight, aDiameter, aDatePlanted, aDateAdded, aTreeStatus, aSpecies, aLocal, aMunicipality);
+		new TreeLocation(x, y, description, tree, locationType);
 		PersistenceXStream.saveToXMLwithXStream(tp);
-		TreeLocation location = new TreeLocation(x, y, description, tree, locationType);
 		return tree;
-		
+	}
+	
+	public Tree removeTree(Tree aTree) {
+		aTree.delete();
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return aTree;
 	}
 	
 	public List<Tree> findAllTrees(){
 		return tp.getTrees();
 	}
 	
-
-	public Tree removeTree(Tree aTree) {
-		
-		aTree.delete();
+	public List<Tree> findTreesById(Integer[] treeIds) throws InvalidInputException{
+		List<Tree> trees = new ArrayList<Tree>();
+		boolean wasAdded = false;
+		for(Integer i: treeIds) {
+			for (Tree t: tp.getTrees()) {
+				if (t.getId() == i) {
+					trees.add(t);
+					wasAdded = true;
+				}
+			}
+			if(wasAdded) wasAdded = false;
+			else throw new InvalidInputException("One or more trees do not exist!");
+		}
+		return trees;
+	}
+	
+	public void updateTree(Tree tree, int i, int j, Date newDatePlanted, TreeStatus newStatus, Species newSpecies,
+			User newUser, Municipality newMunicipality, int k, int l, String string, LocationType newLocationType) throws InvalidInputException{
+		// TODO Auto-generated method stub
+	}
+	
+	
+	/////////////////////	SPECIES  /////////////////////
+	public List<Species> findAllSpecies() {
+		return tp.getSpecies();
+	}
+	
+	public Species createSpecies(String name, int carbonConsumption, int oxygenProduction) {
+		Species sp = new Species(name.toLowerCase(), carbonConsumption, oxygenProduction, tp);
 		PersistenceXStream.saveToXMLwithXStream(tp);
-		return aTree;
+		return sp;
+	}
+	
+	public Species getSpeciesByName(String name) {
+		List<Species> species = tp.getSpecies();
+		for (Species sp: species) {
+			if (sp.getName().equals(name)) return sp;
+		}
+		return null;
+	}
+	
+	
+	/////////////////////	MUNICIPALITIES  /////////////////////
+	public List<Municipality> findAllMunicipalities() {
+		return tp.getMunicipalities();
+	}
+	
+	public Municipality createMunicipality(String name, int id) {
+		Municipality m = new Municipality(id, name, tp);
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return m;
+	}
+	
+	public Municipality getMunicipalityByName(String name) {
+		List<Municipality> municipalities = tp.getMunicipalities();
+		for (Municipality m: municipalities) {
+			if (m.getName().equals(name)) return m;
+		}
+		return null;
+	}
+	
+	
+	/////////////////////	STATUS  /////////////////////
+	public List<String> getTreeStatuses() {
+		Status[] statuses = TreeStatus.Status.values();
+		List<String> st = new ArrayList<String>();
+		for (Status s: statuses) {
+			st.add(s.toString());
+		}
+		return st;
 	}
 
-
-	public String checkTreeInputException(int aHeight, int aDiameter, Date aDatePlanted,
-			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, int x, int y,
+	
+	/////////////////////	ERROR HANDLING  /////////////////////
+	public String checkTreeInputException(double aHeight, double aDiameter, Date aDatePlanted,
+			TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, double x, double y,
 			String description, LocationType locationType, Date aDateAdded) throws InvalidInputException {
+		
 		String errormsg = "";
 		Boolean errorthrown = false;
-		
-
-		if (aHeight < 0 || aDiameter < 0 || x < 0 || y < 0) {
-			errormsg = "Cannot pass negative integer! ";
+		if (aHeight < 0 || aDiameter < 0) {
+			errormsg = "Height and diameter cannot be negative! ";
 			errorthrown = true;
 		}
-		
+		if ((x < -180 || x > 180) || (y < -180 || y > 180)) {
+			errormsg += "Invalid coordinates! ";
+			errorthrown = true;
+		}
 		if (description == null || description.trim().length()==0) {
 			description = "";
 		}
-		
 		if (aDatePlanted.after(aDateAdded)) {
-			errormsg = errormsg + "Cannot plant tree in the future! ";
+			errormsg += "Cannot plant tree in the future! ";
 			errorthrown = true;
 		}
-		
 		if (aTreeStatus == null) {
-			errormsg = errormsg + "Status needs to be selected for registration! ";
+			errormsg += "Status needs to be selected for registration! ";
 			errorthrown = true;
 		}
-		
 		if (aSpecies == null) {
-			errormsg = errormsg + "Species needs to be selected for registration! ";
+			errormsg += "Species needs to be selected for registration! ";
 			errorthrown = true;
 		}
-		
 		if (aLocal == null) {
-			errormsg = errormsg + "User needs to be logged in for registration! ";
+			errormsg += "User needs to be logged in for registration! ";
 			errorthrown = true;
 		}
-		
 		if (aMunicipality == null) {
-			errormsg = errormsg + "Municipality needs to be selected for registration! ";
+			errormsg += "Municipality needs to be selected for registration! ";
 			errorthrown = true;
 		}
-		
 		if(errorthrown) {
 			errormsg = errormsg.trim();
 			throw new InvalidInputException(errormsg);
 		}
-		
 		if (tp.indexOfStatus(aTreeStatus) == -1 ){
 			errormsg = errormsg + "Status must exist! ";
 			errorthrown = true;
 		}
-		
 		if (tp.indexOfSpecies(aSpecies) == -1) {
 			errormsg = errormsg + "Species must exist! ";
 			errorthrown = true;
 		}
-		
 		if (tp.indexOfUser(aLocal) == -1) {
 			errormsg = errormsg + "User must be registered! ";
 			errorthrown = true;
 		}
-		
 		if (tp.indexOfMunicipality(aMunicipality) == -1) {
 			errormsg = errormsg + "Municipality must exist! ";
 			errorthrown = true;
 		}
-		
 		if(locationType instanceof Park) {
 			if(tp.indexOfPark((Park)locationType)==-1){
 				errormsg = errormsg + "Park must exist! ";
 				errorthrown = true;
 			}
 		}
-		
 		if(locationType instanceof Street) {
 			if(tp.indexOfStreet((Street)locationType) == -1) {
 				errormsg = errormsg + "Street must exist! ";
 				errorthrown = true;
 			}
 		}
-		
 		if(errorthrown) {
 			errormsg = errormsg.trim();
 			throw new InvalidInputException(errormsg);
@@ -150,7 +211,7 @@ public class TMSService {
 		return description;
 	}
 	
-	public int calculateOxygenProduction(List<Tree> treeList) throws InvalidInputException {
+	public int calcOxygenProd(List<Tree> treeList) throws InvalidInputException {
 		int total=0;
 		if(treeList.size()==0) {
 			throw new InvalidInputException("Please enter a list of trees");
@@ -170,7 +231,7 @@ public class TMSService {
 		return total;
 	}
 	
-	public int calculateCarbonConsumption(List<Tree> treeList) throws InvalidInputException {
+	public int calcCarbonConsump(List<Tree> treeList) throws InvalidInputException {
 		int total=0;
 		if(treeList.size()==0) {
 			throw new InvalidInputException("Please enter a list of trees");
@@ -191,8 +252,98 @@ public class TMSService {
 		return total;
 	}
 	
+	public int carbonForecast(List<Tree> treeList, String strStatus) throws InvalidInputException{
+		if(strStatus==null) {
+			throw new InvalidInputException("String cannot be null");
+		}
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		double forecast=0;
+		double predicted=0;
+		double current=0;
+		Status status;
+		if("diseased".equals(strStatus.toLowerCase())) {status=Status.Diseased;}
+		else if("cut".equals(strStatus.toLowerCase())) {status=Status.Cut;}
+		else if("healthy".equals(strStatus.toLowerCase())) {status=Status.Healthy;}
+		else if("tobecut".equals(strStatus.toLowerCase())) {status=Status.Healthy;}
+		else {
+			throw new InvalidInputException("Please enter a valid tree status");
+		}
+		
+		for(Tree tree: treeList) {
+			if(tree==null) {
+				throw new InvalidInputException("Cannot have null entry for tree in list");
+			}
+			if(status!=Status.Cut) {
+				if(status==Status.Diseased) {
+					double index=tree.getSpecies().getCarbonConsumption();
+					predicted+=index/2;
+				}
+				else {
+					double index=tree.getSpecies().getCarbonConsumption();
+					predicted+=index;
+				}
+			}	
+		}
+		current=calcCarbonConsump(treeList);
+		System.out.println("current is  "+current);
+		System.out.println("predicted is  "+predicted);
+		forecast=((predicted-current)/current)*100;
+		
+		
+		return (int)forecast;
+	}
+	
+	public int oxygenForecast(List<Tree> treeList, String strStatus) throws InvalidInputException{
+		if(strStatus==null) {
+			throw new InvalidInputException("String cannot be null");
+		}
+		if(treeList == null) {
+			throw new InvalidInputException("List cannot be null");
+		}
+		if(treeList.size()==0) {
+			throw new InvalidInputException("Please enter a list of trees");
+		}
+		double forecast=0;
+		double predicted=0;
+		double current=0;
+		Status status;
+		if("Diseased".equals(strStatus)) {status=Status.Diseased;}
+		else if("Cut".equals(strStatus)) {status=Status.Cut;}
+		else if("Healthy".equals(strStatus)) {status=Status.Healthy;}
+		else if("ToBeCut".equals(strStatus)) {status=Status.Healthy;}
+		else {
+			throw new InvalidInputException("Please enter a valid tree status");
+		}
+		for(Tree tree: treeList) {
+			if(tree==null) {
+				throw new InvalidInputException("Cannot have null entry for tree in list");
+			}
+			if(status!=Status.Cut) {
+				if(status==Status.Diseased) {
+					double index=tree.getSpecies().getOxygenProduction();
+					predicted+=index/2;
+				}
+				else {
+					double index=tree.getSpecies().getOxygenProduction();
+					predicted+=index;
+				}
+			}	
+		}
+		current=calcOxygenProd(treeList);
+		forecast=((predicted-current)/current)*100;
+		
+		
+		return (int)forecast;
+	}
+	
 	public int bioIndexCalculator(List<Tree> treeList) throws InvalidInputException{
 		int index = 0;
+		List <Species> speciesList= new ArrayList<Species>();
 		if(treeList == null) {
 			throw new InvalidInputException("List cannot be null");
 		}
@@ -203,12 +354,21 @@ public class TMSService {
 			if(tree == null) {
 				throw new InvalidInputException("The list contains a null entry");
 			}
+			if(tree.getTreeStatus().getStatus()!= Status.Cut) {
+				Species newSpecies= tree.getSpecies();
+				Boolean marker=true;
+				for(int i=0; treeList.get(i)!=tree;i++) {
+					if(treeList.get(i).getSpecies()==newSpecies) {marker=false;}
+				}
+				if(marker) {index++;}
+				
+			}
 		}
 		
-		return 4*2;
+		return index;
 	}
 	
-	public int bioForecast(List<Tree> treeList) throws InvalidInputException{
+	public int bioForecast(List<Tree> treeList, String Status) throws InvalidInputException{
 		int forecast = 0;
 		if(treeList == null) {
 			throw new InvalidInputException("List cannot be null");
@@ -221,8 +381,9 @@ public class TMSService {
 				throw new InvalidInputException("The list contains a null entry");
 			}
 		}
+		forecast=0-bioIndexCalculator(treeList);
 		
-		return 3*2;
+		return forecast;
 	}
 	
 	public Tree getTreeById(int aId) {
@@ -266,16 +427,67 @@ public class TMSService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	public User login(String username, String password) throws InvalidInputException{
+		if( ("".equals(username.trim())) || (password.trim()=="") ) {
+			throw new InvalidInputException("Please enter a username and password");
+		}
+		List<User> users= tp.getUsers();
+		for(User user: users) {
+			if(username.equals(user.getUsername())) {
+				if(password.equals(user.getPassword())){
+					return user;
+				}
+				else {
+					throw new InvalidInputException("Please re-enter your password");
+				}
+			}
+		}
+		throw new InvalidInputException("username not found");
+	}
+	
+	public User register(String username, String password, Boolean isScientist) throws InvalidInputException{
+		if( (username.trim()=="") || (password.trim()=="") ) {
+			throw new InvalidInputException("Please enter a username and password");
+		}
+		List<User> users= tp.getUsers();
+		for(User user: users) {
+			if(username.equals(user.getUsername())) {
+				throw new InvalidInputException("username already exists, please try another one");
+			}
+		}
+		User newUser=tp.addUser(username, password);
+		if(isScientist) {
+			newUser.setUserType(UserType.Scientist);
+		}
+		PersistenceXStream.saveToXMLwithXStream(tp);
+		return newUser;
+	}
+	
+	public User getUserByName(String name) {
+		List<User> users = tp.getUsers();
+		for (User user: users) {
+			if (user.getUsername().equals(name)) return user;
+		}
+		return null;
+	}
 	public void loadFile(File input) throws InvalidInputException{
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void updateTree(Tree tree, int i, int j, Date newDatePlanted, TreeStatus newStatus, Species newSpecies,
-			User newUser, Municipality newMunicipality, int k, int l, String string, LocationType newLocationType) throws InvalidInputException{
-		// TODO Auto-generated method stub
-		
+	public List<Tree> updateTrees(List<Integer> treeIDs, Status status) throws InvalidInputException{
+		List<Tree> trees=tp.getTrees();
+		for(int id: treeIDs) {
+			for(Tree tree: trees) {
+				if(id==tree.getId()) {
+					TreeStatus aTreeStatus= tree.getTreeStatus();
+					aTreeStatus.setStatus(status);
+				}
+			}
+		}
+		return trees;
 	}
+
 
 }

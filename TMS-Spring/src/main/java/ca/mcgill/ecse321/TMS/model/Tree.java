@@ -2,9 +2,10 @@
 /*This code was generated using the UMPLE 1.27.0.3728.d139ed893 modeling language!*/
 
 package ca.mcgill.ecse321.TMS.model;
+import java.util.*;
 import java.sql.Date;
 
-// line 13 "../../../../../TreePLE.ump"
+// line 18 "../../../../../TreePLE.ump"
 public class Tree
 {
 
@@ -19,8 +20,8 @@ public class Tree
   //------------------------
 
   //Tree Attributes
-  private int height;
-  private int diameter;
+  private double height;
+  private double diameter;
   private Date datePlanted;
   private Date dateAdded;
 
@@ -39,7 +40,7 @@ public class Tree
   // CONSTRUCTOR
   //------------------------
 
-  public Tree(int aHeight, int aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
+  public Tree(double aHeight, double aDiameter, Date aDatePlanted, Date aDateAdded, TreeStatus aTreeStatus, Species aSpecies, User aLocal, Municipality aMunicipality, TreePLE aTreePLE)
   {
     height = aHeight;
     diameter = aDiameter;
@@ -77,7 +78,7 @@ public class Tree
   // INTERFACE
   //------------------------
 
-  public boolean setHeight(int aHeight)
+  public boolean setHeight(double aHeight)
   {
     boolean wasSet = false;
     height = aHeight;
@@ -85,7 +86,7 @@ public class Tree
     return wasSet;
   }
 
-  public boolean setDiameter(int aDiameter)
+  public boolean setDiameter(double aDiameter)
   {
     boolean wasSet = false;
     diameter = aDiameter;
@@ -109,12 +110,12 @@ public class Tree
     return wasSet;
   }
 
-  public int getHeight()
+  public double getHeight()
   {
     return height;
   }
 
-  public int getDiameter()
+  public double getDiameter()
   {
     return diameter;
   }
@@ -330,6 +331,17 @@ public class Tree
     {
       existingTreeLocation.delete();
     }
+  }
+
+  // line 31 "../../../../../TreePLE.ump"
+   public static  void reinitializeAutouniqueID(List<Tree> trees){
+    nextId = 0; 
+   for (Tree t : trees) {
+     if (t.getId() > nextId) {
+       nextId = t.getId();
+     }
+   }
+   nextId++;
   }
 
 
