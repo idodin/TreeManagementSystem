@@ -1,5 +1,6 @@
 namespace ca.mcgill.ecse321.TMS.model;
 
+
 class TreePLE { 
   1 <@>- * Tree trees; 
   1 <@>- * Municipality municipalities;
@@ -15,6 +16,7 @@ class TreePLE {
 }
 
 class Tree {
+  depend java.util.*;
   autounique id;
   double height;
   double diameter; 

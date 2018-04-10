@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse321.TMS.model;
 
-// line 45 "../../../../../TreePLE.ump"
+// line 47 "../../../../../TreePLE.ump"
 public class TreeLocation
 {
 
