@@ -14,6 +14,7 @@ export default {
   data () {
     return {
       loggedUser: currUser.userName,
+      go: loggedin,
       errorMessage: '',
       newSpecies: [],
       trees:[],
@@ -72,7 +73,7 @@ export default {
 	      })
 	  AXIOS.get('/municipalities/').then(response => {
 		  this.municipalities = response.data
-		  this.municipalitiesSelection.push({value: null, text: 'Municipalities', disabled: true},
+		  this.municipalitiesSelection.push({value: null, text: 'Municipality', disabled: true},
 				  {value: 'other', text: 'other'})
 	      for (var i=0; i<this.municipalities.length;i++) {
 			  var name = this.municipalities[i].name

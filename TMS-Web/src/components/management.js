@@ -15,6 +15,7 @@ export default {
 	data () {
 		return {
 			forecastNum: '',
+			tmsUser: currUser.userName,
 			user: '',
 			forecastSelect: null,
 			updateSelect: null,
@@ -24,9 +25,9 @@ export default {
 			citiesStats: [],
 			userType: '',
 			rectBounds: {
-				north: 45.695066,
-				south: 45.495619,
-				east: -73.578198,
+				north: 45.505066,
+				south: 45.484619,
+				east: -73.606198,
 				west: -73.608229
 			},
 			newTree: '',
@@ -183,20 +184,21 @@ export default {
 	},
 
 	methods: {
-		updateTrees: function(rectTrees, status) {
+		updateTrees: function(updateSelect) {
 			console.log("updateTree called")
-			var treeIDs= [1,2,3,4];
-			status = "HEALTHY";
-//			rectTrees.forEach((tree) =>{
-//			treeIDs.push(tree.id);
-//			});
+			var treeIDs= [];
+			//status = "HEALTHY";
+			this.rectTrees.forEach((tree) =>{
+			treeIDs.push(tree.id);
+			});
 
-			AXIOS.post('/updateTrees/?treeIDs=' + treeIDs + '&status='+ status, {}, {})
+			AXIOS.post('/updateTrees/?treeIDs=' + treeIDs + '&status='+ updateSelect, {}, {})
 			.then(response => {
 				//this.findAllTrees();
 				this.trees= response.data;
+				this.listTrees();
+				
 				this.errorMessage = ''
-					console.log("came in therehr")
 			}).catch(e => {
 				var errorMsg = e.response.data.message
 				console.log(errorMsg)
@@ -204,20 +206,8 @@ export default {
 			})
 
 		},
-		findAllTrees: function(){
-			console.log("yea i was here");
-			AXIOS.get(`/trees`)
-			.then(response => {
-				console.log("inside axios");
-				// JSON responses are automatically parsed.
-				this.trees = response.data
-			})
-			.catch(e => {
-				this.listTreesError = e.response.data.message;
-			});
-		},
-
 		createCarbonForecast: function(forecastSelect) {
+			this.forecastNum = '',
 			console.log("carbon forecast called")
 			var treeIDs= [];
 			this.rectTrees.forEach((tree) =>{
@@ -235,6 +225,7 @@ export default {
 		},
 		
 		createOxygenForecast: function(forecastSelect) {
+			this.forecastNum = '',
 			console.log("oxygen forecast called")
 			var treeIDs= [];
 			this.rectTrees.forEach((tree) =>{
@@ -250,14 +241,33 @@ export default {
 				this.errorMessage = errorMsg
 			})
 		},
+		
+		createBioForecast: function(forecastSelect) {
+			this.forecastNum = '',
+			console.log("biodiversity forecast called")
+			var treeIDs= [];
+			this.rectTrees.forEach((tree) =>{
+			console.log("id is "+ tree.id)
+			treeIDs.push(tree.id);
+			});
+			console.log("list is  "+treeIDs)
+			AXIOS.get('/biodiversity/?treeIDs=' + treeIDs + '&status=' + forecastSelect, {}, {}).then(response => {
+				this.forecastNum = response.data
+			}).catch(e => {
+				var errorMsg = e.response.data.message
+				console.log(errorMsg)
+				this.errorMessage = errorMsg
+			})
+		},
 
 		pins : function(tree){
-			var image;
-			if(tree.status == 'diseased'){
-				image = '../static/forest_yellow.png'
-			}else if(tree.status == 'to_be_cut'){
+			
+			let image;
+			if(tree.status == 'Diseased'){
 				image = '../static/forest_purple.png'
-			}else if(tree.status == 'cut_down'){
+			}else if(tree.status == 'ToBeCut'){
+				image = '../static/forest_yello.png'
+			}else if(tree.status == 'Cut'){
 				image = '../static/forest_red.png'
 			}else{
 				image = '../static/forest_green.png'
@@ -296,8 +306,8 @@ export default {
 			'<td>Latitude</td>' +
 			'<td>' + '      '+la + '</td>' +
 			'</tr>' +
-			'</table>'+
-			'<button>BUTT</button>'
+			'</table>'
+			
 
 			var infowindow = new google.maps.InfoWindow({
 				content: contentString
@@ -327,31 +337,46 @@ export default {
 			for(var k = 0; k<this.markers.length; k++){
 				this.markers[k].setMap(null);
 			}
+			
 			this.markers = [];
-			for(var i = 0; i<this.trees.length; i++){
-				if(this.ids.includes(this.trees[i].city) || this.ids.includes(this.trees[i].species) || this.ids.includes(this.trees[i].status)){
-					this.pins(this.trees[i]);
-				}
+			for(var i = 0; i<this.filterTrees.length; i++){
+					console.log(this.filterTrees[i].status)
+					this.pins(this.filterTrees[i]);
 			}
 		},
 		listTrees: function(){
-			this.filterTrees = [];
+			
+			AXIOS.get(`/trees`).then(response => {
+				// JSON responses are automatically parsed.
+				this.requestTrees = [];
+				this.requestTrees = response.data;
+				this.filterTrees = [];
+				this.requestTrees.forEach((tree) => {
 
-			this.requestTrees.forEach((tree) => {
+					var tempTree = {
+							id: tree.id,
+							species: tree.species.name,
+							municipality: tree.municipality.name,
+							status: tree.status.status,
+							latitude: tree.location.y,
+							longitude: tree.location.x,
+							type: tree.location.landLocationType.landUseType,
+							user: tree.user.userName
+					}
+					if(this.ids.includes(tempTree.municipality) || this.ids.includes(tempTree.species) || this.ids.includes(tempTree.status)){
+						console.log("testing if filters")
+						this.filterTrees.push(tempTree)
+					}
+					
 
-				var tempTree = {
-						id: tree.id,
-						species: tree.species.name,
-						municipality: tree.municipality.name,
-						status: tree.status.status,
-						latitude: tree.location.y,
-						longitude: tree.location.x,
-						type: tree.location.landLocationType.landUseType,
-						user: tree.user.userName
-				}
-				this.filterTrees.push(tempTree);
+				})
+				this.printThis();
+				this.updateStats();
+				this.updateCities();
+			}).catch(e => {
+				this.listTreesError = e.response.data.message;
+			})
 
-			});
 		},
 		clear: function(){
 			this.filterTrees = [];
@@ -389,10 +414,10 @@ export default {
 			var Laval = 0;
 			var Lasalle = 0;
 			this.filterTrees.forEach((tree) => {
-				if(tree.city == 'McGill'){McGill ++}
-				if(tree.city == 'Rosemont'){Rosemont ++}
-				if(tree.city == 'Laval'){Laval ++}
-				if(tree.city == 'Lasalle'){Lasalle ++}
+				if(tree.municipality == 'McGill'){McGill ++}
+				if(tree.municipality == 'Rosemont'){Rosemont ++}
+				if(tree.municipality == 'Laval'){Laval ++}
+				if(tree.municipality == 'Lasalle'){Lasalle ++}
 			});
 			this.citiesStats = [["McGill", McGill], ["Rosemont", Rosemont], ["Laval", Laval], ["Lasalle", Lasalle]]
 
@@ -407,7 +432,7 @@ export default {
 			return [...new Set(this.requestTrees.map(p => p.species.name))]
 		},
 		statuses (){
-			return [...new Set(this.trees.map(p => p.status))]
+			return [...new Set(this.trees.map(p => p.status.status))]
 		}
 	},
 	watch: {
@@ -725,12 +750,12 @@ export default {
 			this.rectangle.setMap(this.map);
 
 			this.filterTrees.forEach((tree) => {
-				var image;
-				if(tree.status == 'diseased'){
-					image = '../static/forest_yello.png'
-				}else if(tree.status == 'to_be_cut'){
+				let image;
+				if(tree.status == 'Diseased'){
 					image = '../static/forest_purple.png'
-				}else if(tree.status == 'cut_down'){
+				}else if(tree.status == 'ToBeCut'){
+					image = '../static/forest_yello.png'
+				}else if(tree.status == 'Cut'){
 					image = '../static/forest_red.png'
 				}else{
 					image = '../static/forest_green.png'
@@ -769,8 +794,8 @@ export default {
 				'<td>Latitude</td>' +
 				'<td>' + '      '+la + '</td>' +
 				'</tr>' +
-				'</table>'+
-				'<button>BUTT</button>'
+				'</table>'
+			
 
 				var infowindow = new google.maps.InfoWindow({
 					content: contentString

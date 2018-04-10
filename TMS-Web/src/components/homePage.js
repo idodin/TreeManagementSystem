@@ -3,7 +3,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 var config = require('../../config')
-window.currUser= 'Ahmed';
+window.currUser= '';
+window.loggedin= 'false';
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
 var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
 
@@ -16,6 +17,7 @@ export default {
 
   data () {
     return {
+      errorMessage: '',
 	  users: [],
 	  nameNew: 'tms',
 	  inputToken: '',
@@ -58,16 +60,16 @@ export default {
     		console.log("enter block")
 			  this.users.push(response.data)
 			  currUser= response.data
-
+			  loggedin= 'true'
 			  console.log(currUser)
-	          this.errorMessage = ''
+	          this.errorMessage = errorMsg
 	          window.location.href = "http://localhost:8087/#/create/";
 
 		  }).catch(e => {
 			  errorMsg = e.response.data.message
 			  console.log("catch error")
 	          console.log(errorMsg)
-	          //this.errorMessage = errorMsg
+	          this.errorMessage = errorMsg
 		  })
     },
 
@@ -78,16 +80,16 @@ export default {
     	.then(response => {
     		console.log("enter block")
 			  currUser= response.data
-
+			  loggedin= 'true'
 			  console.log(currUser)
-	          this.errorMessage = ''
+	          this.errorMessage = errorMsg
 	          window.location.href = "http://localhost:8087/#/create/";
 
 		  }).catch(e => {
 			  console.log("catch error")
 			  errorMsg = e.response.data.message
 	          console.log(errorMsg)
-	          //this.errorMessage = errorMsg
+	          this.errorMessage = errorMsg
 		  })
     },
   }

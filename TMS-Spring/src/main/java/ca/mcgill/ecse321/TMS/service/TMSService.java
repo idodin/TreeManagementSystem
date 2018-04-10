@@ -88,7 +88,13 @@ public class TMSService {
 		return tp.getSpecies();
 	}
 	
-	public Species createSpecies(String name, int carbonConsumption, int oxygenProduction) {
+	public Species createSpecies(String name, int carbonConsumption, int oxygenProduction) throws InvalidInputException{
+		if( ( carbonConsumption < 0 ) || (oxygenProduction <0) ) {
+			throw new InvalidInputException(" Amount of carbon consumption or oxygen production cannot be negative");
+		}
+		if((name==null)|| (name.trim().equals("")) ){
+			throw new InvalidInputException(" Please enter a species name");
+		}
 		Species sp = new Species(name.toLowerCase(), carbonConsumption, oxygenProduction, tp);
 		PersistenceXStream.saveToXMLwithXStream(tp);
 		return sp;
@@ -108,7 +114,16 @@ public class TMSService {
 		return tp.getMunicipalities();
 	}
 	
-	public Municipality createMunicipality(String name, int id) {
+	public Municipality createMunicipality(String name, int id) throws InvalidInputException{
+		if((name==null)|| (name.trim().equals("")) ){
+			throw new InvalidInputException(" Please enter a municiplaity name");
+		}
+		List<Municipality> muniList=tp.getMunicipalities();
+		for(Municipality muni: muniList) {
+			if(id==muni.getIdNumber()) {
+				throw new InvalidInputException(" ID already exists. Try another one please.");
+			}
+		}
 		Municipality m = new Municipality(id, name, tp);
 		PersistenceXStream.saveToXMLwithXStream(tp);
 		return m;
@@ -368,7 +383,7 @@ public class TMSService {
 		return index;
 	}
 	
-	public int bioForecast(List<Tree> treeList, String Status) throws InvalidInputException{
+	public int bioForecast(List<Tree> treeList, String status) throws InvalidInputException{
 		int forecast = 0;
 		if(treeList == null) {
 			throw new InvalidInputException("List cannot be null");
@@ -381,7 +396,25 @@ public class TMSService {
 				throw new InvalidInputException("The list contains a null entry");
 			}
 		}
-		forecast=0-bioIndexCalculator(treeList);
+		if(status.equals("Cut")) {
+			forecast=0-bioIndexCalculator(treeList);
+		}
+		else {
+			for(Tree tree: treeList) {
+				if(tree == null) {
+					throw new InvalidInputException("The list contains a null entry");
+				}
+				if(tree.getTreeStatus().getStatus()== Status.Cut) {
+					Species newSpecies= tree.getSpecies();
+					Boolean marker=true;
+					for(int i=0; treeList.get(i)!=tree;i++) {
+						if(treeList.get(i).getSpecies()==newSpecies) {marker=false;}
+					}
+					if(marker) {forecast++;}
+					
+				}
+			}
+		}
 		
 		return forecast;
 	}

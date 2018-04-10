@@ -2,14 +2,13 @@
   <div id="treemanagement">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
-      <a href="#about">Forecast</a>
+      <a href="#about">Hello {{tmsUser}}</a>
       <a class="active" href="#news">Visualizer</a>
       <a href="/#/create">Create</a>
       <a href="/#/home">Home</a>
     </div>
     <br />
     <br />
-    <button @click="listTrees()">ListTrees</button>
     <div id="charts">
       <b-card id="card1">
         <h6>data charts</h6>
@@ -17,7 +16,7 @@
           <b-tab title="Status" active>
             <pie-chart width="500px" height="250px":donut="true" :data="stats" :colors="['#2db563', '#a72cb5', '#ede438', '#d62f2f']"></pie-chart>
           </b-tab>
-          <b-tab title="City">
+          <b-tab title="Municipality">
             <pie-chart width="500px" height="250px":donut="true" :data="citiesStats"></pie-chart>
           </b-tab>
 
@@ -64,10 +63,8 @@
     </div>
 
     <div class="google-map" v-bind:id="mapName"></div>
-    <button @click="forecasteTrees()">Show trees</button>
-    <p>
-    {{rectTrees}}
-    </p>
+    <button id="updateButton" style="width:250px; height:60px;"@click="forecasteTrees()">use the box to gather the trees  </button>
+    <br /><br />
     <div id="forecast">
       <b-card id="cardForecast">
         <h3>forecasts</h3>
@@ -77,18 +74,20 @@
           <b-tab title="carbon consumption" active>
             <br />
             <h5> If the selected trees were {{forecastSelect}}</h5>
-             <button id="regButton" @click="createCarbonForecast(forecastSelect)">generate</button>
-             <h5>forecast is {{forecastNum}} %</h5>
+             <button id="updateButton" @click="createCarbonForecast(forecastSelect)">then...</button>
+             <h5>carbon consumption changed by {{forecastNum}} %</h5>
           </b-tab>
           <b-tab title="oxygen production">
             <br />
             <h5> If the selected trees were {{forecastSelect}}</h5>
-             <button id="regButton" @click="createOxygenForecast(forecastSelect)">generate</button>
-             <h5>forecast is {{forecastNum}} %</h5>
+             <button id="updateButton" @click="createOxygenForecast(forecastSelect)">then...</button>
+             <h5>oxygen production changed by {{forecastNum}} %</h5>
           </b-tab>
           <b-tab title="biodiverstiy index">
             <br />
-            <h5> ALDHJS KLASD </h5>
+            <h5> If the selected trees were {{forecastSelect}}</h5>
+             <button id="updateButton" @click="createBioForecast(forecastSelect)">then...</button>
+             <h5>biodiversity changed by {{forecastNum}} number of species</h5>
           </b-tab>
         </b-tabs>
       </b-card>
@@ -101,7 +100,7 @@
       <span>change the status of the selected trees to: </span>
       <b-form-select style="width:120px; margin-top:17px;" id="typeMenu" v-model="updateSelect" :options="statusForecast" class="mb-3"/>
       <br />
-      <button id="updateButton">register</button>
+      <button id="updateButton" @click="updateTrees(updateSelect)">register</button>
     </div>
   </div>
 </template>
@@ -129,7 +128,7 @@
 
 #cardForecast{
   background: #f7f9fc;
-  height: 300px;
+  height: 350px;
 }
 
 #updateTrees{
@@ -230,7 +229,7 @@
 
 #updateButton{
   box-sizing: border-box;
-	padding: 1em;
+	
 	border: 10px solid #0c0c0c;
 	border-radius: 0.5em;
   background-color: #4d564d;
@@ -241,7 +240,7 @@
   margin-right: 30px;
   transition: 0.3s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   margin-top: 10px;
   width: 120px;
 }
@@ -294,7 +293,7 @@ li {
 
 /* Add a color to the active/current link */
 .topnav a.active {
-  background-color: #4CAF50;
+  background-color: #6496e5;
   color: white;
 }
 
