@@ -2,7 +2,7 @@
   <div id="hello">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
-      <a href="#about">Hello {{loggedUser}}</a>
+      <a href="#about">Hello</a>
       <a href="/#/home">Visualizer</a>
       <a href="/#/home/" >Create</a>
       <a class="active" href="/#/home">Home</a>
