@@ -61,6 +61,7 @@ public class PersistenceXStream {
         	tp.reinitialize();
         } else {
             try {
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
