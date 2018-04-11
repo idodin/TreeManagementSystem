@@ -30,7 +30,7 @@ import ca.mcgill.ecse321.TMS.model.UserRole;
 public class PersistenceXStream {
 
 	private static XStream xstream = new XStream();
-	private static String filename = "/treePLE/data.xml";
+	private static String filename = "/TreePLE/data.xml";
 
 	// TODO create the RegistrationManager instance here (replace the void return value as well)
 	public static TreePLE initializeModelManager(String fileName) {
