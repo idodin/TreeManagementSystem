@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     if (statusText.equals("cut")) {
                         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred));
-                    } else if (statusText.equals("tobecutdown")) {
+                    } else if (statusText.equals("tobecut")) {
                         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow));
                     } else if (statusText.equals("diseased")) {
                         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple));
@@ -259,29 +259,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
 
-        };
-
-        @Override
-        public void onFailure ( int statusCode, Header[] headers, Throwable throwable, JSONObject
-        errorResponse){
-            try {
-                error += errorResponse.get("message").toString();
-            } catch (JSONException e) {
-                //error += e.getMessage();
             }
-            refreshErrorMessage();
-        }
-    });
 
-    // Set back the spinners to the initial state after posting the request
+            ;
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
+                    errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    //error += e.getMessage();
+                }
+                refreshErrorMessage();
+            }
+        });
+
+        // Set back the spinners to the initial state after posting the request
         speciesSpinner.setSelection(0);
         municipalitySpinner.setSelection(0);
         statusSpinner.setSelection(0);
         landuseSpinner.setSelection(0);
 
-    refreshErrorMessage();
+        refreshErrorMessage();
 
-}
+    }
 
 
     @Override
@@ -316,23 +318,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 new LatLng(y, x)).title(user + "'s " + species);
                         markers.add(marker);
 
-                        switch (status) {
-                            case "Cut":
-                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred));
-                                break;
-                            case "ToBeCut":
-                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow));
-                                break;
-                            case "Diseased":
-                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple));
-                                break;
-
-                            default:
-                                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon));
-                                break;
+                        if (status.equals("Cut")) {
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconred));
+                        } else if (status.equals("ToBeCut")) {
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconyellow));
+                        } else if (status.equals("Diseased")) {
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeiconpurple));
+                        } else {
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.treeicon));
                         }
-
                         myMap.addMarker(marker);
+
+
                     } catch (Exception e) {
                         error += e.getMessage();
                     }
