@@ -37,6 +37,12 @@ public class TMSService {
 			Date aDatePlanted, TreeStatus aTreeStatus,
 			Species aSpecies, User aLocal, Municipality aMunicipality,
 			double x, double y, String description, LocationType locationType) throws InvalidInputException{
+		if( (x<-74.0) && (x>-73.0) ) {
+			throw new InvalidInputException("Please enter longitude within montreal area, range:[-74.0 ~ -73.0]");
+		}
+		if( (y<45.0) || (y>46.0) ) {
+			throw new InvalidInputException("Please enter latitude within montreal area, range:[45.0 ~ 46.0]");
+		}
 		List<Tree> trees= tp.getTrees();
 		for(Tree aTree: trees) {
 			if( (x==aTree.getTreeLocation().getX()) && (y==aTree.getTreeLocation().getY()) ) {
