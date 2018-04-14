@@ -37,7 +37,7 @@ public class TMSService {
 			Date aDatePlanted, TreeStatus aTreeStatus,
 			Species aSpecies, User aLocal, Municipality aMunicipality,
 			double x, double y, String description, LocationType locationType) throws InvalidInputException{
-		if( (x<-74.0) && (x>-73.0) ) {
+		if( (x<-74.0) || (x>-73.0) ) {
 			throw new InvalidInputException("Please enter longitude within montreal area, range:[-74.0 ~ -73.0]");
 		}
 		if( (y<45.0) || (y>46.0) ) {
