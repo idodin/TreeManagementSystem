@@ -34,5 +34,5 @@ dependencies {
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'org.json:json:20160212'
     implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
-    implementation 'com.google.android.gms:play-services:12.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.0'
 }
