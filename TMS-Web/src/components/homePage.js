@@ -63,7 +63,7 @@ export default {
 			  loggedin= 'true'
 			  console.log(currUser)
 	          this.errorMessage = errorMsg
-	          window.location.href = "http://ecse312-9.ece.mcgill.ca:8087/#/create/";
+	          window.location.href = "http://ecse321-9.ece.mcgill.ca:8087/#/create/";
 
 		  }).catch(e => {
 			  errorMsg = e.response.data.message
@@ -83,7 +83,7 @@ export default {
 			  loggedin= 'true'
 			  console.log(currUser)
 	          this.errorMessage = errorMsg
-	          window.location.href = "http://ecse312-9.ece.mcgill.ca:8087/#/create/";
+	          window.location.href = "http://ecse321-9.ece.mcgill.ca:8087/#/create/";
 
 		  }).catch(e => {
 			  console.log("catch error")
