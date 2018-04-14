@@ -391,9 +391,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Button register = (Button) myDialog.findViewById(R.id.plant_tree);
         Button refreshLists = (Button) myDialog.findViewById(R.id.refresh_list);
-
-        EditText emailaddr = (EditText) myDialog.findViewById(R.id.email);
-        EditText password = (EditText) myDialog.findViewById(R.id.password);
         myDialog.show();
 
         register.setOnClickListener(new View.OnClickListener() {
