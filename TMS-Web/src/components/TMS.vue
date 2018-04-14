@@ -64,7 +64,12 @@
 
     <div class="google-map" v-bind:id="mapName"></div>
     <button id="updateButton" style="width:250px; height:60px;"@click="forecasteTrees()">Highlight trees on the map then click here to select them</button>
-    <br /><br />
+   <br />
+    <div v-if="rectTrees.length != 0">
+      <span>IDs of Selected Trees: </span>
+      <h6 v-for="tree in rectTrees">{{tree.id}}</h6>
+    </div>
+   <br /><br />
     <div id="forecast">
       <b-card id="cardForecast">
         <h3>forecasts</h3>
