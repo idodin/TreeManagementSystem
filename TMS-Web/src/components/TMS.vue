@@ -11,7 +11,7 @@
     <br />
     <div id="charts">
       <b-card id="card1">
-        <h6>data charts</h6>
+        <h6>Data Charts</h6>
         <b-tabs>
           <b-tab title="Status" active>
             <pie-chart width="500px" height="250px":donut="true" :data="stats" :colors="['#2db563', '#a72cb5', '#ede438', '#d62f2f']"></pie-chart>
@@ -23,7 +23,7 @@
         </b-tabs>
       </b-card>
       <b-card id="card">
-        <h6>filters</h6>
+        <h6>Filters</h6>
         <b-tabs>
           <b-tab title="City" active>
             <div id="stack">
@@ -63,7 +63,7 @@
 
 
     <div class="google-map" v-bind:id="mapName"></div>
-    <button id="updateButton" style="width:250px; height:60px;"@click="forecasteTrees()">use the box to gather the trees  </button>
+    <button id="updateButton" style="width:250px; height:60px;"@click="forecasteTrees()">Highlight trees on the map then click here to select them</button>
     <br /><br />
     <div id="forecast">
       <b-card id="cardForecast">
@@ -71,19 +71,19 @@
         <span>What if the selected trees were</span>
         <b-form-select style="width:120px; margin-top:17px;" id="typeMenu" v-model="forecastSelect" :options="statusForecast" class="mb-3"/>
         <b-tabs>
-          <b-tab title="carbon consumption" active>
+          <b-tab title="Carbon Consumption" active>
             <br />
             <h5> If the selected trees were {{forecastSelect}}</h5>
              <button id="updateButton" @click="createCarbonForecast(forecastSelect)">then...</button>
              <h5>carbon consumption changed by {{forecastNum}} %</h5>
           </b-tab>
-          <b-tab title="oxygen production">
+          <b-tab title="Oxygen Production">
             <br />
             <h5> If the selected trees were {{forecastSelect}}</h5>
              <button id="updateButton" @click="createOxygenForecast(forecastSelect)">then...</button>
              <h5>oxygen production changed by {{forecastNum}} %</h5>
           </b-tab>
-          <b-tab title="biodiverstiy index">
+          <b-tab title="Biodiverstiy Index">
             <br />
             <h5> If the selected trees were {{forecastSelect}}</h5>
              <button id="updateButton" @click="createBioForecast(forecastSelect)">then...</button>
@@ -96,11 +96,11 @@
 
     <div id="updateTrees">
       <br />
-      <h3>update the status of selected trees</h3>
+      <h3>Update the status of selected trees</h3>
       <span>change the status of the selected trees to: </span>
       <b-form-select style="width:120px; margin-top:17px;" id="typeMenu" v-model="updateSelect" :options="statusForecast" class="mb-3"/>
       <br />
-      <button id="updateButton" @click="updateTrees(updateSelect)">register</button>
+      <button id="updateButton" @click="updateTrees(updateSelect)">Update</button>
     </div>
   </div>
 </template>
