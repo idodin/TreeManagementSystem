@@ -54,13 +54,13 @@
     </div>
     <br /> <br />
 
-    <div style="display:inline">
+
       <br />
       <div id="list">
         <b-table striped hover :items="filterTrees" :fields="fields"></b-table>
       </div>
       <br />
-    </div>
+
 
     <div class="google-map" v-bind:id="mapName"></div>
     <button id="updateButton" style="width:250px; height:60px;"@click="forecasteTrees()">use the box to gather the trees  </button>
@@ -164,16 +164,17 @@
   /*margin-right: 50px;*/
 }
 #list{
-  float: left;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   width: 860px;
   height: 215px;
   background: #f7f9fc;
   border-radius: 0.5em;
-  margin-left: 208px;
+  float: center;
+  display: inline-block;
   margin-bottom: 30px;
   overflow-y: auto;
   overflow-x: auto;
+  position: relative;
 }
 
 #card{
