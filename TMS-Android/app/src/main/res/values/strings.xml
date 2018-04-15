@@ -36,4 +36,6 @@
     <string name="select_landuse">Select LandUse</string>
     <string name="enter_description">Enter Description</string>
     <string name="refresh_map">Refresh Map</string>
+    <string name="refresh_tree">Refresh Info</string>
+    <string name="cut_tree">Cut Down Tree</string>
 </resources>
