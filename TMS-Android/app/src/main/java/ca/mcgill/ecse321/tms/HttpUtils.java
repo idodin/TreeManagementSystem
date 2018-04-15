@@ -5,7 +5,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class HttpUtils {
-    public static final String DEFAULT_BASE_URL = "http://10.0.2.2:8080/";
+    public static final String DEFAULT_BASE_URL = "http://ecse321-9.ece.mcgill.ca:8080/";
 
     private static String baseUrl;
     private static AsyncHttpClient client = new AsyncHttpClient();

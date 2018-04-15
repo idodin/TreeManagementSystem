@@ -9,10 +9,6 @@
             android:id="@+id/map"
             android:icon="@drawable/ic_map"
             android:title="@string/map" />
-        <item
-            android:id="@+id/list_trees"
-            android:icon="@drawable/ic_view_list"
-            android:title="@string/list_trees" />
 
     </group>
 </menu>
