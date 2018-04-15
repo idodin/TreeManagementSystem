@@ -407,6 +407,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 plantTree(v, longitude, latitude);
+                myDialog.dismiss();
 
             }
         });
