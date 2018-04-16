@@ -138,15 +138,15 @@ export default {
 		}
 	},
 	created: function () {
-		AXIOS.get(`/trees`)
-		.then(response => {
-
-			// JSON responses are automatically parsed.
-			this.trees = response.data
-		})
-		.catch(e => {
-			this.listTreesError = e.response.data.message;
-		});
+		// AXIOS.get(`/trees`)
+		// .then(response => {
+		//
+		// 	// JSON responses are automatically parsed.
+		// 	this.trees = response.data
+		// })
+		// .catch(e => {
+		// 	this.listTreesError = e.response.data.message;
+		// });
 
 //		AXIOS.get('/trees/').then(response => {
 //		this.trees = response.data
@@ -195,8 +195,11 @@ export default {
 			AXIOS.post('/updateTrees/?treeIDs=' + treeIDs + '&status='+ updateSelect, {}, {})
 			.then(response => {
 				//this.findAllTrees();
-				this.trees= response.data;
+				this.requestTrees = response.data;
+				this.printThis();
 				this.listTrees();
+				this.updateStats();
+				this.updateCities();
 
 				this.errorMessage = ''
 			}).catch(e => {
@@ -460,7 +463,7 @@ export default {
 			return [...new Set(this.requestTrees.map(p => p.species.name))]
 		},
 		statuses (){
-			return [...new Set(this.trees.map(p => p.status.status))]
+			return [...new Set(this.requestTrees.map(p => p.status.status))]
 		}
 	},
 	watch: {
