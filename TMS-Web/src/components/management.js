@@ -15,6 +15,7 @@ export default {
 	data () {
 		return {
 			forecastNum: '',
+			fTree: [],
 			tmsUser: currUser.userName,
 			user: '',
 			forecastSelect: null,
@@ -198,28 +199,28 @@ export default {
 
 
 
-				this.listTrees();
-				this.printThis();
-				this.updateStats();
-				this.updateCities();
 
-				this.fTree = response.data;
+				this.listTrees();
+
+
 				this.filterTrees = []
-				this.fTree.forEach((tree) => {
+				this.requestTrees.forEach((tree) => {
 
 					var tempTree = {
-							id: tree.id,
-							species: tree.species.name,
-							municipality: tree.municipality.name,
-							status: tree.status.status,
-							latitude: tree.location.y,
-							longitude: tree.location.x,
-							type: tree.location.landLocationType.landUseType,
-							user: tree.user.userName
+						id: tree.id,
+						species: tree.species.name,
+						municipality: tree.municipality.name,
+						status: tree.status.status,
+						latitude: tree.location.y,
+						longitude: tree.location.x,
+						type: tree.location.landLocationType.landUseType,
+						user: tree.user.userName
 					}
-					this.filterTrees.push(tempTree)
-
+					this.filterTrees.push(tempTree);
+					console.log("beeh herer")
 				})
+
+				this.ids = ["Healthy", "Diseased", "ToBeCut", "Cut"]
 				this.errorMessage = ''
 			}).catch(e => {
 				var errorMsg = e.response.data.message
@@ -400,10 +401,6 @@ export default {
 			})
 
 		},
-		clear: function(){
-			this.filterTrees = [];
-			this.ids = [];
-		},
 		forecasteTrees: function (){
 			this.rectTrees = [];
 			var ne = this.rectangle.getBounds().getNorthEast();
@@ -515,8 +512,6 @@ export default {
 				this.filterTrees.push(tempTree)
 
 			})
-
-			//this.filterTrees = this.trees;
 
 
 			this.updateStats();
