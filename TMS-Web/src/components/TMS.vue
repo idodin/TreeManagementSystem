@@ -107,6 +107,8 @@
       <b-form-select style="width:120px; margin-top:17px;" id="typeMenu" v-model="updateSelect" :options="statusForecast" class="mb-3"/>
       <br />
       <button id="updateButton" @click="updateTrees(updateSelect)">Update</button>
+      <br />
+      <h6>If the map, charts or table is empty, make sure that you seletected a filter</h6>
     </div>
   </div>
 </template>
