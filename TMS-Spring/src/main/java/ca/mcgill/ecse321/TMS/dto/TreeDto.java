@@ -2,9 +2,6 @@ package ca.mcgill.ecse321.TMS.dto;
 
 import java.sql.Date;
 
-import ca.mcgill.ecse321.TMS.model.Municipality;
-import ca.mcgill.ecse321.TMS.model.User;
-
 public class TreeDto {
 	
 	private int id; 
@@ -20,11 +17,8 @@ public class TreeDto {
 	private MunicipalityDto municipality;
 	
 	
-	
 	public TreeDto() {
-		
 	}
-
 
 	public TreeDto(int height, int diameter, int id, Date datePlanted, Date dateAdded,
 			TreeLocationDto location, TreeStatusDto status, SpeciesDto species,
@@ -41,7 +35,6 @@ public class TreeDto {
 		this.municipality = municipality;
 	}
 	
-
 	public int getHeight() {
 		return height;
 	}

@@ -1,24 +1,15 @@
 package ca.mcgill.ecse321.TMS.dto;
-
-import ca.mcgill.ecse321.TMS.model.LocationType;
-import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Tree;
 
 public class TreeLocationDto {
-	
 	
 	private double x;
 	private double y;
 	private String description;
 	
-	
-	//private Tree tree;
 	private LocationTypeDto locationType;
 	
-	
-	
 	public TreeLocationDto() {
-		
 	}
 	
 	public TreeLocationDto(double x, double y, String description, Tree tree, LocationTypeDto locationType) {
@@ -27,7 +18,6 @@ public class TreeLocationDto {
 		this.description = description;
 		this.locationType = locationType;
 	}
-
 	
 	public double getX() {
 		return x;
@@ -61,5 +51,4 @@ public class TreeLocationDto {
 		this.locationType = locationType;
 	}
 
-	
 }
