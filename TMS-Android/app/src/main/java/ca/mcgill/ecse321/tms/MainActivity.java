@@ -76,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // Marker list
     private HashMap<Marker, JSONObject> markers = new HashMap<Marker, JSONObject>();
 
+    /**
+     * Method describings procedures on creation of Activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Set-up Navigation Drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        // Define Navigation Drawer and Actions
         NavigationView navigationView = findViewById(R.id.nav_view);
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.header_text)).setText("Welcome, " + username + "!");
         navigationView.setNavigationItemSelectedListener(
@@ -130,10 +135,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Method describing actions followed when Google Maps Fragment is Ready
+     * @param googleMap
+     */
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         myMap = googleMap;
         generateMarkers();
+
+        //Zoom to Montreal
         LatLng montreal = new LatLng(45.50202067177077, -73.5668932646513);
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
@@ -167,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Set the Spinners for the Plant Tree Dialog Box Form
+     */
     private void setSpinners() {
         // Add adapters to spinner lists and refresh spinner content
         Spinner speciesSpinner = (Spinner) myDialog.findViewById(R.id.species_spinner);
@@ -195,6 +209,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    /**
+     * Method describing HTTP Request Procedures for Planting a Tree
+     * @param v Source View (to Reference view Elements)
+     * @param longt (Longitude of Tap Location)
+     * @param lat (Latitude of Tap Location)
+     */
     public void plantTree(View v, double longt, double lat) {
 
         final double latitude = lat;
@@ -294,6 +314,53 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Method defining procedure for issuing an HTTP Request to CutDown Trees
+     * @param v Source View (to Access View Elements)
+     * @param m Marker Tapped
+     */
+    public void cutDownTree(View v, Marker m) {
+
+        int id = 0;
+        try {
+            id = markers.get(m).getInt("id");
+        } catch (JSONException e){
+            return;
+        }
+
+        RequestParams rp = new RequestParams();
+
+        rp.add("treeIDs", Integer.toString(id));
+        rp.add("status", "cut");
+
+        HttpUtils.post("updateTrees/", rp, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                refreshErrorMessage();
+            }
+
+            ;
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
+                    errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    //error += e.getMessage();
+                }
+                refreshErrorMessage();
+            }
+        });
+
+    }
+
+    /**
+     * Defines Navigation Drawer Reaction when Home Button is Tapped
+     * @param item Item Tapped (checks if this is the Home Button)
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -304,7 +371,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO set icons based on status
+    /**
+     * (Re)Generate Tree Icons on Map
+     */
     private void generateMarkers() {
 
         HttpUtils.get("trees", new RequestParams(), new JsonHttpResponseHandler() {
@@ -359,12 +428,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Utility Function to Regenerate Markers for Refresh Button
+     * @param menuItem MenuItem Tapped
+     */
     public void generateMarkers(MenuItem menuItem) {
         generateMarkers();
     }
 
+    /**
+     * Method to display Error Message in Plant Tree Dialog Box Form
+     */
     private void refreshErrorMessage() {
-//        // set the error message
+        // set the error message
         TextView tvError = (TextView) myDialog.findViewById(R.id.error_message_dialog);
         tvError.setText(error);
 
@@ -376,6 +452,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Inflate the Menu with the options defined in the XML file
+     * @param menu Menu to Inflate
+     * @return Boolean indicating Success
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -383,6 +464,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
+    /**
+     * Call Plant Tree Dialog Box on Tap of Map
+     * @param longt Longitude of Tap
+     * @param lat Latitude of Tap
+     */
     private void callRegisterDialog(double longt, double lat) {
         final double latitude = lat;
         final double longitude = longt;
@@ -414,7 +500,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    //TODO
+    /**
+     * Call Tree Info Dialog Box on long tap of Map Info Box
+     * @param m Marker associated to Info Box
+     * @throws JSONException thrown by trying to parse data from HTTP JSON REsponse
+     */
     private void callTreeInfoDialog(Marker m) throws JSONException {
         JSONObject obj = markers.get(m);
         double x = obj.getJSONObject("location").getDouble("x");
@@ -469,43 +559,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public void cutDownTree(View v, Marker m) {
-
-        int id = 0;
-        try {
-            id = markers.get(m).getInt("id");
-        } catch (JSONException e){
-            return;
-        }
-
-        RequestParams rp = new RequestParams();
-
-        rp.add("treeIDs", Integer.toString(id));
-        rp.add("status", "cut");
-
-        HttpUtils.post("updateTrees/", rp, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                refreshErrorMessage();
-            }
-
-            ;
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
-                    errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    //error += e.getMessage();
-                }
-                refreshErrorMessage();
-            }
-        });
-
-    }
-
+    /**
+     * Function to show Date Picker Fragment
+     * @param v Source View (To Access Elements)
+     */
     public void showDatePickerDialog(View v) {
         TextView tf = (TextView) v;
         Bundle args = getDateFromLabel(tf.getText().toString());
@@ -517,11 +574,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    /**
+     * Utility Function to set Date on Fragment
+     * @param id id of Date Element
+     * @param d Day
+     * @param m Month
+     * @param y Year
+     */
     public void setDate(int id, int d, int m, int y) {
         TextView tv = (TextView) myDialog.findViewById(id);
         tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
     }
 
+    /**
+     * Utility Function to Read Date from Date Label
+     * @param text
+     * @return Bundle containing Date Information
+     */
     private Bundle getDateFromLabel(String text) {
         Bundle rtn = new Bundle();
         String comps[] = text.toString().split("-");
@@ -541,7 +610,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return rtn;
     }
-
+    /**
+     * Utility Function to Refresh Drop Down Lists on Plant Tree Form
+     * @param view Source View to access View Elements
+     */
     public void refreshLists(View view) {
         refreshList(speciesAdapter, speciesNames, "species");
         refreshList(municipalityAdapter, municipalityNames, "municipalities");
@@ -549,6 +621,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         refreshListLandUse(landuseAdapter, landuseNames, "landuse");
     }
 
+    /**
+     * Hard Code Tree Status Locations
+     * @param adapter Adapter to add list to Drop Down
+     * @param names List of Names to be added to Drop Down
+     * @param restFunctionName Rest Function name to match format of other refresh functions
+     */
     private void refreshListStatus(final ArrayAdapter<String> adapter, final List<String> names, String restFunctionName) {
         names.clear();
         names.add("Please select...");
@@ -559,6 +637,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Utility Functions to Refresh Other Lists - Provided in EventRegistration Tutorial
+     * @param adapter Adapter to add list to Drop Down
+     * @param names List of Names to be added to Drop Down
+     * @param restFunctionName Name of rest functions to get data
+     */
     private void refreshList(final ArrayAdapter<String> adapter, final List<String> names, String restFunctionName) {
         names.clear();
         names.add("Please select...");
@@ -591,6 +675,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    /**
+     * Hard Code Land Use Refresh Lists
+     * @param adapter Adapter to add list to Drop Down
+     * @param names List of Names to be added to Drop Down
+     * @param restFunctionName Name of rest functions to get data
+     */
     private void refreshListLandUse(final ArrayAdapter<String> adapter, final List<String> names, String restFunctionName) {
         names.clear();
         names.add("Please select...");
