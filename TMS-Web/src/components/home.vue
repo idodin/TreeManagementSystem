@@ -6,6 +6,7 @@
       <a href="/#/home">Visualizer</a>
       <a href="/#/home/" >Create</a>
       <a class="active" href="/#/home">Home</a>
+      <a href="../../../TMS-Android/app/build/outputs/apk/release/app-release-unsigned.apk" download="APK">APK</a>
     </div>
     <br /><br /><br />
     <h3>Someone's sitting in the shade today because...</h3>
@@ -33,7 +34,7 @@
         <button id="regButton" style="margin-top:25px" @click="createUser(username, password, inputToken)">register</button>
       </div>
     </div>
-    
+
 
   </div>
 </template>

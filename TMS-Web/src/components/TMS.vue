@@ -6,6 +6,7 @@
       <a class="active" href="#news">Visualizer</a>
       <a href="/#/create">Create</a>
       <a href="/#/home">Home</a>
+      <a href="../../../TMS-Android/app/build/outputs/apk/release/app-release-unsigned.apk" download="APK">APK</a>
     </div>
     <br />
     <br />
@@ -235,7 +236,7 @@
 
 #updateButton{
   box-sizing: border-box;
-	
+
 	border: 10px solid #0c0c0c;
 	border-radius: 0.5em;
   background-color: #4d564d;
