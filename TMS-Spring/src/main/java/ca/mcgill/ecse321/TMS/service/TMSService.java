@@ -57,6 +57,7 @@ public class TMSService {
 		return tree;
 	}
 	
+	//removing a tree record from the system
 	public Tree removeTree(Tree aTree) {
 		aTree.delete();
 		PersistenceXStream.saveToXMLwithXStream(tp);
@@ -67,6 +68,7 @@ public class TMSService {
 		return tp.getTrees();
 	}
 	
+	//access list of trees by their id numbers
 	public List<Tree> findTreesById(Integer[] treeIds) throws InvalidInputException{
 		List<Tree> trees = new ArrayList<Tree>();
 		boolean wasAdded = false;
@@ -83,6 +85,7 @@ public class TMSService {
 		return trees;
 	}
 	
+	//update list of trees with a specific tree status
 	public List<Tree> updateTrees(List<Integer> treeIDs, Status status) throws InvalidInputException{
 		List<Tree> trees=tp.getTrees();
 		for(int id: treeIDs) 
@@ -92,6 +95,62 @@ public class TMSService {
 					aTreeStatus.setStatus(status);
 				}
 		return trees;
+	}
+	
+	//update all attributes for a single tree record
+	public void updateTree(Tree tree, int newHeight, int newDiameter, Date newDatePlanted, TreeStatus newStatus, Species newSpecies,
+			User newUser, Municipality newMunicipality, int newX, int newY, String locationDescription, LocationType newLocationType) throws InvalidInputException{
+		Calendar c1 = Calendar.getInstance();
+		Date currentDate = new Date(c1.getTimeInMillis());
+		if( (tree==null) || (newHeight<0) || (newDiameter<0) || (newDatePlanted.after(currentDate)) || 
+				(newDatePlanted==null) || (newStatus==null) || (newSpecies==null) || (newUser==null) ||
+				(newMunicipality==null) || (newX<0) || (newY<0) || (locationDescription==null) || (newLocationType==null)){
+			throw new InvalidInputException("Tree needs to be selected to be updated! Cannot pass negative integer! Cannot plant tree in the future! Status needs to be selected for registration! Species needs to be selected for registration! User needs to be logged in for registration! Municipality needs to be selected for registration!");
+		}
+		TreePLE ple=tree.getTreePLE();
+		if( (ple.indexOfStatus(newStatus)==-1) || (ple.indexOfSpecies(newSpecies)==-1) || (ple.indexOfUser(newUser)==-1) || (ple.indexOfMunicipality(newMunicipality)==-1) || ( (ple.indexOfStreet((Street)newLocationType)==-1) && (ple.indexOfPark((Park)newLocationType)==-1) ) ){
+			throw new InvalidInputException("Status must exist! Species must exist! User must be registered! Municipality must exist! Street must exist!");
+		}
+		tree.setTreeStatus(newStatus);
+		tree.setSpecies(newSpecies);
+		tree.setLocal(newUser);
+		tree.setMunicipality(newMunicipality);
+		tree.setDatePlanted(newDatePlanted);
+		tree.setHeight(newHeight);
+		tree.setDiameter(newDiameter);
+		if(!tree.hasTreeLocation()) {
+			TreeLocation newTreeLocation= new TreeLocation(newX, newY, locationDescription, tree, newLocationType);
+			tree.setTreeLocation(newTreeLocation);
+		}
+		else {
+			TreeLocation newTreeLocation=tree.getTreeLocation();
+			newTreeLocation.setX(newX);
+			newTreeLocation.setY(newY);
+			newTreeLocation.setDescription(locationDescription);
+		}
+
+	}
+	
+	public Tree markDiseased(Tree tree) throws InvalidInputException{
+		if(tree==null) {
+			throw new InvalidInputException("Tree needs to be selected to be marked as diseased.");
+		}
+		if(tree.getTreeStatus().getStatus()== Status.Diseased) {
+			throw new InvalidInputException("Tree was already diseased!");
+		}
+		tree.getTreeStatus().setStatus(Status.Diseased);
+		return tree;
+	}
+
+	public Tree markToBeCut(Tree tree) throws InvalidInputException {
+		if(tree==null) {
+			throw new InvalidInputException("Tree needs to be selected to be mark as to be cut.");
+		}
+		if(tree.getTreeStatus().getStatus()==Status.Cut) {
+			throw new InvalidInputException("Tree was already cut down!");
+		}
+		tree.getTreeStatus().setStatus(Status.ToBeCut);
+		return tree;
 	}
 	
 	public Tree getTreeById(int aId) {
@@ -353,6 +412,8 @@ public class TMSService {
 	}
 	
 	/////////////////////	FORECASTING  /////////////////////
+	
+	//returns forecast percentage figure
 	public int carbonForecast(List<Tree> treeList, String strStatus) throws InvalidInputException{
 		if(strStatus==null) 
 			throw new InvalidInputException("String cannot be null");
@@ -386,12 +447,11 @@ public class TMSService {
 			}	
 		}
 		current = calcCarbonConsump(treeList);
-		System.out.println("current is  "+current);
-		System.out.println("predicted is  "+predicted);
 		forecast = ((predicted-current)/current)*100;
 		return (int)forecast;
 	}
 	
+	//returns forecast percentage figure
 	public int oxygenForecast(List<Tree> treeList, String strStatus) throws InvalidInputException{
 		if(strStatus==null) 
 			throw new InvalidInputException("String cannot be null");
@@ -429,6 +489,7 @@ public class TMSService {
 		return (int)forecast;
 	}
 	
+	//returns change in species biodiversity for a list of trees
 	public int bioForecast(List<Tree> treeList, String status) throws InvalidInputException{
 		int forecast = 0;
 		if(treeList == null) 
@@ -457,7 +518,8 @@ public class TMSService {
 	}
 	
 
-	/////////////////////	USER and REGISTRATION  /////////////////////
+	/////////////////////	USER LOGIN and REGISTRATION  /////////////////////
+	//method logs the user in and returns his record to the controller
 	public User login(String username, String password) throws InvalidInputException{
 		if(("".equals(username.trim())) || (password.trim()=="")) 
 			throw new InvalidInputException("Please enter a username and password");
@@ -472,7 +534,7 @@ public class TMSService {
 		}
 		throw new InvalidInputException("username not found");
 	}
-	
+	//method registers a user and returns his record to the controller
 	public User register(String username, String password, Boolean isScientist) throws InvalidInputException {
 		if((username.trim()=="") || (password.trim()=="")) 
 			throw new InvalidInputException("Please enter a username and password");
