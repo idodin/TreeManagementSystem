@@ -1,10 +1,5 @@
 package ca.mcgill.ecse321.TMS.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ca.mcgill.ecse321.TMS.model.Tree;
-
 public class SpeciesDto {
 	
 	String name; 
@@ -12,7 +7,6 @@ public class SpeciesDto {
 	int oxygenProduction;
 	
 	public SpeciesDto() {
-		
 	}
 	
 	public SpeciesDto(String name, int carbonConsumption, int oxygenProduction) {

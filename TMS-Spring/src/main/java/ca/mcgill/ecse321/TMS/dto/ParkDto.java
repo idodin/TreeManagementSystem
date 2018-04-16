@@ -1,17 +1,13 @@
 package ca.mcgill.ecse321.TMS.dto;
 
-import java.util.List;
-
 import ca.mcgill.ecse321.TMS.model.LocationType.LandUseType;
 
 public class ParkDto extends LocationTypeDto{
 
-	
 	private int parkCode;
 	private String parkName;
 	
 	public ParkDto() {
-		
 	}
 	
 	public ParkDto(int parkCode, String parkName, LandUseType landUseType) {
@@ -36,5 +32,4 @@ public class ParkDto extends LocationTypeDto{
 		this.parkName = parkName;
 	}
 	
-
 }

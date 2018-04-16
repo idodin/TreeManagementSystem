@@ -27,7 +27,6 @@ import ca.mcgill.ecse321.TMS.dto.UserDto;
 import ca.mcgill.ecse321.TMS.model.Local;
 
 import ca.mcgill.ecse321.TMS.model.LocationType;
-import ca.mcgill.ecse321.TMS.model.LocationType.LandUseType;
 import ca.mcgill.ecse321.TMS.model.Municipality;
 import ca.mcgill.ecse321.TMS.model.Specialist;
 import ca.mcgill.ecse321.TMS.model.Species;
@@ -37,9 +36,7 @@ import ca.mcgill.ecse321.TMS.model.TreePLE;
 
 
 import ca.mcgill.ecse321.TMS.model.TreeStatus;
-import ca.mcgill.ecse321.TMS.model.TreeStatus.Status;
 import ca.mcgill.ecse321.TMS.model.User;
-import ca.mcgill.ecse321.TMS.model.User.UserType;
 import ca.mcgill.ecse321.TMS.model.UserRole;
 
 
@@ -64,78 +61,24 @@ public class TMSRestController {
 		return "TreePLE application root. Use the REST API to manage trees.\n";
 	}
 
-	///////////////	TO DO LIST ///////////////
-	// Create municipality, if time select municipalities in specific area
-	// How can we pass coordinates?
-	
-	//tree id are all 1 for me, something with persistence
-	//deleting a tree
-	//update a tree, i.e. information or mark status change
-	//if local then can only mark his tree as cut down
-	// list of tree, change of status, user	= change of status
-	// forecast
-	//what are the measurements in? cm m ft
-	//change status to enum in tree
-
-	
 	///////////////	HTTP REQUESTS ///////////////
 	// TREES 
 	@PostMapping(value = {"/trees/"})
 	public TreeDto createTree(
-			@RequestParam double height,
-			@RequestParam double diameter, 
-			@RequestParam Date datePlanted, 
-			@RequestParam String x,
-			@RequestParam String y, 
-			@RequestParam String description,
-			@RequestParam String location,
-			@RequestParam String status,
-			@RequestParam String species,
-			@RequestParam String municipality,
+			@RequestParam double height, @RequestParam double diameter, @RequestParam Date datePlanted, 
+			@RequestParam String x, @RequestParam String y, @RequestParam String description, @RequestParam String location,
+			@RequestParam String status, @RequestParam String species, @RequestParam String municipality, 
 			@RequestParam String loggedUser) throws InvalidInputException {	
-		
-		
 		
 		Species aSpecies = service.getSpeciesByName(species);
 		if (aSpecies == null) throw new InvalidInputException("Could not find species");
 		Municipality aMunicipality = service.getMunicipalityByName(municipality);
 		if (aMunicipality == null) throw new InvalidInputException("Could not find municipality");
-		
-		TreeStatus aStatus = new TreeStatus(treePLE); 
-		switch(status.toLowerCase()) {
-		case "healthy": 
-			aStatus.setStatus(Status.Healthy);
-			break;
-		case "diseased":
-			aStatus.setStatus(Status.Diseased);
-			break;
-		case "cut": 
-			aStatus.setStatus(Status.Cut);
-			break;
-		case "tobecut": 
-			aStatus.setStatus(Status.ToBeCut);
-			break;
-		default:
-			treePLE.removeStatus(aStatus);
-			throw new InvalidInputException("Must select status");
-		}
-		LocationType aLocationType = new LocationType(); 
-		switch(location.toLowerCase()) {
-		case "residential": 
-			aLocationType.setLandUseType(LandUseType.Residential);
-			break;
-		case "institutional":
-			aLocationType.setLandUseType(LandUseType.Institutional);
-			break;
-		case "municipal": 
-			aLocationType.setLandUseType(LandUseType.Municipal);
-			break;
-		default:
-			throw new InvalidInputException("Must select location type");
-		}
-		User user=service.getUserByName(loggedUser);
-		Tree tree = service.createTree(height, diameter, datePlanted, aStatus, aSpecies, user, aMunicipality, Double.parseDouble(x), Double.parseDouble(y), description, aLocationType);
-		System.out.println(tree.getId());
+		TreeStatus aStatus = service.createStatus(status);
+		LocationType aLocationType = service.createLocationType(location);
+		User user = service.getUserByName(loggedUser);
+		Tree tree = service.createTree(height, diameter, datePlanted, aStatus, aSpecies, 
+				user, aMunicipality, Double.parseDouble(x), Double.parseDouble(y), description, aLocationType);
 		return convertToDto(tree);
 	}
 	
@@ -143,28 +86,12 @@ public class TMSRestController {
 	public List<TreeDto> updateTree(
 		@RequestParam List<Integer> treeIDs,
 		@RequestParam String status) throws InvalidInputException{
-		System.out.println("in controller "+treeIDs);
-		TreeStatus aStatus=new TreeStatus(treePLE);
-		switch(status.toLowerCase()) {
-		case "healthy": 
-			aStatus.setStatus(Status.Healthy);
-			break;
-		case "diseased":
-			aStatus.setStatus(Status.Diseased);
-			break;
-		case "cut": 
-			aStatus.setStatus(Status.Cut);
-			break;
-		default:
-			treePLE.removeStatus(aStatus);
-			throw new InvalidInputException("Must select status");
-		}
+		TreeStatus aStatus = service.createStatus(status);
 		List <Tree> trees = service.updateTrees(treeIDs, aStatus.getStatus());
-		List<TreeDto> treeDtos=new ArrayList();
-		for(Tree tree: trees) {
+		List<TreeDto> treeDtos = new ArrayList<TreeDto>();
+		for(Tree tree: trees) 
 			treeDtos.add(convertToDto(tree));
-		}
-			return treeDtos;
+		return treeDtos;
 	}
 
 	@GetMapping(value = { "/trees", "/trees/" })
@@ -202,7 +129,7 @@ public class TMSRestController {
 		return species;
 	}
 	
-	// TREE STATUS
+	// STATUS
 	@GetMapping(value = {"/status", "/status/"})
 	public List<String> getAllTreeStatuses() {
 		return service.getTreeStatuses();
@@ -236,9 +163,8 @@ public class TMSRestController {
 	@GetMapping(value = { "/municipalities", "/municipalities/" })
 	public List<MunicipalityDto> findAllMunicipalities() {
 		List<MunicipalityDto> municipalities = Lists.newArrayList();
-		for (Municipality m : service.findAllMunicipalities()) {
+		for (Municipality m : service.findAllMunicipalities()) 
 			municipalities.add(convertToDto(m));
-		}
 		return municipalities;
 	}
 	
@@ -250,7 +176,6 @@ public class TMSRestController {
 	}
 	
 	
-
 	// FORECASTS 
 	@GetMapping(value = {"/forecasts/"})
 	public int createCarbonForecast(
@@ -306,12 +231,10 @@ public class TMSRestController {
 		ArrayList<String> roles = new ArrayList<String>();
 		UserDto usD = modelMapper.map(user, UserDto.class);
 		for (UserRole role : user.getUserRoles()) {
-			if (role instanceof Local) {
+			if (role instanceof Local) 
 				roles.add("local");
-			}
-			if (role instanceof Specialist) {
+			if (role instanceof Specialist) 
 				roles.add("specialist");
-			}
 		}
 		usD.setRoles(roles);
 		return usD;
