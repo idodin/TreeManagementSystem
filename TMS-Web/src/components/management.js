@@ -38,6 +38,7 @@ export default {
 			statusForecast: [
 				{ value: null, text: 'Status', disabled: true },
 				{ value: 'Healthy', text: 'Healthy' },
+        { value: 'ToBeCut', text: 'ToBeCut' },
 				{ value: 'Cut', text: 'Cut' },
 				{ value: 'Diseased', text: 'Diseased' }
 				],
