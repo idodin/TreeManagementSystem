@@ -8,6 +8,9 @@
 # install dependencies
 npm install
 
+# install additional dependencies
+npm install axios chart.js vue-chartkick
+
 # serve with hot reload at localhost:8080
 npm run dev
 
