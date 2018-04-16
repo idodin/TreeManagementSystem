@@ -33,7 +33,23 @@ export default {
       species: [],
       speciesSelection: [],
       municipalities: [],
-      municipalitiesSelection: [],
+      municipalitiesSelection: [
+        { value: null, text: 'Municipality', disabled: true },
+        { value: 'Montreal_Est', text: 'Montreal_Est' },
+        { value: 'Montreal_Ouest', text: 'Montreal_Ouest' },
+        { value: 'Montreal', text: 'Montreal' },
+        { value: 'Westmount', text: 'Westmount' },
+        { value: 'Hampstead', text: 'Hampstead' },
+        { value: 'Cte_St_Luc', text: 'Cte_St_Luc' },
+        { value: 'Dorval', text: 'Dorval' },
+        { value: 'Point_Clair', text: 'Point_Clair' },
+        { value: 'Ile_Dorval', text: 'Ile_Dorval' },
+        { value: 'Dollard', text: 'Dollard' },
+        { value: 'Kirkland', text: 'Kirkland' },
+        { value: 'Beaconsfield', text: 'Beaconsfield' },
+        { value: 'Baie_dUrfe', text: 'Baie_dUrfe' },
+        { value: 'Ste_Anne', text: 'Ste_Anne' }
+      ],
       locationsSelection: [
         { value: null, text: 'Location', disabled: true },
         { value: 'Residential', text: 'Residential' },
@@ -71,19 +87,6 @@ export default {
 	          console.log(errorMsg)
 	          this.errorMessage = errorMsg
 	      })
-	  AXIOS.get('/municipalities/').then(response => {
-		  this.municipalities = response.data
-		  this.municipalitiesSelection.push({value: null, text: 'Municipality', disabled: true},
-				  {value: 'other', text: 'other'})
-	      for (var i=0; i<this.municipalities.length;i++) {
-			  var name = this.municipalities[i].name
-	    	  this.municipalitiesSelection.push( { value: name, text: name })
-	      }
-		  }).catch(e => {
-			  var errorMsg = e.response.data.message
-	          console.log(errorMsg)
-	          this.errorMessage = errorMsg
-		  })
 	  AXIOS.get('/trees/').then(response => {
 		  this.trees = response.data
 		  }).catch(e => {
@@ -138,20 +141,6 @@ export default {
 			  this.speciesName = ''
 			  this.speciesCarbon = ''
 			  this.speciesOxygen = ''
-		  }).catch(e => {
-			  var errorMsg = e.response.data.message
-	          console.log(errorMsg)
-	          this.errorMessage = errorMsg
-		  })
-	  },
-	  createMunicipality: function(name, id) {
-		  AXIOS.post('/municipalities/' + name + '?&id=' + id, {}, {})
-		  .then(response => {
-			  var m = response.data
-			  this.municipalities.push(m)
-			  this.municipalitiesSelection.push({value: m.name, text: m.name})
-			  this.municipalityName = ''
-			  this.municipalityId = ''
 		  }).catch(e => {
 			  var errorMsg = e.response.data.message
 	          console.log(errorMsg)

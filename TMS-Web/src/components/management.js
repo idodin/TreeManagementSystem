@@ -197,7 +197,7 @@ export default {
 				//this.findAllTrees();
 				this.trees= response.data;
 				this.listTrees();
-				
+
 				this.errorMessage = ''
 			}).catch(e => {
 				var errorMsg = e.response.data.message
@@ -223,7 +223,7 @@ export default {
 				this.errorMessage = errorMsg
 			})
 		},
-		
+
 		createOxygenForecast: function(forecastSelect) {
 			this.forecastNum = '',
 			console.log("oxygen forecast called")
@@ -241,7 +241,7 @@ export default {
 				this.errorMessage = errorMsg
 			})
 		},
-		
+
 		createBioForecast: function(forecastSelect) {
 			this.forecastNum = '',
 			console.log("biodiversity forecast called")
@@ -261,7 +261,7 @@ export default {
 		},
 
 		pins : function(tree){
-			
+
 			let image;
 			if(tree.status == 'Diseased'){
 				image = '../static/forest_purple.png'
@@ -307,7 +307,7 @@ export default {
 			'<td>' + '      '+la + '</td>' +
 			'</tr>' +
 			'</table>'
-			
+
 
 			var infowindow = new google.maps.InfoWindow({
 				content: contentString
@@ -337,7 +337,7 @@ export default {
 			for(var k = 0; k<this.markers.length; k++){
 				this.markers[k].setMap(null);
 			}
-			
+
 			this.markers = [];
 			for(var i = 0; i<this.filterTrees.length; i++){
 					console.log(this.filterTrees[i].status)
@@ -345,7 +345,7 @@ export default {
 			}
 		},
 		listTrees: function(){
-			
+
 			AXIOS.get(`/trees`).then(response => {
 				// JSON responses are automatically parsed.
 				this.requestTrees = [];
@@ -367,7 +367,7 @@ export default {
 						console.log("testing if filters")
 						this.filterTrees.push(tempTree)
 					}
-					
+
 
 				})
 				this.printThis();
@@ -409,17 +409,45 @@ export default {
 			this.stats = [["Healthy", Healthy], ["Diseased", Diseased], ["ToBeCut", ToBeCut], ["Cut", Cut]]
 		},
 		updateCities : function(){
-			var McGill = 0;
-			var Rosemont = 0;
-			var Laval = 0;
-			var Lasalle = 0;
+			var Montreal_Est = 0;
+			var Montreal_Ouest = 0;
+			var Montreal = 0;
+			var Westmount = 0;
+			var Hampstead = 0;
+			var Cte_St_Luc = 0;
+			var Dorval = 0;
+			var Point_Clair = 0;
+			var Ile_Dorval = 0;
+			var Dollard = 0;
+			var Kirkland = 0;
+			var Beaconsfield = 0;
+			var Baie_dUrfe = 0;
+			var Ste_Anne = 0;
+			var Senneville = 0;
+
 			this.filterTrees.forEach((tree) => {
-				if(tree.municipality == 'McGill'){McGill ++}
-				if(tree.municipality == 'Rosemont'){Rosemont ++}
-				if(tree.municipality == 'Laval'){Laval ++}
-				if(tree.municipality == 'Lasalle'){Lasalle ++}
+				if(tree.municipality == 'Montreal_Est'){Montreal_Est ++}
+				if(tree.municipality == 'Montreal_Ouest'){Montreal_Ouest ++}
+				if(tree.municipality == 'Montreal'){Montreal ++}
+				if(tree.municipality == 'Westmount'){Westmount ++}
+				if(tree.municipality == 'Hampstead'){Hampstead ++}
+				if(tree.municipality == 'Cte_St_Luc'){Cte_St_Luc ++}
+				if(tree.municipality == 'Dorval'){Dorval ++}
+				if(tree.municipality == 'Point_Clair'){Point_Clair ++}
+				if(tree.municipality == 'Ile_Dorval'){Ile_Dorval ++}
+				if(tree.municipality == 'Dollard'){Dollard ++}
+				if(tree.municipality == 'Kirkland'){Kirkland ++}
+				if(tree.municipality == 'Beaconsfield'){Beaconsfield ++}
+				if(tree.municipality == 'Baie_dUrfe'){Baie_dUrfe ++}
+				if(tree.municipality == 'Ste_Anne'){Ste_Anne ++}
+				if(tree.municipality == 'Senneville'){Senneville ++}
 			});
-			this.citiesStats = [["McGill", McGill], ["Rosemont", Rosemont], ["Laval", Laval], ["Lasalle", Lasalle]]
+			this.citiesStats = [["Montreal_Est", Montreal_Est], ["Montreal_Ouest", Montreal_Ouest],
+			["Montreal", Montreal], ["Westmount", Westmount],
+			["Hampstead", Hampstead], ["Cte_St_Luc", Cte_St_Luc], ["Dorval", Dorval],
+			["Point_Clair", Point_Clair], ["Ile_Dorval", Ile_Dorval], ["Dollard", Dollard],
+			["Kirkland", Kirkland], ["Beaconsfield", Beaconsfield], ["Baie_dUrfe", Baie_dUrfe],
+			["Ste_Anne", Ste_Anne], ["Senneville", Senneville]]
 
 		}
 	},
@@ -795,7 +823,7 @@ export default {
 				'<td>' + '      '+la + '</td>' +
 				'</tr>' +
 				'</table>'
-			
+
 
 				var infowindow = new google.maps.InfoWindow({
 					content: contentString

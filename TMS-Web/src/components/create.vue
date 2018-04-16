@@ -30,7 +30,7 @@
           <b-button @click="createTree(treeHeight, treeDiameter, datePlanted, xCoord, yCoord, description, locationType, treeStatus, treeSpecies, treeMunicipality)">add tree</b-button>
 
 
-          
+
     </div>
     <div v-if="treeSpecies === 'other'" id="createBox">
     	<input type="text" v-model="speciesName" placeholder="Name">
@@ -38,13 +38,7 @@
     	<input type="number" v-model="speciesOxygen" placeholder="Oxygen Production">
     	<b-button @click="createSpecies(speciesName, speciesCarbon, speciesOxygen)">Add Species</b-button>
     </div>
-    <div v-if="treeMunicipality === 'other'" id="createBox">
-    	<input type="text" v-model="municipalityName" placeholder="Name">
-    	<input type="number" v-model="municipalityId" placeholder="Municipality ID">
-    	<b-button @click="createMunicipality(municipalityName, municipalityId)">Add Municipality</b-button>
-    </div>
 
-    
   </div>
 </template>
 
