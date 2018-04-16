@@ -21,7 +21,7 @@ sourceCompatibility = 1.8
 
 
 war {
-	baseName = 'eventregistration'
+	baseName = 'treeple'
 	version = '0.0.1-SNAPSHOT'
 }
 
