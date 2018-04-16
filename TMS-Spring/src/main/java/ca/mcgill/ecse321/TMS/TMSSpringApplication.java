@@ -35,13 +35,11 @@ public class TMSSpringApplication extends SpringBootServletInitializer {
 		return modelMapper;
 	}
 
-	// TODO add a Bean to provide a registration manager
 	@Bean
 	public TreePLE treeMan() {
 		return PersistenceXStream.initializeModelManager(PersistenceXStream.getFilename());
 	}
 
-	// TODO add client configuration
 	@Autowired
 	private AndroidProperties androidProperties;
 
