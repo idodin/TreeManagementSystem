@@ -2,12 +2,11 @@
   <div id="hello" v-if="go==='true'">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
-
+      <a href="../static/app-release-unsigned.apk" download="APK">APK</a>
       <a href="#about">Hello {{loggedUser}}</a>
       <a href="/#/app">Visualizer</a>
       <a class="active" href="/#/create/">Create</a>
       <a href="/#/home">Home</a>
-      <a href="../../../TMS-Android/app/build/outputs/apk/release/app-release-unsigned.apk" download="APK">APK</a>
     </div>
     <!-- <h1 style="padding-top: 7px; padding-left: 15px; font-size: 15pt; float: left ">hello {{loggedUser}}</h1> -->
     <br /><br /><br />

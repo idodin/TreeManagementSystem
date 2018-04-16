@@ -2,11 +2,11 @@
   <div id="hello">
     <div class="topnav">
       <h2 style="padding-top: 7px; padding-left: 15px; float: left; font-weight: bolder"> ♧ TreePLE ♧</h2>
+      <a href="../static/app-release-unsigned.apk" download="APK">APK</a>
       <a href="#about">Hello</a>
       <a href="/#/home">Visualizer</a>
       <a href="/#/home/" >Create</a>
       <a class="active" href="/#/home">Home</a>
-      <a href="../../../TMS-Android/app/build/outputs/apk/release/app-release-unsigned.apk" download="APK">APK</a>
     </div>
     <br /><br /><br />
     <h3>Someone's sitting in the shade today because...</h3>
