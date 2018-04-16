@@ -38,6 +38,7 @@ export default {
 			statusForecast: [
 				{ value: null, text: 'Status', disabled: true },
 				{ value: 'Healthy', text: 'Healthy' },
+        { value: 'ToBeCut', text: 'ToBeCut' },
 				{ value: 'Cut', text: 'Cut' },
 				{ value: 'Diseased', text: 'Diseased' }
 				],
@@ -138,15 +139,15 @@ export default {
 		}
 	},
 	created: function () {
-		AXIOS.get(`/trees`)
-		.then(response => {
-
-			// JSON responses are automatically parsed.
-			this.trees = response.data
-		})
-		.catch(e => {
-			this.listTreesError = e.response.data.message;
-		});
+		// AXIOS.get(`/trees`)
+		// .then(response => {
+		//
+		// 	// JSON responses are automatically parsed.
+		// 	this.trees = response.data
+		// })
+		// .catch(e => {
+		// 	this.listTreesError = e.response.data.message;
+		// });
 
 //		AXIOS.get('/trees/').then(response => {
 //		this.trees = response.data
@@ -185,19 +186,40 @@ export default {
 
 	methods: {
 		updateTrees: function(updateSelect) {
-			console.log("updateTree called")
+
 			var treeIDs= [];
-			//status = "HEALTHY";
+
 			this.rectTrees.forEach((tree) =>{
 			treeIDs.push(tree.id);
 			});
 
 			AXIOS.post('/updateTrees/?treeIDs=' + treeIDs + '&status='+ updateSelect, {}, {})
 			.then(response => {
-				//this.findAllTrees();
-				this.trees= response.data;
-				this.listTrees();
 
+
+
+				this.listTrees();
+				this.printThis();
+				this.updateStats();
+				this.updateCities();
+
+				this.fTree = response.data;
+				this.filterTrees = []
+				this.fTree.forEach((tree) => {
+
+					var tempTree = {
+							id: tree.id,
+							species: tree.species.name,
+							municipality: tree.municipality.name,
+							status: tree.status.status,
+							latitude: tree.location.y,
+							longitude: tree.location.x,
+							type: tree.location.landLocationType.landUseType,
+							user: tree.user.userName
+					}
+					this.filterTrees.push(tempTree)
+
+				})
 				this.errorMessage = ''
 			}).catch(e => {
 				var errorMsg = e.response.data.message
@@ -364,7 +386,7 @@ export default {
 							user: tree.user.userName
 					}
 					if(this.ids.includes(tempTree.municipality) || this.ids.includes(tempTree.species) || this.ids.includes(tempTree.status)){
-						console.log("testing if filters")
+
 						this.filterTrees.push(tempTree)
 					}
 
@@ -460,13 +482,14 @@ export default {
 			return [...new Set(this.requestTrees.map(p => p.species.name))]
 		},
 		statuses (){
-			return [...new Set(this.trees.map(p => p.status.status))]
+			return [...new Set(this.requestTrees.map(p => p.status.status))]
 		}
 	},
 	watch: {
 		ids : function(val){
-			this.printThis();
+
 			this.listTrees();
+			this.printThis();
 			this.updateStats();
 			this.updateCities();
 		}
@@ -492,11 +515,7 @@ export default {
 				this.filterTrees.push(tempTree)
 
 			})
-			console.log("insdieasd mouneetd")
 
-
-
-			console.log("outside mouneetd")
 			//this.filterTrees = this.trees;
 
 
