@@ -4,7 +4,7 @@
 
 This is a repository for the TreePLE Application created by Project Group 9 for the ECSE 321 Winter 2018 Course.
 
-## Website URL: 
+## Website URL
 http://ecse321-9.ece.mcgill.ca:8087/#/
 
 ## Workflow Description
