@@ -1,1 +1,1 @@
-web: cat package.json && echo $PORT && export PORT && npm start 
+web: ls && cat package.json && echo $PORT && export PORT && npm start 
