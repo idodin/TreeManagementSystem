@@ -1,1 +1,1 @@
-web: echo $PORT && export PORT && npm start 
+web: pwd && echo $PORT && export PORT && npm start 
