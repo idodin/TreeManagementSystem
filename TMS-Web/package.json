@@ -3,9 +3,20 @@
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "aljulanda-alabri <aljulanda.alabri@mail.mcgill.ca>",
-  "contributors": [{"name" : "Imad Dodin", "email": "imad.dodin@mail.mcgill.ca"},
-	  {"name": "Ahmed Elehwany", "email": "ahmed.elehwany@mail.mcgill.ca"},
-	  {"name": "Nada Marawan", "email": "nada.marwan@mail.mcgill.ca"}]
+  "contributors": [
+    {
+      "name": "Imad Dodin",
+      "email": "imad.dodin@mail.mcgill.ca"
+    },
+    {
+      "name": "Ahmed Elehwany",
+      "email": "ahmed.elehwany@mail.mcgill.ca"
+    },
+    {
+      "name": "Nada Marawan",
+      "email": "nada.marwan@mail.mcgill.ca"
+    }
+  ],
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
