@@ -37,7 +37,7 @@ public class TMSSpringApplication extends SpringBootServletInitializer {
 
 	@Bean
 	public TreePLE treeMan() {
-		return PersistenceXStream.initializeModelManager(PersistenceXStream.getFilename());
+		return PersistenceXStream.initializeModelManager(PersistenceXStream.getFILENAME());
 	}
 
 	@Autowired

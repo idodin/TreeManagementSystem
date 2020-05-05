@@ -30,13 +30,13 @@ import ca.mcgill.ecse321.TMS.model.UserRole;
 public class PersistenceXStream {
 
 	private static XStream xstream = new XStream();
-	private static String filename = "/TreePLE/data.xml";
+	private static String FILENAME = "data.xml";
 
 	// TODO create the RegistrationManager instance here (replace the void return value as well)
 	public static TreePLE initializeModelManager(String fileName) {
 		// Initialization for persistence
         TreePLE tp;
-        setFilename(fileName);
+        setFILENAME(fileName);
         setAlias("user", User.class);
         setAlias("local", Local.class);
         setAlias("municipality", Municipality.class);
@@ -78,7 +78,7 @@ public class PersistenceXStream {
         String xml = xstream.toXML(obj); // save our xml file
 
         try {
-            FileWriter writer = new FileWriter(filename);
+            FileWriter writer = new FileWriter(FILENAME);
             writer.write(xml);
             writer.close();
             return true;
@@ -91,7 +91,7 @@ public class PersistenceXStream {
 	public static Object loadFromXMLwithXStream() {
 		xstream.setMode(XStream.ID_REFERENCES);
         try {
-            FileReader fileReader = new FileReader(filename); // load our xml file
+            FileReader fileReader = new FileReader(FILENAME); // load our xml file
             return xstream.fromXML(fileReader);
         }
         catch (IOException e) {
@@ -104,16 +104,16 @@ public class PersistenceXStream {
 		xstream.alias(xmlTagName, className);
 	}
 
-	public static void setFilename(String fn) {
-		filename = fn;
+	public static void setFILENAME(String fn) {
+		FILENAME = fn;
 	}
 
-	public static String getFilename() {
-		return filename;
+	public static String getFILENAME() {
+		return FILENAME;
 	}
 
 	public static void clearData() {
-		File myFoo = new File(filename);
+		File myFoo = new File(FILENAME);
 		FileWriter fooWriter;
 		try {
 			fooWriter = new FileWriter(myFoo, false);
