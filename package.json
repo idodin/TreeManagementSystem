@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "postinstall": "cd TMS-Web && npm install"
+    "postinstall": "cd TMS-Web && npm install",
+    "start": "cd TMS-Web && node server.js"
   }
 }
