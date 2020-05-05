@@ -1,6 +1,6 @@
 {
   "scripts": {
     "postinstall": "cd TMS-Web && npm install",
-    "start": "cd TMS-Web && npm install && node build/dev-server.js"
+    "start": "cd TMS-Web && node server.js"
   }
 }
