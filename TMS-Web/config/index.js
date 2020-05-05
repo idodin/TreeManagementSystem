@@ -4,10 +4,10 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    port: 8087,
-    host:  'ecse321-9.ece.mcgill.ca', // set the real address of frontend VM
+    port: 443,
+    host:  'treeple-backend.herokuapp.com', // set the real address of frontend VM
     backendHost: 'ecse321-9.ece.mcgill.ca', // set it to real address of backend VM
-    backendPort: 8080,
+    backendPort: 80,
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
