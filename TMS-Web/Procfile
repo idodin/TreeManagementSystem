@@ -1,1 +1,1 @@
-web: pwd && echo $PORT && export PORT && npm start 
+web: cat package.json && echo $PORT && export PORT && npm start 
