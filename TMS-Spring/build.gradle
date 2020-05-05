@@ -13,17 +13,10 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'war'
 
 group = 'ca.mcgill.ecse321'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
-
-
-war {
-	baseName = 'treeple'
-	version = '0.0.1-SNAPSHOT'
-}
 
 repositories {
 	mavenCentral()
