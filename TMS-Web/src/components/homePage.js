@@ -5,8 +5,8 @@ Vue.use(VueRouter);
 var config = require('../../config')
 window.currUser= '';
 window.loggedin= 'false';
-var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
-var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
+var frontendUrl = 'https://' + config.dev.host;
+var backendUrl = 'https://' + config.dev.backendHost;
 
 var AXIOS = axios.create({
   baseURL: backendUrl,
@@ -63,7 +63,7 @@ export default {
 			  loggedin= 'true'
 			  console.log(currUser)
 	          this.errorMessage = errorMsg
-	          window.location.href = "http://ecse321-9.ece.mcgill.ca:8087/#/create/";
+	          window.location.href = "https://treeple-frontend.herokuapp.com/#/create";
 
 		  }).catch(e => {
 			  errorMsg = e.response.data.message
@@ -83,7 +83,7 @@ export default {
 			  loggedin= 'true'
 			  console.log(currUser)
 	          this.errorMessage = errorMsg
-	          window.location.href = "http://ecse321-9.ece.mcgill.ca:8087/#/create/";
+	          window.location.href = "https://treeple-frontend.herokuapp.com/#/create";
 
 		  }).catch(e => {
 			  console.log("catch error")

@@ -10,11 +10,11 @@ public class WebFrontendProperties {
 	/**
 	 * The IP adress of the web frontend client
 	 */
-	private String ip = "http://ecse321-9.ece.mcgill.ca";
+	private String ip = "https://treeple-frontend.herokuapp.com";
 	/**
 	 * The port on which the web frontend listens
 	 */
-	private int port = 8080;
+	private int port = 443;
 
 	public String getIp() {
 		return ip;

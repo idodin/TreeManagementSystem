@@ -5,8 +5,8 @@ module.exports = {
   build: {
     env: require('./prod.env'),
     port: 443,
-    host:  'treeple-backend.herokuapp.com', // set the real address of frontend VM
-    backendHost: 'ecse321-9.ece.mcgill.ca', // set it to real address of backend VM
+    host:  'treeple-frontend.herokuapp.com', // set the real address of frontend VM
+    backendHost: 'treeple-backend.herokuapp.com', // set it to real address of backend VM
     backendPort: 443,
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
@@ -27,11 +27,11 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8087,
-    host:  'ecse321-9.ece.mcgill.ca',
-    backendHost: 'ecse321-9.ece.mcgill.ca', // set it to real address of backend VM
-    backendPort: 8080,
-    autoOpenBrowser: true,
+    aport: 443,
+    host:  'treeple-frontend.herokuapp.com', // set the real address of frontend VM
+    backendHost: 'treeple-backend.herokuapp.com', // set it to real address of backend VM
+    backendPort: 443,
+	autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
