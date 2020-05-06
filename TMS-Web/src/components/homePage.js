@@ -75,7 +75,8 @@ export default {
 
     login: function(username, password){
     	var errorMsg
-    	console.log("login user")
+      console.log("login user")
+      AXIOS.get('/')
     	AXIOS.get('/user/' + username+ '?password='+password, {}, {})
     	.then(response => {
     		console.log("enter block")

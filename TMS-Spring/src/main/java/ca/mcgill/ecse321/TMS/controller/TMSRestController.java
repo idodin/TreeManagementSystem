@@ -1,8 +1,10 @@
 package ca.mcgill.ecse321.TMS.controller;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +59,34 @@ public class TMSRestController {
 	private TMSService service;
 	
 	@RequestMapping("/")
-	public String index() {
+	public String index() throws InvalidInputException{
+		String[] municipalities = {"Montreal_Est", "Montreal_Ouest", "Montreal", "Westmount",
+				"Hampstead", "Cte_St_Luc", "Dorval", "Point_Clair", "Ile_Dorval", "Dollard", "Kirkland",
+				"Beaconsfield", "Baie_dUrfe", "Ste_Anne"};
+		service.createSpecies("Maple", 10, 10);
+		service.createSpecies("Oak", 4, 8);
+		service.createSpecies("Elm", 12, 4);
+		String[] statuses = {"healthy", "diseased", "cut", "tobecut"};
+		String[] locations = {"residential", "institutional", "municipal"};
+		String[] species = {"maple", "oak", "elm"};
+		User admin = new User("admin", "admin", treePLE);
+		for(int i = 0 ; i<municipalities.length; ++i) service.createMunicipality(municipalities[i], i+1);
+		for(int i = 0; i<100; i++){
+			Random rand = new Random();
+			double height = rand.nextInt(100) + 1;
+			double diameter = rand.nextInt(100) + 1;
+			Date date = new Date(Date.from(Instant.now()).getTime());
+			Species specie = service.getSpeciesByName(species[rand.nextInt(species.length)]);
+			double x = -73.0 - rand.nextDouble();
+			double y = 45 + rand.nextDouble();
+			Municipality municipality = service.getMunicipalityByName(municipalities[rand.nextInt(municipalities.length)]);
+			TreeStatus status = service.createStatus(statuses[rand.nextInt(statuses.length)]);
+
+			LocationType location = service.createLocationType(locations[rand.nextInt(locations.length)]);
+
+			service.createTree(height, diameter, date, status, specie, admin, municipality,
+					x, y, "generated", location);
+		}
 		return "TreePLE application root. Use the REST API to manage trees.\n";
 	}
 

@@ -1,5 +1,8 @@
 package ca.mcgill.ecse321.TMS;
 
+import ca.mcgill.ecse321.TMS.model.*;
+import ca.mcgill.ecse321.TMS.service.InvalidInputException;
+import ca.mcgill.ecse321.TMS.service.TMSService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration.AccessLevel;
 import org.modelmapper.convention.NamingConventions;
@@ -14,11 +17,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import ca.mcgill.ecse321.TMS.controller.configuration.AndroidProperties;
 import ca.mcgill.ecse321.TMS.controller.configuration.WebFrontendProperties;
-import ca.mcgill.ecse321.TMS.model.TreePLE;
 import ca.mcgill.ecse321.TMS.persistence.PersistenceXStream;
+
+import java.time.Instant;
+import java.sql.Date;
+import java.util.Random;
 
 @SpringBootApplication
 public class TMSSpringApplication extends SpringBootServletInitializer {
+
+	@Autowired
+	private TMSService service;
+
+	@Autowired
+	private TreePLE treePLE;
 
 
 	public static void main(String[] args) {
@@ -36,7 +48,7 @@ public class TMSSpringApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public TreePLE treeMan() {
+	public TreePLE treeMan() throws InvalidInputException {
 		return PersistenceXStream.initializeModelManager(PersistenceXStream.getFILENAME());
 	}
 
