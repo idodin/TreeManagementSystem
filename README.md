@@ -7,6 +7,16 @@ This is a repository for the TreePLE Application created by Project Group 9 for 
 ## Website URL
 http://ecse321-9.ece.mcgill.ca:8087/#/
 
+## Screenshots
+### Login Page
+![Imgur](https://i.imgur.com/XTSfuXC.png)
+
+### Create Tree Page
+![Imgur](https://i.imgur.com/Qq3YRGN.png)
+
+### Visualizer Page
+![Imgur](https://i.imgur.com/C6zFfRh.png)
+
 ## Workflow Description
 
 Each member has their own development branch. We did this with the following command (for future reference):
