@@ -30,7 +30,7 @@
     "axios": "^0.18.1",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "latest",
-    "chart.js": "^2.7.2",
+    "chart.js": "^2.9.4",
     "popper.js": "^1.12.9",
     "vue": "^2.5.2",
     "vue-chartkick": "^0.3.0",
